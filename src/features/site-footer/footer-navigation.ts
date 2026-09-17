@@ -1,40 +1,32 @@
-import type { NavLink } from "@/features/site-header/navigation";
+import { type NavLink, serviceLinks } from "@/features/site-header/navigation";
 
 export type FooterColumn = { title: string; links: readonly NavLink[] };
 export type SocialId = "facebook" | "linkedin" | "x";
 
 export const footerTagline =
-  "The modern project management tool for creative teams. Build, collaborate, and ship with confidence.";
+  "Infrantic turns complex business processes into intelligent, automated systems.";
 
 export const footerColumns: readonly FooterColumn[] = [
   {
-    title: "Product",
-    links: [
-      { label: "Features", href: "/#features" },
-      { label: "Integrations", href: "/#integrations" },
-      { label: "Roadmap", href: "/roadmap" },
-      { label: "Changelog", href: "/changelog" },
-      { label: "Pricing", href: "/#pricing" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Blog", href: "/blog" },
-      { label: "Documentation", href: "/docs" },
-      { label: "Guides", href: "/guides" },
-      { label: "Help Center", href: "/help" },
-      { label: "API Reference", href: "/docs/api" },
-    ],
+    title: "Services",
+    links: serviceLinks.map(({ label, href }) => ({ label, href })),
   },
   {
     title: "Company",
     links: [
-      { label: "About", href: "/about" },
-      { label: "Careers", href: "/careers" },
+      { label: "The problem we solve", href: "/#problem" },
+      { label: "How we work", href: "/#workflow" },
+      { label: "Industries", href: "/#industries" },
+      { label: "Technology", href: "/#technology" },
+      { label: "Our approach", href: "/#approach" },
+    ],
+  },
+  {
+    title: "Get in touch",
+    links: [
+      { label: "Book a discovery call", href: "/#contact" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
-      { label: "Contact", href: "/contact" },
     ],
   },
 ];

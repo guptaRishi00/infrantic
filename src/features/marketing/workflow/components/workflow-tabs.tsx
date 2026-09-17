@@ -67,9 +67,9 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
               onClick={() => setActive(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
-                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-zinc-950",
+                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink",
                 selected
-                  ? "font-medium text-zinc-950"
+                  ? "font-medium text-ink"
                   : "text-zinc-400 hover:text-zinc-700",
               )}
             >
@@ -77,7 +77,7 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-x-4 -bottom-px h-0.5 rounded-full bg-zinc-950 transition-opacity duration-200",
+                  "absolute inset-x-4 -bottom-px h-0.5 rounded-full bg-ink transition-opacity duration-200",
                   selected ? "opacity-100" : "opacity-0",
                 )}
               />

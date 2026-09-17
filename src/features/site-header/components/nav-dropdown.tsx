@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState } from "react";
 import type { NavGroup } from "../navigation";
@@ -42,23 +43,13 @@ export function NavDropdown({ group }: { group: NavGroup }) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
-        className="flex items-center gap-1 rounded-md px-3 py-2 text-sm text-zinc-700 transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950"
+        className="flex items-center gap-1 rounded-md px-3 py-2 text-sm text-zinc-700 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
       >
         {group.label}
-        <svg
-          viewBox="0 0 16 16"
+        <ChevronDown
           aria-hidden="true"
           className={`size-3.5 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-        >
-          <path
-            d="m4 6 4 4 4-4"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </button>
 
       <div
@@ -68,13 +59,13 @@ export function NavDropdown({ group }: { group: NavGroup }) {
       >
         <ul>
           {group.items.map((item) => (
-            <li key={item.href}>
+            <li key={item.label}>
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
                 className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 focus-visible:bg-zinc-50 focus-visible:outline-none"
               >
-                <span className="block text-sm font-medium text-zinc-900">
+                <span className="block text-sm font-medium text-ink">
                   {item.label}
                 </span>
                 {item.description ? (

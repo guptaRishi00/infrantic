@@ -1,12 +1,43 @@
-/** Four joined lobes with a cut-out centre. Colour follows `currentColor`. */
-export function BrandMark({ className }: { className?: string }) {
+import Image from "next/image";
+import { cn } from "@/shared/lib/cn";
+
+// The "I" glyph at the left of the master wordmark (/brand/logo-svg.svg,
+// 1278×168; the glyph is the first 43.4 units). The file is cropped with CSS, so
+// there is a single source of truth for the brand artwork.
+const LOGO_SRC = "/brand/logo-svg.svg";
+const GLYPH_ASPECT = "43.4 / 168";
+
+/**
+ * Compact brand mark for square tiles. Size it with `size-*` on `className`.
+ * `tone="white"` renders it knocked out in white for dark or brand surfaces.
+ */
+export function BrandMark({
+  className,
+  tone = "white",
+}: {
+  className?: string;
+  tone?: "white" | "color";
+}) {
   return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        d="M1.5 6.5a5 5 0 0 1 8.9-3.1L12 5.2l1.6-1.8a5 5 0 1 1 7 7L18.8 12l1.8 1.6a5 5 0 1 1-7 7L12 18.8l-1.6 1.8a5 5 0 1 1-7-7L5.2 12 3.4 10.4A5 5 0 0 1 1.5 6.5ZM12 9.2 9.2 12l2.8 2.8 2.8-2.8L12 9.2Z"
-      />
-    </svg>
+    <span
+      aria-hidden="true"
+      className={cn("inline-flex items-center justify-center", className)}
+    >
+      <span
+        className="relative h-full overflow-hidden"
+        style={{ aspectRatio: GLYPH_ASPECT }}
+      >
+        <Image
+          src={LOGO_SRC}
+          alt=""
+          width={1278}
+          height={168}
+          className={cn(
+            "absolute top-0 left-0 h-full w-auto max-w-none",
+            tone === "white" && "brightness-0 invert",
+          )}
+        />
+      </span>
+    </span>
   );
 }

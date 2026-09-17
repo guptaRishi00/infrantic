@@ -1,7 +1,8 @@
+import { Bot, Check } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/shared/lib/cn";
 import { BrandMark } from "@/shared/ui/brand-mark";
-import { CheckIcon } from "@/shared/ui/icons";
-import { type AvatarPerson, InitialsAvatar } from "@/shared/ui/initials-avatar";
+import type { Collaborator } from "../benefits.types";
 
 // Illustrative product mockups. Purely decorative: every root is aria-hidden.
 
@@ -11,60 +12,106 @@ const panel =
 export function CollaborationVisual({
   people,
 }: {
-  people: readonly AvatarPerson[];
+  people: readonly Collaborator[];
 }) {
   return (
     <div
       aria-hidden="true"
-      className="relative flex h-full min-h-[22rem] flex-col items-center overflow-hidden rounded-2xl bg-[radial-gradient(120%_80%_at_50%_0%,#a78bfa_0%,#7c3aed_45%,#6d28d9_100%)] px-6 pt-8 pb-6"
+      className="relative flex h-full min-h-[22rem] flex-col items-center overflow-hidden rounded-2xl bg-[radial-gradient(120%_80%_at_50%_0%,#5cbaff_0%,#0796fe_45%,#021c37_100%)] px-6 pt-8 pb-6"
     >
+      {/* Soft light from below plus a faint grid, for depth. */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_110%,rgb(255_255_255/0.28),transparent_60%)]" />
-      <span className="relative grid size-16 place-items-center rounded-2xl bg-white/15 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_12px_32px_-8px_rgb(46_16_101/0.6)] ring-1 ring-white/25 backdrop-blur">
-        <BrandMark className="size-8" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgb(255_255_255/0.06)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/0.06)_1px,transparent_1px)] [mask-image:radial-gradient(closest-side,#000,transparent)] bg-[size:28px_28px]" />
+
+      <span className="relative grid size-14 place-items-center rounded-2xl bg-white/15 text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.35),0_12px_32px_-8px_rgb(2_28_55/0.55)] ring-1 ring-white/25 backdrop-blur">
+        <BrandMark className="size-7" />
       </span>
-      <ul className="relative my-auto grid grid-cols-3 gap-4 py-8">
+
+      <ul className="relative my-auto grid grid-cols-3 gap-x-4 gap-y-3 py-8">
         {people.map((person, index) => (
           <li
             key={person.name}
-            className={cn(index % 3 === 1 && "translate-y-5")}
+            className={cn(
+              "flex flex-col items-center gap-1.5",
+              index % 3 === 1 && "translate-y-6",
+            )}
           >
-            <InitialsAvatar
-              person={person}
-              className="size-16 rounded-2xl text-sm shadow-[0_10px_24px_-10px_rgb(30_10_80/0.55)] ring-2 ring-white/70"
-            />
+            <CollaboratorTile person={person} />
+            <span className="rounded-full bg-ink/40 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur">
+              {person.role}
+            </span>
           </li>
         ))}
       </ul>
-      <span className="relative inline-flex items-center gap-2 rounded-full bg-zinc-950/85 px-3.5 py-2 text-xs font-medium text-white shadow-lg ring-1 ring-white/10">
+
+      <span className="relative inline-flex items-center gap-2 rounded-full bg-ink/85 px-3.5 py-2 text-xs font-medium text-white shadow-lg ring-1 ring-white/10 backdrop-blur">
         <span className="size-1.5 rounded-full bg-emerald-400" />
-        Automatic Collaboration
+        Human in the loop
       </span>
     </div>
   );
 }
 
+function CollaboratorTile({ person }: { person: Collaborator }) {
+  const tile =
+    "relative size-[4.5rem] overflow-hidden rounded-2xl shadow-[0_14px_28px_-12px_rgb(2_28_55/0.6)] ring-2 ring-white/70";
+
+  if (person.kind === "agent") {
+    return (
+      <span
+        className={cn(
+          tile,
+          "grid place-items-center bg-[linear-gradient(145deg,#1a416b,#021c37)] text-white",
+        )}
+      >
+        <Bot className="size-7" strokeWidth={1.75} />
+      </span>
+    );
+  }
+
+  return (
+    <span className={tile}>
+      <Image
+        src={person.photo}
+        alt=""
+        fill
+        sizes="72px"
+        className="object-cover"
+      />
+    </span>
+  );
+}
+
 const boardColumns = [
   {
-    name: "Backlog",
+    name: "Before · manual",
     count: 3,
     tasks: [
       {
-        title: "Moodboard",
-        tag: "Brand",
-        tone: "bg-violet-100 text-violet-700",
+        title: "Invoice entry",
+        tag: "Finance",
+        tone: "bg-brand-100 text-brand-700",
       },
-      { title: "Copy draft", tag: "Web", tone: "bg-sky-100 text-sky-700" },
+      {
+        title: "Lead follow-up",
+        tag: "Sales",
+        tone: "bg-brand-100 text-brand-700",
+      },
     ],
   },
   {
-    name: "In review",
+    name: "After · automated",
     count: 2,
     tasks: [
-      { title: "Hero layout", tag: "Web", tone: "bg-sky-100 text-sky-700" },
       {
-        title: "Logo system",
-        tag: "Brand",
-        tone: "bg-violet-100 text-violet-700",
+        title: "Invoice processing",
+        tag: "Finance",
+        tone: "bg-brand-100 text-brand-700",
+      },
+      {
+        title: "Lead routing",
+        tag: "Sales",
+        tone: "bg-brand-100 text-brand-700",
       },
     ],
   },
@@ -118,33 +165,33 @@ export function ReviewsVisual() {
     >
       <div className={cn(panel, "p-3")}>
         <div className="flex items-center gap-2">
-          <span className="size-5 rounded-full bg-gradient-to-br from-amber-200 to-orange-300" />
+          <span className="size-5 rounded-full bg-gradient-to-br from-brand-100 to-brand-300" />
           <span className="text-[11px] font-medium text-zinc-800">
-            Ava Rossi
+            Procurement bot
           </span>
           <span className="ml-auto text-[9px] text-zinc-400">2m</span>
         </div>
         <p className="mt-2 text-[11px] leading-4 text-zinc-500">
-          Can we bump the heading contrast a touch?
+          Purchase order #418 needs approval.
         </p>
       </div>
       <div className={cn(panel, "ml-6 p-3")}>
         <div className="flex items-center gap-2">
-          <span className="size-5 rounded-full bg-gradient-to-br from-sky-200 to-indigo-300" />
+          <span className="size-5 rounded-full bg-gradient-to-br from-ink-700 to-ink" />
           <span className="text-[11px] font-medium text-zinc-800">
-            Noah Kim
+            Priya Shah
           </span>
           <span className="ml-auto grid size-3.5 place-items-center rounded-full bg-emerald-500 text-white">
-            <CheckIcon className="size-2.5" />
+            <Check aria-hidden="true" className="size-2.5" strokeWidth={3} />
           </span>
         </div>
         <p className="mt-2 text-[11px] leading-4 text-zinc-500">
-          Done — resolved in v3.
+          Approved. Synced to ERP.
         </p>
       </div>
       <span className="mx-auto mt-auto inline-flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-[11px] font-medium text-zinc-700 shadow-sm">
-        <span className="size-1.5 rounded-full bg-violet-500" />
-        Comment &amp; Annotate
+        <span className="size-1.5 rounded-full bg-brand" />
+        Approve &amp; sync
       </span>
     </div>
   );
@@ -152,24 +199,24 @@ export function ReviewsVisual() {
 
 const timeRows = [
   {
-    task: "Brand refresh",
-    status: "In progress",
+    task: "Invoices processed",
+    status: "Running",
     tone: "bg-amber-50 text-amber-700",
-    time: "12h 40m",
+    time: "412",
     progress: "w-3/4",
   },
   {
-    task: "Website redesign",
-    status: "Review",
-    tone: "bg-violet-50 text-violet-700",
-    time: "8h 15m",
+    task: "Orders synced",
+    status: "Needs review",
+    tone: "bg-brand-50 text-brand-700",
+    time: "836",
     progress: "w-1/2",
   },
   {
-    task: "Launch campaign",
-    status: "Done",
+    task: "Reports generated",
+    status: "Complete",
     tone: "bg-emerald-50 text-emerald-700",
-    time: "21h 05m",
+    time: "36",
     progress: "w-full",
   },
 ] as const;
@@ -180,14 +227,14 @@ export function TrackingVisual() {
       <div className={cn(panel, "overflow-hidden")}>
         <div className="flex items-center justify-between border-b border-zinc-100 px-3 py-2.5">
           <div>
-            <p className="text-[10px] text-zinc-400">This week</p>
-            <p className="text-sm font-semibold tracking-tight text-zinc-900 tabular-nums">
-              42:00:00
+            <p className="text-[10px] text-zinc-400">Automated today</p>
+            <p className="text-sm font-semibold tracking-tight text-ink tabular-nums">
+              1,284 tasks
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 rounded-md bg-zinc-950 px-2 py-1 text-[10px] font-medium text-white">
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-ink px-2 py-1 text-[10px] font-medium text-white">
             <span className="size-1.5 animate-pulse rounded-full bg-red-400 motion-reduce:animate-none" />
-            Tracking
+            Live
           </span>
         </div>
         <ul className="divide-y divide-zinc-100">
@@ -213,7 +260,7 @@ export function TrackingVisual() {
               <span className="hidden h-1.5 overflow-hidden rounded-full bg-zinc-100 sm:block">
                 <span
                   className={cn(
-                    "block h-full rounded-full bg-violet-400",
+                    "block h-full rounded-full bg-brand-300",
                     row.progress,
                   )}
                 />

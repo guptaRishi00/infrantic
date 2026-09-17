@@ -16,34 +16,44 @@ export function isNavGroup(item: NavItem): item is NavGroup {
   return "items" in item;
 }
 
-export const primaryNav: readonly NavItem[] = [
-  { label: "Products", href: "/products" },
+/** The five service lines; also used by the footer. */
+export const serviceLinks: readonly NavLink[] = [
   {
-    label: "Solutions",
-    items: [
-      {
-        label: "Startups",
-        href: "/solutions/startups",
-        description: "Ship faster with a lean, organized team.",
-      },
-      {
-        label: "Agencies",
-        href: "/solutions/agencies",
-        description: "Keep every client project on track.",
-      },
-      {
-        label: "Enterprise",
-        href: "/solutions/enterprise",
-        description: "Scale workflows with security and control.",
-      },
-    ],
+    label: "AI Automation",
+    href: "/#services",
+    description: "Reduce manual work without removing human control.",
   },
-  { label: "Services", href: "/services", badge: "New" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Insight", href: "/insight" },
+  {
+    label: "Business Process Automation",
+    href: "/#services",
+    description: "Faster, more consistent operations.",
+  },
+  {
+    label: "Custom Software",
+    href: "/#services",
+    description: "Software that fits the way you work.",
+  },
+  {
+    label: "Systems & Integrations",
+    href: "/#services",
+    description: "One connected digital ecosystem.",
+  },
+  {
+    label: "Data & Operational Intelligence",
+    href: "/#services",
+    description: "Visibility into what is happening and why.",
+  },
+];
+
+export const primaryNav: readonly NavItem[] = [
+  { label: "Services", items: serviceLinks },
+  { label: "How we work", href: "/#workflow" },
+  { label: "Industries", href: "/#industries" },
+  { label: "Technology", href: "/#technology" },
+  { label: "Approach", href: "/#approach" },
 ];
 
 export const headerActions = {
-  signIn: { label: "Sign in", href: "/sign-in" },
-  contact: { label: "Contact", href: "/contact" },
+  secondary: { label: "The problem", href: "/#problem" },
+  primary: { label: "Book a call", href: "/#contact" },
 } as const satisfies Record<string, NavLink>;

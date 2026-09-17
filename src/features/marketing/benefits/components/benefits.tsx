@@ -27,16 +27,22 @@ export function Benefits({ content }: { content: BenefitsContent }) {
 
   return (
     <section
-      id="features"
+      id="outcomes"
       aria-labelledby="benefits-title"
       className="scroll-mt-24 px-4 py-24 sm:py-28"
     >
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          id="benefits-title"
-          title={content.title}
-          description={content.description}
-        />
+      <div className="mx-auto max-w-[84rem]">
+        <div className="flex flex-col items-center text-center">
+          <p className="text-sm font-medium text-brand-700">
+            {content.eyebrow}
+          </p>
+          <SectionHeading
+            id="benefits-title"
+            title={content.title}
+            description={content.description}
+            className="mt-3"
+          />
+        </div>
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {content.benefits.map((benefit) => (
             <li
@@ -48,7 +54,7 @@ export function Benefits({ content }: { content: BenefitsContent }) {
             >
               <div className="flex-1">{visuals[benefit.visual]}</div>
               <div className="px-3 pt-4 pb-3">
-                <h3 className="text-[15px] font-semibold tracking-tight text-zinc-950">
+                <h3 className="text-[15px] font-semibold tracking-tight text-ink">
                   {benefit.title}
                 </h3>
                 <p className="mt-1 max-w-sm text-sm leading-6 text-zinc-500">

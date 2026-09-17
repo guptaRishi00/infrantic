@@ -1,39 +1,26 @@
 import type { CtaContent } from "./cta.types";
 
 const ctaContent = {
-  socialProof: {
-    value: "200K+",
-    label: "happy creators",
-    people: [
-      {
-        name: "Ava Rossi",
-        initials: "AR",
-        tone: "from-amber-200 to-orange-300 text-orange-900",
-      },
-      {
-        name: "Noah Kim",
-        initials: "NK",
-        tone: "from-sky-200 to-indigo-300 text-indigo-900",
-      },
-      {
-        name: "Mia Chen",
-        initials: "MC",
-        tone: "from-rose-200 to-pink-300 text-rose-900",
-      },
-    ],
-  },
-  title: "Create better, faster, and together",
+  eyebrow: "What is slowing your business down?",
+  title: "Let's make your business easier to operate",
   description:
-    "The modern project management tool designed for designers, developers, and makers. Streamline your creative workflow from concept to launch.",
-  primaryCta: { label: "Get Started", href: "/sign-up" },
-  secondaryCta: { label: "See Demo", href: "/demo" },
+    "Infrantic exists to simplify the machinery behind modern businesses. Tell us where the friction is, and we'll design the system that removes it.",
+  commitments: [
+    "We find the friction",
+    "We design the system",
+    "We automate the work",
+    "We build the software",
+    "We connect everything",
+  ],
+  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  secondaryCta: { label: "Explore our services", href: "/#services" },
   badges: [
-    { id: "mailchimp", x: 20, y: 72 },
-    { id: "pinwheel", x: 32, y: 86 },
-    { id: "slack", x: 9, y: 34 },
-    { id: "meta", x: 88, y: 30 },
-    { id: "clickup", x: 70, y: 86 },
-    { id: "zapier", x: 82, y: 70 },
+    { id: "make", x: 20, y: 72 },
+    { id: "googleSheets", x: 32, y: 86 },
+    { id: "openai", x: 9, y: 34 },
+    { id: "claude", x: 88, y: 30 },
+    { id: "n8n", x: 70, y: 86 },
+    { id: "whatsapp", x: 82, y: 70 },
   ],
 } as const satisfies CtaContent;
 

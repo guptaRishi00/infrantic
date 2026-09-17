@@ -1,15 +1,12 @@
 import type { Cta } from "@/shared/types";
-import type { AvatarPerson } from "@/shared/ui/initials-avatar";
 import type { IntegrationId } from "@/shared/ui/integration-logo";
 
 export type CtaContent = {
-  socialProof: {
-    value: string;
-    label: string;
-    people: readonly AvatarPerson[];
-  };
+  eyebrow: string;
   title: string;
   description: string;
+  /** Short statements shown as a row of steps under the description. */
+  commitments: readonly string[];
   primaryCta: Cta;
   secondaryCta: Cta;
   /** Floating badges; `x`/`y` are centre positions in % of the band. */

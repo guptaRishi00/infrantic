@@ -1,10 +1,10 @@
 # Infrantic — Codebase Map
-_Last updated: 2026-09-16_
+_Last updated: 2026-09-17_
 
 > Legend: **[v]** confirmed against the filesystem/git on 2026-09-16. **[?]** inferred — check before relying on it.
 
 ## Identity
-- Marketing site in early build: a complete one-page home (hero → benefits → workflow → use cases → testimonials → integrations → pricing → CTA → footer), built 2026-09-16 from two reference screenshots. **[v]**
+- Marketing site for **Infrantic, an AI, automation and custom-software company** ("AI & Automation Systems for Modern Businesses"). One-page home built from the company brief (2026-09-17): hero → problem → services → how we work → outcomes → technology → approach → contact band → footer. **[v]**
 - Name `infrantic` (package.json). What the product actually is: **[?] unknown** — see Open questions.
 - Next.js **16.3.5** App Router, React **19.2.8**, TypeScript (strict), Tailwind CSS **v4**, React Compiler on (`reactCompiler: true`). **[v]**
 - Git repo, branch `master`, **no remote**, one commit `40fe870` "Initial commit from Create Next App" (2026-09-16, guptaRishi00). All landing-page work is uncommitted. **[v]**
@@ -37,42 +37,45 @@ _Last updated: 2026-09-16_
 - `src/features/<feature>/` — feature code. Each feature has an `index.ts` public API; import from that, never from its internals
   - `site-header/` — `navigation.ts` (typed nav data, `NavLink` type), `components/site-header.tsx` (server), `nav-dropdown.tsx` + `mobile-nav.tsx` (client)
   - `site-footer/` — `footer-navigation.ts` (columns, socials), `components/site-footer.tsx`
-  - `marketing/<section>/` — `hero`, `benefits`, `workflow`, `use-cases`, `testimonials`, `integrations`, `pricing`, `cta`. Each has `*.types.ts`, `*.data.ts` (`get*Content()`), `components/`, `index.ts`
-  - **Client components (all of them):** `nav-dropdown`, `mobile-nav`, `workflow/components/workflow-tabs`, `pricing/components/billing-switch`
-- `src/shared/` — feature-agnostic code: `ui/` (`button-link`, `brand-mark`, `new-badge`, `section-heading`, `initials-avatar` + `AvatarPerson`, `icons` (check/arrow/star), `integration-logo` + `IntegrationId`), `lib/cn.ts`, `types.ts` (`Cta`)
+  - `marketing/<section>/` — `hero`, `problem`, `services`, `workflow` (How we work, 5 steps), `benefits` (outcomes bento), `integrations` (Technology: constellation + stack groups), `approach` (difference + philosophy + personality), `cta` (contact band). Each has `*.types.ts`, `*.data.ts` (`get*Content()`), `components/`, `index.ts`. **Removed 2026-09-17:** `use-cases`, `testimonials`, `pricing`; the brief has no testimonials or pricing, so none are invented.
+  - **Client components (all of them):** `nav-dropdown`, `mobile-nav`, `workflow/components/workflow-tabs`
+- `src/shared/` — feature-agnostic code: `ui/` (`button-link`, `brand-logo` (real logo: header + footer), `brand-mark` (placeholder shape still used in the purple tiles in benefits, problem and integrations), `new-badge`, `section-heading`, `integration-logo` + `IntegrationId`), `lib/cn.ts`, `types.ts` (`Cta`)
 - `src/config/site.ts` — brand name + description
-- `public/` — empty (template SVGs deleted)
+- `public/brand/logo-svg.svg` — **the master INFRANTIC wordmark** (1278×168, navy `#021C38` + blue gradients), rendered only through `shared/ui/brand-logo.tsx` (`next/image`, SVG served unoptimized automatically). Put further static assets in `public/brand/` and `public/images/`
 - root — `next.config.ts`, `biome.json`, `tsconfig.json`, `postcss.config.mjs`, `AGENTS.md`, `CLAUDE.md`
 
 ## Surfaces
 | Name | Type | File:Line | Auth/Cap | Purpose |
 |---|---|---|---|---|
-| `/` | Page (Server, static) | `src/app/(marketing)/page.tsx:18` | public | Home landing page (8 sections). In-page anchors: `#features`, `#workflow`, `#integrations`, `#pricing` |
+| `/` | Page (Server, static) | `src/app/(marketing)/page.tsx:18` | public | Home. In-page anchors used by nav/footer: `#problem`, `#services`, `#workflow`, `#industries` (hero marquee), `#outcomes`, `#technology`, `#approach`, `#contact` (CTA band) |
 | (marketing) layout | Layout | `src/app/(marketing)/layout.tsx:6` | public | Fixed floating header + footer |
 | root layout | Layout | `src/app/layout.tsx:25` | public | Fonts, metadata (`title.template` = `%s · Infrantic`) |
 
-The nav and CTAs link to routes that **don't exist yet** (they 404): `/products`, `/solutions/{startups,agencies,enterprise}`, `/services`, `/pricing`, `/insight`, `/sign-in`, `/sign-up` (+ `?plan=solo|team|studio` from pricing), `/contact`, `/demo`, `/use-cases/*`, and the footer's `/roadmap`, `/changelog`, `/blog`, `/docs`, `/docs/api`, `/guides`, `/help`, `/about`, `/careers`, `/privacy`, `/terms`. Social links point at the bare facebook.com / linkedin.com / x.com homepages (placeholders).
+Nearly all links are in-page anchors. Routes that **don't exist yet** (404): `/contact` (the CTA band's primary button), `/privacy`, `/terms`. Social links are placeholder homepages.
 
 No API routes, route handlers, middleware/proxy, server actions, or jobs exist.
 
 ## Data
-No database or CMS. Content is typed static data behind a getter (`hero.data.ts` → `getHeroContent()`). Every section works the same way: a `get*Content()` in its `*.data.ts`. To move content to a CMS, change only those function bodies and add caching there. Pricing is display-only (prices per user/month for monthly and yearly). No billing logic exists.
+No database or CMS. Content is typed static data behind a getter (`hero.data.ts` → `getHeroContent()`). Every section works the same way: a `get*Content()` in its `*.data.ts`. To move content to a CMS, change only those function bodies and add caching there. All copy comes from the company brief. Hero activity cards and benefit mockup numbers (Invoice #1042, PO #418, 1,284 tasks) are illustrative UI, not claims.
 
 ## Assets
-No image assets. Brand and integration logos are **inline SVG approximations** (`integration-logo.tsx`), customer logos are **styled text wordmarks** (`trusted-by.tsx`), avatars and the testimonial "portrait" tile are initials, and product mockups (benefit visuals, flow canvas, use-case art) are hand-built HTML/SVG. Replace them with licensed assets before launch.
+No image assets. **Icons come from `react-icons` and `lucide-react` (added 2026-09-17 at the user's request). Do not hand-write icon SVGs in the hero.** Integration logos (`shared/ui/integration-logo.tsx`) map an id to a react-icons component plus brand colour; trusted-by uses Simple Icons (Coinbase from Tabler) with the name text; ratings use `FcGoogle`/`SiTrustpilot`; activity cards use lucide `Check`/`EllipsisVertical` and `SiGmail`. Several `Si*` icons are wordmarks that turn illegible at badge size (Zapier, Typeform, Coinbase), so use `TbBrand*` or pick another brand., avatars and the testimonial "portrait" tile are initials, and product mockups (benefit visuals, flow canvas, use-case art) are hand-built HTML/SVG. Replace them with licensed assets before launch.
 
 ## External services
 None.
 
 ## Conventions
+- **Section width:** all content containers (Problem, Services heading, Workflow, Benefits, Technology, Approach, footer) use **`max-w-[84rem]`**; the hero keeps its own narrower text column. Section eyebrows are a `text-sm font-medium text-brand-700` `<p>` above `SectionHeading` (`text-brand-300` on ink).
+- **Section rhythm:** every page section (hero bottom, all `main > section`, footer top) uses **`py-24 sm:py-28`** vertical padding, so any two adjacent blocks are 192px apart on phones and 224px from `sm` up (measured). New sections must use the same padding; don't add margins between sections.
+- **Brand palette (2026-09-17): white, `brand` #0796fe, `ink` #021c37**, defined as `@theme` tokens in `globals.css` with derived `brand-50/100/200/300/700` and `ink-700/800`. Use `text-brand-700` for small blue text (#0796fe on white is too low-contrast), `bg-ink`/`text-ink` for dark surfaces and headings (**primary buttons are pure black `bg-black hover:bg-zinc-800`, not ink**, per the user on 2026-09-17), and brand→ink gradients for brand tiles and cards. **No violet/indigo/purple.** **Icons are never brand blue** (user rule, 2026-09-17): generic icons use dark grey (`zinc-800`, `#27272a`) or ink, and brand/product logos keep their original colours. Blue stays for text accents, surfaces and gradients. Greys (`zinc-*` except 900/950) stay for secondary text, borders and surfaces; emerald/amber only as status colours in mockups.
 - Server Components by default; `"use client"` only for interactive islands, which receive plain serializable props.
-- **Client islands keep server-rendered content.** `WorkflowTabs` takes `panels: ReactNode[]` built on the server (all panels stay in the HTML, inactive ones `hidden`). `BillingSwitch` only toggles `data-billing` on a `group/billing` wrapper. Both prices are in the HTML, switched with `group-data-[billing=yearly]/billing:` variants.
-- Horizontal carousels are native scroll-snap (no JS). They bleed to the viewport edge via `px-[max(1rem,calc((100%_-_72rem)/2_+_1rem))]` plus matching `scroll-px`.
+- **Client islands keep server-rendered content.** `WorkflowTabs` takes `panels: ReactNode[]` built on the server (all panels stay in the HTML, inactive ones `hidden`).
+- Services is an **ink section**: heading in the same `max-w-[84rem]` container as Problem; the infinite CSS marquee sits **outside** it, edge to edge (`-mx-4`, no edge fade): two copies, -50% loop, `animationDuration: 60s` inline, per-card `pr-4` (never `gap`), pause on hover, edge mask; reduced motion gives one manually scrollable row. The duplicate list is `aria-hidden` and omits heading ids. `SectionHeading` takes `tone="dark"` for ink backgrounds.
 - Cross-feature imports go through shared code. Features don't import each other, except the footer reusing `NavLink` from `site-header/navigation`.
 - Section headings use `SectionHeading` (`id` feeds `aria-labelledby`).
 - Presentational components take content via props; data comes from a `get*()` in the feature's `*.data.ts`, called by the route's `page.tsx`.
 - Content types live in `*.types.ts`. Data is `as const satisfies Type`.
-- Animation is CSS-only: `animate-rise`, `animate-float`, `animate-orbit` tokens in `globals.css`, always behind `motion-safe:`.
+- Animation is CSS-only: `animate-rise`, `animate-float`, `animate-marquee` (40s, translateX -50%), `animate-row-cycle` (12s) tokens in `globals.css`, always behind `motion-safe:`.
 - Decorative SVGs carry `aria-hidden="true"` (Biome `noSvgWithoutTitle` requires it).
 - `cn()` from `@/shared/lib/cn` (no clsx/tailwind-merge: later classes don't override earlier ones, so avoid conflicting utilities).
 - Biome formatting (2-space, double quotes), TS strict, `@/` imports. Root layout uses the `LayoutProps<"/">` global. The group layout uses `Readonly<{ children: ReactNode }>`.
@@ -80,8 +83,8 @@ None.
 ## Where to add a <thing>
 - **Marketing page:** `src/app/(marketing)/<route>/page.tsx` (gets the header and footer automatically)
 - **Home section:** new `src/features/marketing/<section>/` folder, then add `<Section content={get…()} />` in `src/app/(marketing)/page.tsx`
-- **Pricing plan:** `plans` in `pricing.data.ts` (`id` union + `planIcons` in `pricing.tsx`)
-- **Integration logo:** add the id to `IntegrationId` and an entry in `logos` in `src/shared/ui/integration-logo.tsx`
+- **Service:** `services` in `services.data.ts` (+ `serviceLinks` in `site-header/navigation.ts`, which feeds the nav dropdown and footer)
+- **Integration logo:** add the id to `IntegrationId` and a `{ Icon, color }` entry (react-icons) in `logos` in `src/shared/ui/integration-logo.tsx`
 - **Different chrome (app/auth):** a new route group, e.g. `src/app/(app)/layout.tsx`
 - **Page section:** `src/features/marketing/<section>/` with `index.ts`, `*.types.ts`, `*.data.ts`, `components/`
 - **Nav link:** `primaryNav` in `src/features/site-header/navigation.ts`
@@ -90,8 +93,12 @@ None.
 
 ## Risks & gotchas
 - **Next 16 ≠ training data.** `AGENTS.md` (auto-written by `next dev`) says to read `node_modules/next/dist/docs/` before writing code. `CLAUDE.md` is just `@AGENTS.md`. `next dev` re-adds that block if removed — don't fight it.
-- **Orbit stacking:** `OrbitBackdrop` uses `-z-10` against the hero `<section className="isolate">`. Never put transform/opacity/animation on its wrapper div in `hero.tsx`: that creates a local stacking context and paints the rings **over** the headline.
-- Orbit geometry is design-pixel offsets (`x`/`y` in `hero.data.ts`) multiplied by `--orbit-scale` (0.5→1 across breakpoints). Integration badges are hidden below `sm`, accent arcs too.
+- **Hero activity stack** (`activity-stack.tsx`, data `activity` in `hero.data.ts`, `Activity` union joined/profile/email): three **stationary** cards at stepped widths (100/88/72%, `-mt-1.5` overlap, the back card faded and masked). The animation rotates the **content**, not the cards: each card holds all 3 rows grid-stacked, and `row-cycle` (12s) shows one row per third with a 0.4s cross-fade, so each notification steps up a card every 4s. Per-row delay is `-((slot-row) mod 3) × 4s`, set **inline** because the `animate-*` shorthand resets utility delays. Non-own rows are `opacity-0` + `aria-hidden`, so under reduced motion each card shows its own row. Never animate card width or position: the user rejected both. Because every row passes through the 72% card, the stack wrapper in `hero.tsx` is `max-w-[25.5rem]` so the longest row (the Wei Chen line, 268px + padding) fits there untruncated. Re-measure if the copy gets longer. Rows are `min-w-0`, so on phones they truncate instead of being clipped.
+- **Industries marquee** (`hero/components/industries-marquee.tsx`, lucide icons, `id="industries"`; replaced the fake customer-logo row and fake ratings on 2026-09-17): the logo list is rendered twice (the second copy `aria-hidden`) in a `w-max` track animated -50%. Spacing is per-item `px-8/sm:px-10`, never flex `gap`, which would break the seamless loop. `-mx-4` cancels the section `px-4` so it runs edge to edge, with masked fade edges; it pauses on hover. Reduced motion: the duplicate is hidden and the row wraps centred.
+- **Marquee fade:** a `-z-10` gradient div (transparent → white at 55%) inside the marquee wrapper in `hero.tsx` paints over the rings (same z, later DOM order) and under the logos. It bleeds `-inset-x-4` and down to the section bottom (`-bottom-24 sm:-bottom-28`, which must equal the hero's `pb-24 sm:pb-28`). Keep it `-z-10`, because a higher z would cover the logos.
+- **Orbit stacking:** `OrbitBackdrop` uses `-z-10` against the hero `<section className="isolate">`. The cards are pushed down with `pt-10` on the inner animate div, not margin on the wrapper, because the wrapper top is the orbit anchor. Never put transform/opacity/animation on its wrapper div in `hero.tsx`: that creates a local stacking context and paints the rings **over** the headline.
+- Orbit rings: 7 radii in `RING_RADII` (510→1450, enlarged ~8% on 2026-09-17) inside a 3000 design-px SVG (`VIEWBOX` and the `size-[calc(var(--orbit-scale)*3000px)]` class must match). The mask fades out from 70%.
+- Hero integration badges sit **on** the rings: data is `{ ring, angle }` (`ring` indexes `RING_RADII`, angle in degrees clockwise from 3 o'clock), turned into x/y by `pointOnRing()` in `orbit-backdrop.tsx` and multiplied by `--orbit-scale` (0.44→0.85). They are static (no float) and hidden below `sm`. Badges use ring indices 0-2 (510/650/800). Ring 2 only fits between about 20° and 46° above horizontal: flatter angles clip at the 1280px viewport edge, steeper ones hit the header. Badge visibility per breakpoint is **computed**: `revealClass(x)` in `orbit-backdrop.tsx` picks the first breakpoint (`BREAKPOINTS`, whose scales must mirror the `--orbit-scale` classes) where the badge fits horizontally, so near-horizontal badges only appear on wider screens. At 1024 only 6 of 10 show. Adding or removing a ring shifts the indices, so update `hero.data.ts` too.
 - Dark mode was removed on purpose (the design is light-only).
 - `IntegrationLogo` gradient ids come from `useId()` (the logos render in the hero, integrations and CTA). Never hard-code SVG gradient ids in shared components.
 - Integrations constellation: rings sit in an `overflow-hidden` + radial-mask wrapper. Without it the outer rings run through the section heading.
@@ -106,3 +113,9 @@ None.
 2. Brand: the reference design said "Deflexai". The build uses `siteConfig.name` = "Infrantic" **[?]**. Are the copy, ratings (4.6/4.9) and "200,000+ users" placeholders?
 3. Git remote to add, and should the default branch be `master` or `main`?
 4. Deploy target — Vercel (as with the sibling sites)? **[?]**
+- Nav/footer links share `href`s (all services → `/#services`), so list keys use `label`, never `href`.
+- Scripted edits via Python heredocs in Bash mangle `\n` escapes. When a data file is left invalid, `biome check --write` "formats" the broken syntax into worse garbage, so fix with Edit/Write, never with biome.
+- Before changing hero rings or badge angles, re-measure in the pane at **1024 and 1280**. Select badges with `section[aria-labelledby=hero-title] div[aria-hidden] > ul > li`, not `span.grid`, which also matches the card avatars. Check viewport clipping, overlap with header/h1/subtitle/cards/marquee, and badge-badge collisions. Badges no longer need hand-tuned angles to avoid clipping; `revealClass` hides them where they would clip.
+- **Visual check of hover/animated states:** the Browser pane freezes transitions and its screenshots come back blank. Drive headless Edge over CDP with a scratch Node script (`--remote-debugging-port`, `Runtime.evaluate` to force state, `Page.captureScreenshot` with a clip). Node 22's global `WebSocket` and `fetch` suffice, no dependencies.
+- **Remote images:** `next.config.ts` allows `https://images.unsplash.com/photo-**` (object-form `remotePatterns`; the `new URL()` form pins an empty query and 400s on Unsplash sizing params). This only serves the **placeholder portraits** in the benefits collaboration card (`benefits.data.ts` `collaborators`, `kind: "person" | "agent"`). Replace them with local `public/images` files and drop the pattern.
+- **`next.config.ts` changes need a dev-server restart**; hot reload does not pick up `images` config.

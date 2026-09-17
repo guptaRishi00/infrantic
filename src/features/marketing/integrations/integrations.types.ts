@@ -1,7 +1,8 @@
-import type { AvatarPerson } from "@/shared/ui/initials-avatar";
 import type { IntegrationId } from "@/shared/ui/integration-logo";
 
-type Placement = {
+export type ConstellationItem = {
+  id: IntegrationId;
+  label: string;
   /** Centre position in % of the constellation box. */
   x: number;
   y: number;
@@ -9,12 +10,24 @@ type Placement = {
   desktopOnly?: boolean;
 };
 
-export type ConstellationItem =
-  | (Placement & { kind: "logo"; id: IntegrationId; label: string })
-  | (Placement & { kind: "person"; person: AvatarPerson });
+export type TechStackIcon =
+  | "ai"
+  | "automation"
+  | "software"
+  | "infrastructure"
+  | "integrations";
+
+export type TechStackGroup = {
+  category: string;
+  icon: TechStackIcon;
+  items: readonly string[];
+};
 
 export type IntegrationsContent = {
+  eyebrow: string;
   title: string;
   description: string;
   items: readonly ConstellationItem[];
+  stack: readonly TechStackGroup[];
+  footnote: string;
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
 import { ButtonLink } from "@/shared/ui/button-link";
@@ -33,17 +34,13 @@ export function MobileNav({ items, actions }: MobileNavProps) {
         aria-controls={panelId}
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => setOpen((value) => !value)}
-        className="grid size-10 place-items-center rounded-lg text-zinc-800 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-zinc-950"
+        className="grid size-10 place-items-center rounded-lg text-zinc-800 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-ink"
       >
-        <svg viewBox="0 0 20 20" aria-hidden="true" className="size-5">
-          <path
-            d={open ? "M5 5l10 10M15 5 5 15" : "M3 6.5h14M3 13.5h14"}
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-          />
-        </svg>
+        {open ? (
+          <X aria-hidden="true" className="size-5" />
+        ) : (
+          <Menu aria-hidden="true" className="size-5" />
+        )}
       </button>
 
       <nav
@@ -61,14 +58,14 @@ export function MobileNav({ items, actions }: MobileNavProps) {
                 </span>
                 <ul>
                   {item.items.map((child) => (
-                    <li key={child.href}>
+                    <li key={child.label}>
                       <MobileLink link={child} onNavigate={close} />
                     </li>
                   ))}
                 </ul>
               </li>
             ) : (
-              <li key={item.href}>
+              <li key={item.label}>
                 <MobileLink link={item} onNavigate={close} />
               </li>
             ),

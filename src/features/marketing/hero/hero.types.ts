@@ -1,37 +1,30 @@
+import type { Cta } from "@/shared/types";
 import type { IntegrationId } from "@/shared/ui/integration-logo";
 
-export type { IntegrationId };
+export type { Cta, IntegrationId };
 
-export type CompanyId =
-  | "google"
-  | "airbnb"
-  | "coinbase"
-  | "notion"
-  | "gumroad"
-  | "paypal"
-  | "upwork"
-  | "shopify"
-  | "stripe"
-  | "zoom";
-
-export type Cta = { label: string; href: string };
-
-export type Rating = {
-  source: "google" | "trustpilot";
-  label: string;
-  score: number;
-};
+export type IndustryId =
+  | "manufacturing"
+  | "apparel"
+  | "logistics"
+  | "professionalServices"
+  | "retail"
+  | "finance"
+  | "realEstate"
+  | "healthcare"
+  | "education"
+  | "startups";
 
 /**
- * An integration badge floating around the hero. `x`/`y` are offsets in design
- * pixels (1280px layout) from the top-centre of the activity stack; the orbit
- * scales them down on smaller breakpoints.
+ * A technology badge sitting on one of the hero's background rings.
+ * `ring` indexes `RING_RADII` in orbit-backdrop.tsx; `angle` is in degrees,
+ * clockwise from 3 o'clock.
  */
 export type OrbitIntegration = {
   id: IntegrationId;
   label: string;
-  x: number;
-  y: number;
+  ring: number;
+  angle: number;
 };
 
 export type Person = {
@@ -41,11 +34,14 @@ export type Person = {
   tone: string;
 };
 
+/** Illustrative automation events shown in the hero's card stack. */
 export type Activity =
   | {
-      kind: "joined";
+      /** "<person> <action> <target>", e.g. "AI Agent processed Invoice #1042". */
+      kind: "event";
       id: string;
       person: Person;
+      action: string;
       target: string;
       meta: readonly string[];
     }
@@ -64,15 +60,15 @@ export type Activity =
     };
 
 export type HeroContent = {
-  ratings: readonly Rating[];
+  eyebrow: string;
   title: string;
   subtitle: string;
   primaryCta: Cta;
   secondaryCta: Cta;
   integrations: readonly OrbitIntegration[];
   activity: readonly Activity[];
-  trustedBy: {
+  industries: {
     label: string;
-    companies: readonly { id: CompanyId; name: string }[];
+    items: readonly { id: IndustryId; name: string }[];
   };
 };

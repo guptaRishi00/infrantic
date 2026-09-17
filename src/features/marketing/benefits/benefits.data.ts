@@ -1,69 +1,77 @@
 import type { BenefitsContent } from "./benefits.types";
 
 const benefitsContent = {
-  title: "Why creative teams love us",
+  eyebrow: "Outcomes",
+  title: "Systems that handle the work in the background",
   description:
-    "Purpose-built features that understand how creative professionals actually work.",
+    "Less manual work, less fragmented data, and less operational friction, with your team in control when decisions matter.",
   benefits: [
     {
-      id: "team-collaboration",
-      title: "Team Collaboration",
+      id: "human-control",
+      title: "Humans stay in control",
       description:
-        "Work together in real time with shared spaces, instant feedback, and seamless communication.",
+        "AI handles repetitive work, and people step in where judgment or approval matters.",
       visual: "collaboration",
     },
     {
-      id: "flexible-boards",
-      title: "Flexible Boards",
+      id: "less-manual-work",
+      title: "Less manual work",
       description:
-        "Switch between kanban, list, and timeline views. Organize your work the way you think best.",
+        "Invoices, leads, onboarding, and inventory move through automated workflows instead of inboxes.",
       visual: "boards",
     },
     {
-      id: "seamless-reviews",
-      title: "Seamless Reviews",
+      id: "approvals",
+      title: "Approvals that keep moving",
       description:
-        "Pin feedback directly on designs, track revisions, and resolve comments in context.",
+        "Requests reach the right person with the right context, and approved work syncs everywhere.",
       visual: "reviews",
     },
     {
-      id: "time-tracking",
-      title: "Time Tracking",
+      id: "visibility",
+      title: "Visibility into operations",
       description:
-        "Track time per task, project, or client. See budgets burn down before your spend does.",
+        "See what is happening, why it is happening, and where action is required, in real time.",
       visual: "tracking",
     },
   ],
+  // Placeholder portraits (Unsplash). Replace with real team photos.
   collaborators: [
     {
-      name: "Ava Rossi",
-      initials: "AR",
-      tone: "from-amber-200 to-orange-300 text-orange-900",
+      kind: "person",
+      name: "Ava",
+      role: "Operations",
+      photo:
+        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=240&h=240&fit=crop&crop=faces&auto=format&q=80",
+    },
+    { kind: "agent", name: "AI Agent", role: "Automation" },
+    {
+      kind: "person",
+      name: "Daniel",
+      role: "Finance",
+      photo:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=240&h=240&fit=crop&crop=faces&auto=format&q=80",
     },
     {
-      name: "Leo Park",
-      initials: "LP",
-      tone: "from-zinc-700 to-zinc-900 text-white",
+      kind: "person",
+      name: "Maya",
+      role: "Sales",
+      photo:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=240&h=240&fit=crop&crop=faces&auto=format&q=80",
     },
     {
-      name: "Mia Chen",
-      initials: "MC",
-      tone: "from-rose-200 to-pink-300 text-rose-900",
+      kind: "person",
+      name: "Rohan",
+      role: "Procurement",
+      photo:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=240&h=240&fit=crop&crop=faces&auto=format&q=80",
     },
     {
-      name: "Noah Kim",
-      initials: "NK",
-      tone: "from-sky-200 to-indigo-300 text-indigo-900",
-    },
-    {
-      name: "Zoe Hart",
-      initials: "ZH",
-      tone: "from-red-400 to-rose-600 text-white",
-    },
-    {
-      name: "Eli Ward",
-      initials: "EW",
-      tone: "from-yellow-200 to-amber-400 text-amber-900",
+      kind: "person",
+      name: "Lena",
+      role: "Support",
+      photo:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&h=240&fit=crop&crop=faces&auto=format&q=80",
     },
   ],
 } as const satisfies BenefitsContent;

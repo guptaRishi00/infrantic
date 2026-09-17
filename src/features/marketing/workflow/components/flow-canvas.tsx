@@ -1,12 +1,13 @@
+import { Check } from "lucide-react";
+import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
-import { CheckIcon } from "@/shared/ui/icons";
 import type { FlowNode, FlowNodeStatus, WorkflowStep } from "../workflow.types";
 
 const statusStyles: Record<FlowNodeStatus, { dot: string; ring: string }> = {
   done: { dot: "bg-emerald-500 text-white", ring: "border-emerald-200" },
   active: {
-    dot: "bg-violet-500 text-white",
-    ring: "border-violet-300 shadow-[0_0_0_4px_rgb(139_92_246/0.1)]",
+    dot: "bg-brand text-white",
+    ring: "border-brand-200 shadow-[0_0_0_4px_rgb(7_150_254/0.12)]",
   },
   todo: { dot: "bg-zinc-200 text-zinc-500", ring: "border-zinc-200" },
 };
@@ -20,36 +21,21 @@ export function FlowCanvas({ step }: { step: WorkflowStep }) {
   return (
     <div
       aria-hidden="true"
-      className="relative h-full min-h-80 overflow-hidden rounded-2xl border border-zinc-200/70 bg-zinc-50 bg-[radial-gradient(rgb(24_24_27/0.08)_1px,transparent_1px)] [background-size:16px_16px]"
+      className="relative h-full min-h-[30rem] overflow-hidden rounded-2xl border border-zinc-200/70 bg-zinc-50 bg-[radial-gradient(rgb(2_28_55/0.08)_1px,transparent_1px)] [background-size:16px_16px]"
     >
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 size-full"
-      >
-        {step.edges.map(([fromId, toId]) => {
-          const from = byId.get(fromId);
-          const to = byId.get(toId);
-          if (!from || !to) return null;
-          const midX = (from.x + to.x) / 2;
-          const d =
-            from.x === to.x
-              ? `M${from.x} ${from.y}V${to.y}`
-              : `M${from.x} ${from.y}H${midX}V${to.y}H${to.x}`;
-          return (
-            <path
-              key={`${fromId}-${toId}`}
-              d={d}
-              fill="none"
-              stroke={to.status === "todo" ? "#d4d4d8" : "#a78bfa"}
-              strokeWidth="1.5"
-              strokeDasharray={to.status === "todo" ? "4 4" : undefined}
-              vectorEffect="non-scaling-stroke"
-            />
-          );
-        })}
-      </svg>
+      {step.edges.map(([fromId, toId]) => {
+        const from = byId.get(fromId);
+        const to = byId.get(toId);
+        if (!from || !to) return null;
+        return (
+          <Connector
+            key={`${fromId}-${toId}`}
+            from={from}
+            to={to}
+            muted={to.status === "todo"}
+          />
+        );
+      })}
 
       {step.nodes.map((node) => {
         const style = statusStyles[node.status];
@@ -70,7 +56,11 @@ export function FlowCanvas({ step }: { step: WorkflowStep }) {
                 )}
               >
                 {node.status === "done" ? (
-                  <CheckIcon className="size-2.5" />
+                  <Check
+                    aria-hidden="true"
+                    className="size-2.5"
+                    strokeWidth={3}
+                  />
                 ) : (
                   <span className="size-1 rounded-full bg-current" />
                 )}
@@ -87,4 +77,64 @@ export function FlowCanvas({ step }: { step: WorkflowStep }) {
       })}
     </div>
   );
+}
+
+/**
+ * Elbow connector (horizontal → vertical → horizontal) drawn with bordered
+ * boxes positioned in % of the canvas, so it scales like the old SVG path.
+ */
+function Connector({
+  from,
+  to,
+  muted,
+}: {
+  from: FlowNode;
+  to: FlowNode;
+  muted: boolean;
+}) {
+  const line = muted
+    ? "border-dashed border-zinc-300"
+    : "border-solid border-brand";
+  const midX = (from.x + to.x) / 2;
+  const top = Math.min(from.y, to.y);
+  const height = Math.abs(to.y - from.y);
+
+  const segments: CSSProperties[] =
+    from.x === to.x
+      ? [
+          {
+            left: `${from.x}%`,
+            top: `${top}%`,
+            height: `${height}%`,
+            borderLeftWidth: 1.5,
+          },
+        ]
+      : [
+          {
+            left: `${Math.min(from.x, midX)}%`,
+            top: `${from.y}%`,
+            width: `${Math.abs(midX - from.x)}%`,
+            borderTopWidth: 1.5,
+          },
+          {
+            left: `${midX}%`,
+            top: `${top}%`,
+            height: `${height}%`,
+            borderLeftWidth: 1.5,
+          },
+          {
+            left: `${Math.min(midX, to.x)}%`,
+            top: `${to.y}%`,
+            width: `${Math.abs(to.x - midX)}%`,
+            borderTopWidth: 1.5,
+          },
+        ];
+
+  return segments.map((style) => (
+    <span
+      key={`${style.left}-${style.top}-${style.width ?? style.height}`}
+      className={cn("absolute border-0", line)}
+      style={style}
+    />
+  ));
 }

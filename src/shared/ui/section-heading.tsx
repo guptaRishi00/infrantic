@@ -5,6 +5,10 @@ type SectionHeadingProps = {
   title: string;
   description?: string;
   align?: "center" | "left";
+  /** Use "dark" on ink backgrounds. */
+  tone?: "light" | "dark";
+  /** "lg" is a slightly larger title with a bit more space above the description. */
+  size?: "md" | "lg";
   className?: string;
 };
 
@@ -14,6 +18,8 @@ export function SectionHeading({
   title,
   description,
   align = "center",
+  tone = "light",
+  size = "md",
   className,
 }: SectionHeadingProps) {
   return (
@@ -26,12 +32,24 @@ export function SectionHeading({
     >
       <h2
         id={id}
-        className="max-w-[20ch] text-3xl leading-[1.1] font-semibold tracking-[-0.035em] text-balance text-zinc-950 sm:text-4xl"
+        className={cn(
+          "max-w-[20ch] leading-[1.1] font-semibold tracking-[-0.035em] text-balance",
+          size === "lg"
+            ? "text-[2.125rem] sm:text-[2.625rem]"
+            : "text-3xl sm:text-4xl",
+          tone === "dark" ? "text-white" : "text-ink",
+        )}
       >
         {title}
       </h2>
       {description ? (
-        <p className="mt-3 max-w-md text-[15px] leading-6 text-pretty text-zinc-500">
+        <p
+          className={cn(
+            "max-w-md text-[15px] leading-6 text-pretty",
+            size === "lg" ? "mt-4" : "mt-3",
+            tone === "dark" ? "text-zinc-400" : "text-zinc-500",
+          )}
+        >
           {description}
         </p>
       ) : null}
