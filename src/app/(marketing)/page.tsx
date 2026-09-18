@@ -7,7 +7,7 @@ import {
   Integrations,
 } from "@/features/marketing/integrations";
 import { getProblemContent, Problem } from "@/features/marketing/problem";
-import { getServicesContent, Services } from "@/features/marketing/services";
+import { getWhatWeBuildContent, WhatWeBuild } from "@/features/marketing/what-we-build";
 import { getWorkflowContent, Workflow } from "@/features/marketing/workflow";
 
 // Statically prerendered: no request-time APIs are read on this route.
@@ -19,7 +19,7 @@ export default function HomePage() {
     <>
       <Hero content={getHeroContent()} />
       <Problem content={getProblemContent()} />
-      <Services content={getServicesContent()} />
+      <WhatWeBuild content={getWhatWeBuildContent()} />
       <Workflow content={getWorkflowContent()} />
       <Benefits content={getBenefitsContent()} />
       <Integrations content={getIntegrationsContent()} />
