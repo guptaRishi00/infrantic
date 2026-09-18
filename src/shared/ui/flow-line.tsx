@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
 
 // Marching dashes and travelling packets, compositor-only: the dashes are a
-// strip 8px longer than its (clipping) line that slides by one 8px period, and
+// strip 80px longer than its (clipping) line that slides by ten 8px periods, and
 // the packet rides a track that translates by its own length. Nothing here
 // animates layout or paint, so the main thread stays idle.
 
@@ -14,7 +14,7 @@ type FlowLineProps = {
   color: string;
   /** Painted part of each 8px dash period, in px. */
   dash?: number;
-  /** Seconds per dash period. */
+  /** Seconds per 80px (ten dash periods); default 8. */
   duration?: number;
   animated?: boolean;
   /** Positioning (`absolute`, or `relative block` in flow), length and thickness. */
@@ -38,8 +38,8 @@ export function FlowLine({
         className={cn(
           "absolute",
           horizontal
-            ? "inset-y-0 right-0 -left-2"
-            : "inset-x-0 -top-2 bottom-0",
+            ? "inset-y-0 right-0 -left-20"
+            : "inset-x-0 -top-20 bottom-0",
           animated &&
             (horizontal
               ? "motion-safe:animate-flow-x"

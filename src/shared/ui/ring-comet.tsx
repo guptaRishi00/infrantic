@@ -38,7 +38,7 @@ export function RingComet({
   const height = Math.ceil((tail * tail) / (2 * radius)) + 4;
   const len = (n: number) => `calc(${n} * ${unit})`;
 
-  const windowStyle: CSSProperties & Record<`--${string}`, string> = {
+  const windowStyle: CSSProperties = {
     left: left ? "50%" : `calc(50% - ${len(tail)})`,
     top: `calc(50% + ${len(radius - height)})`,
     width: len(tail),
@@ -47,14 +47,14 @@ export function RingComet({
     transformOrigin: `${left ? "0" : "100%"} ${len(-(radius - height))}`,
     // Head (at the ring's bottom point) opaque, tail fading out.
     maskImage: `linear-gradient(to ${left ? "right" : "left"}, #000, transparent)`,
-    "--comet-turn": left ? "180deg" : "-180deg",
     animationDelay: `${delay}s`,
   };
 
   return (
     <span
       className={cn(
-        "absolute hidden overflow-hidden motion-safe:block motion-safe:animate-comet",
+        "absolute hidden overflow-hidden motion-safe:block",
+        left ? "motion-safe:animate-comet" : "motion-safe:animate-comet-right",
       )}
       style={windowStyle}
     >

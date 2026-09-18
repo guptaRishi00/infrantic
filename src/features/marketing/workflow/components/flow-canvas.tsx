@@ -142,7 +142,7 @@ const LINE: Record<
 > = {
   done: { color: "var(--color-brand-300)", dash: 4, thick: true },
   active: { color: "var(--color-brand-from)", dash: 4, thick: true },
-  todo: { color: "rgb(161 161 170)", dash: 3, thick: false, duration: 1.6 },
+  todo: { color: "rgb(161 161 170)", dash: 3, thick: false, duration: 16 },
 };
 
 /**

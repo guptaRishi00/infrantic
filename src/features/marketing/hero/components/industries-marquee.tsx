@@ -36,7 +36,17 @@ export function IndustriesMarquee({ industries }: { industries: Industries }) {
         {industries.label}
       </p>
 
-      <div className="-mx-4 mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_8%,#000_92%,transparent)]">
+      {/* Edge fades are white overlays (the ground here is white), not a mask
+          around the moving track. */}
+      <div className="relative -mx-4 mt-6 overflow-hidden">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[8%] bg-[linear-gradient(to_right,#fff,rgb(255_255_255/0))]"
+        />
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[8%] bg-[linear-gradient(to_left,#fff,rgb(255_255_255/0))]"
+        />
         <div className="flex w-max motion-safe:animate-marquee motion-reduce:w-full motion-reduce:flex-wrap motion-reduce:justify-center">
           <IndustryList items={industries.items} />
           <IndustryList

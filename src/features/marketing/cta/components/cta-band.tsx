@@ -68,7 +68,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
       />
 
       <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-        <p className="rounded-full border border-white/70 bg-white/60 px-3 py-1 text-[13px] font-medium text-ink backdrop-blur">
+        <p className="rounded-full border border-white/70 bg-white/80 px-3 py-1 text-[13px] font-medium text-ink">
           {content.eyebrow}
         </p>
 

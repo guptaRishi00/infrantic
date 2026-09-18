@@ -26,27 +26,36 @@
   --animate-marquee: marquee 40s linear infinite;
   --animate-row-cycle: row-cycle 12s ease-in-out infinite;
   --animate-comet: comet 26s linear infinite;
+  --animate-comet-right: comet-right 26s linear infinite;
   /* Selected-work automation flow: marching dashes, travelling packets and a
      soft pulse on the agent. */
-  --animate-flow-x: flow-x 0.8s linear infinite;
-  --animate-flow-y: flow-y 0.8s linear infinite;
-  --animate-packet-x: packet-x 3.2s ease-in-out infinite;
-  --animate-packet-y: packet-y 3.2s ease-in-out infinite;
+  /* 80px per 8s = ten 8px dash periods per iteration: same speed as one
+     period per 0.8s, but a tenth of the iteration events (React listens for
+     those at the root, and each one costs a main-thread frame). */
+  --animate-flow-x: flow-x 8s linear infinite;
+  --animate-flow-y: flow-y 8s linear infinite;
+  /* Four 3.2s passes per 12.8s iteration (eased per pass inside the keyframes):
+     same motion, a quarter of the iteration events. */
+  --animate-packet-x: packet-x 12.8s linear infinite;
+  --animate-packet-y: packet-y 12.8s linear infinite;
   --animate-agent-glow: agent-glow 3.2s ease-in-out infinite;
-  /* Technology orbit, one animation per logo: rotate out to the ring, then
-     rotate back by the same angle so the logo stays upright. --orbit-a is the
-     start angle, --orbit-r the ring radius; duration/direction are set inline.
-     A plain transform animation, so it runs on the compositor. */
+  /* Technology orbit: each logo has an outer wrapper turning one way and an
+     inner one turning back, so it circles the ring and stays upright. Both
+     live in the same <li>, so they always start together. Keyframes must not
+     use var(): that keeps a transform animation off the compositor.
+     Duration/direction are set inline. */
   --animate-orbit: orbit 60s linear infinite;
+  --animate-orbit-back: orbit-back 60s linear infinite;
 
   @keyframes orbit {
-    from {
-      transform: rotate(var(--orbit-a)) translateX(var(--orbit-r))
-        rotate(calc(var(--orbit-a) * -1));
-    }
     to {
-      transform: rotate(calc(var(--orbit-a) + 360deg))
-        translateX(var(--orbit-r)) rotate(calc(var(--orbit-a) * -1 - 360deg));
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes orbit-back {
+    to {
+      transform: rotate(-360deg);
     }
   }
 
@@ -66,13 +75,13 @@
      so they run on the compositor and never trigger layout or paint. */
   @keyframes flow-x {
     to {
-      transform: translateX(8px);
+      transform: translateX(80px);
     }
   }
 
   @keyframes flow-y {
     to {
-      transform: translateY(8px);
+      transform: translateY(80px);
     }
   }
 
@@ -80,13 +89,56 @@
     0% {
       transform: translateX(0);
       opacity: 0;
+      animation-timing-function: ease-in-out;
     }
-    10%,
-    50% {
+    2.5%,
+    12.5% {
       opacity: 1;
     }
-    60%,
-    100% {
+    15%,
+    24.99% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    25% {
+      transform: translateX(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    27.5%,
+    37.5% {
+      opacity: 1;
+    }
+    40%,
+    49.989999999999995% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    50% {
+      transform: translateX(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    52.5%,
+    62.5% {
+      opacity: 1;
+    }
+    65%,
+    74.99% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    75% {
+      transform: translateX(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    77.5%,
+    87.5% {
+      opacity: 1;
+    }
+    90%,
+    99.99% {
       transform: translateX(100%);
       opacity: 0;
     }
@@ -96,13 +148,56 @@
     0% {
       transform: translateY(0);
       opacity: 0;
+      animation-timing-function: ease-in-out;
     }
-    10%,
-    50% {
+    2.5%,
+    12.5% {
       opacity: 1;
     }
-    60%,
-    100% {
+    15%,
+    24.99% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    25% {
+      transform: translateY(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    27.5%,
+    37.5% {
+      opacity: 1;
+    }
+    40%,
+    49.989999999999995% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    52.5%,
+    62.5% {
+      opacity: 1;
+    }
+    65%,
+    74.99% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    75% {
+      transform: translateY(0);
+      opacity: 0;
+      animation-timing-function: ease-in-out;
+    }
+    77.5%,
+    87.5% {
+      opacity: 1;
+    }
+    90%,
+    99.99% {
       transform: translateY(100%);
       opacity: 0;
     }
@@ -137,7 +232,7 @@
     }
     96.68% {
       opacity: 0;
-      transform: translateY(8px);
+      transform: translateY(80px);
     }
     100% {
       opacity: 1;
@@ -146,7 +241,8 @@
   }
 
   /* Half a turn (bottom → up one side → top), then a pause before the next pass.
-     `--comet-turn` (±180deg) picks the side. */
+     Two literal keyframe sets (left = clockwise, right = counter-clockwise):
+     a var() in a transform keyframe keeps the animation off the compositor. */
   @keyframes comet {
     0% {
       opacity: 0;
@@ -159,7 +255,23 @@
     72%,
     100% {
       opacity: 0;
-      transform: rotate(var(--comet-turn, 180deg));
+      transform: rotate(180deg);
+    }
+  }
+
+  @keyframes comet-right {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+    8%,
+    64% {
+      opacity: 1;
+    }
+    72%,
+    100% {
+      opacity: 0;
+      transform: rotate(-180deg);
     }
   }
 

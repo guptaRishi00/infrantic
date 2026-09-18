@@ -66,34 +66,50 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
             <BrandMark className="size-10 sm:size-12" />
           </span>
 
-          {/* Each logo starts at the centre and carries one transform animation
-              (`animate-orbit`): out to its ring, around, and counter-rotated so
-              it stays upright. The static transform is the reduced-motion
-              placement. */}
+          {/* Each logo sits at the centre and is carried out to its ring by
+              nested transforms: start angle (li) → turning wrapper → ring
+              radius → counter-turning wrapper → upright badge. Without motion
+              the two turning wrappers are inert and the logo rests at its
+              start angle. */}
           <ul>
             {content.items.map((item) => {
               const ring = RINGS[item.ring];
+              const spin: CSSProperties = {
+                animationDuration: `${ring.seconds}s`,
+                animationDirection: ring.reverse ? "reverse" : "normal",
+              };
               return (
                 <li
                   key={item.id}
                   className={cn(
-                    "absolute top-1/2 left-1/2 -mt-[1.375rem] -ml-[1.375rem] [transform:rotate(var(--orbit-a))_translateX(var(--orbit-r))_rotate(calc(var(--orbit-a)*-1))] motion-safe:animate-orbit sm:-mt-6 sm:-ml-6",
+                    "absolute top-1/2 left-1/2 size-0",
                     item.desktopOnly && "hidden sm:block",
                   )}
-                  style={
-                    {
-                      "--orbit-a": `${item.angle}deg`,
-                      "--orbit-r": `${ring.size / 2}cqw`,
-                      animationDuration: `${ring.seconds}s`,
-                      animationDirection: ring.reverse ? "reverse" : "normal",
-                    } as CSSProperties
-                  }
+                  style={{ rotate: `${item.angle}deg` }}
                 >
-                  <span className="grid size-11 place-items-center rounded-full border border-zinc-200/70 bg-white shadow-[0_10px_24px_-12px_rgb(2_28_55/0.25)] sm:size-12">
-                    <IntegrationLogo
-                      id={item.id}
-                      className="block size-5 sm:size-6 [&>svg]:size-full"
-                    />
+                  <span
+                    className="block size-0 motion-safe:animate-orbit"
+                    style={spin}
+                  >
+                    <span
+                      className="block size-0"
+                      style={{ translate: `${ring.size / 2}cqw 0` }}
+                    >
+                      <span
+                        className="block size-0 motion-safe:animate-orbit-back"
+                        style={spin}
+                      >
+                        <span
+                          className="grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-zinc-200/70 bg-white shadow-[0_10px_24px_-12px_rgb(2_28_55/0.25)] sm:size-12"
+                          style={{ rotate: `${-item.angle}deg` }}
+                        >
+                          <IntegrationLogo
+                            id={item.id}
+                            className="block size-5 sm:size-6 [&>svg]:size-full"
+                          />
+                        </span>
+                      </span>
+                    </span>
                   </span>
                 </li>
               );

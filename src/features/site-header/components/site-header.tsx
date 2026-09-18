@@ -10,7 +10,7 @@ import { NavDropdown } from "./nav-dropdown";
 export function SiteHeader() {
   return (
     <AutoHideHeader>
-      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-xl border border-zinc-200/80 bg-white/85 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)] backdrop-blur-md">
+      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-xl border border-zinc-200/80 bg-white/95 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)]">
         <Link
           href="/"
           className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"

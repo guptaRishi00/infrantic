@@ -13,7 +13,7 @@ export function Hero({ content }: { content: HeroContent }) {
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
         <div className="motion-safe:animate-rise">
-          <p className="rounded-full border border-zinc-200 bg-white/80 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600 backdrop-blur">
+          <p className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600">
             {content.eyebrow}
           </p>
         </div>
