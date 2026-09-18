@@ -405,3 +405,9 @@
 ## 2026-09-18 — Technology: logos fade with the rings
 - `integrations.tsx`: the vertical fade mask moved from the ring-lines wrapper (now removed) to the whole diagram container. Logos now fade out as they orbit past the top and bottom, the same as the lines, instead of floating over the fade. The centre brand tile sits in the fully opaque middle band, so it is unaffected.
 - Verified: CDP screenshot `tech5-crop.png`. Vercel (top) and Next.js (bottom) are faded into the mask; mid-band logos are fully opaque. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Merged origin/sudeep into main and pushed
+- Committed all local work on main as `c8c2a33`. Merged `origin/sudeep` (`5d6e68c`: new `what-we-build` feature plus a `package-lock.json`) as `53fe4a8` and pushed `d37b301..53fe4a8` to origin/main.
+- Conflict in `page.tsx`: sudeep had replaced Services with WhatWeBuild; locally, Work sat after Problem and the user had moved Services below Workflow. Kept both sides. Order: Hero → Problem → What we build → Selected work → Workflow → Services → Technology → Approach → CTA.
+- Merge fixups: Biome formatting (CRLF and layout) on the 4 what-we-build files, and removed an unused `LucideIcon` import. Verified: biome clean, tsc OK, `next build` → `/` static, and the dev page renders the 9 sections in that order.
+- Open items (not changed): `package-lock.json` now sits beside `bun.lock` (two lockfiles). What we build uses `max-w-[84rem]` instead of 88rem, and `animate-in`/`slide-in-from-bottom-4`/`fade-in` classes that do nothing without tailwindcss-animate.
