@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
 import { IntegrationLogo } from "@/shared/ui/integration-logo";
+import { RingComet, ringFadeAlpha } from "@/shared/ui/ring-comet";
 import type { OrbitIntegration } from "../hero.types";
 
 type CssVars = CSSProperties & Record<`--${string}`, string | number>;
@@ -16,27 +17,12 @@ const RINGS_BOX = 3000;
 const COMET_TAIL = 150;
 const COMET_STAGGER_S = 4.3;
 const COMET_SIDES = ["left", "right"] as const;
+const ORBIT_UNIT = "calc(var(--orbit-scale) * 1px)";
 
-/**
- * Comet style for ring `index`: a conic tail whose head starts at the bottom.
- * Left comets climb clockwise, right comets counter-clockwise.
- */
-function cometStyle(
-  radius: number,
-  index: number,
-  side: (typeof COMET_SIDES)[number],
-): CssVars {
-  const tail = (COMET_TAIL / radius) * (180 / Math.PI);
-  const left = side === "left";
-  return {
-    width: `${((radius * 2) / RINGS_BOX) * 100}%`,
-    backgroundImage: left
-      ? `conic-gradient(from 180deg, transparent ${360 - tail}deg, #07a1fd ${360 - tail / 2}deg, #047efd 360deg)`
-      : `conic-gradient(from 180deg, #047efd 0deg, #07a1fd ${tail / 2}deg, transparent ${tail}deg)`,
-    "--comet-turn": left ? "180deg" : "-180deg",
-    animationDelay: `${index * -COMET_STAGGER_S}s`,
-  };
-}
+// Rings fade out from 70% of the box radius to its edge. They share a centre
+// with that fade, so each ring (and its comets) just gets a constant alpha;
+// an actual mask over a box this size is expensive to composite.
+const ringAlpha = (radius: number) => ringFadeAlpha(radius, RINGS_BOX / 2, 0.7);
 
 /** Design-pixel offset of a point on a ring, relative to the backdrop anchor. */
 function pointOnRing(ring: number, angle: number) {
@@ -94,24 +80,30 @@ export function OrbitBackdrop({
       aria-hidden="true"
       className="pointer-events-none absolute top-0 left-1/2 -z-10 [--orbit-scale:0.44] sm:[--orbit-scale:0.54] md:[--orbit-scale:0.64] lg:[--orbit-scale:0.76] xl:[--orbit-scale:0.85]"
     >
-      {/* Concentric rings as bordered circles in a RINGS_BOX-sized, radially masked box. */}
-      <div className="absolute top-[calc(var(--orbit-scale)*36px)] left-0 size-[calc(var(--orbit-scale)*3000px)] max-w-none -translate-x-1/2 -translate-y-1/2 [mask-image:radial-gradient(closest-side,#000_70%,transparent_100%)]">
+      {/* Concentric rings as bordered circles in a RINGS_BOX-sized box centred
+          on the ring centre. */}
+      <div className="absolute top-[calc(var(--orbit-scale)*36px)] left-0 size-[calc(var(--orbit-scale)*3000px)] max-w-none -translate-x-1/2 -translate-y-1/2">
         {RING_RADII.map((radius) => (
           <span
             key={radius}
-            className="absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-zinc-200"
-            style={{ width: `${((radius * 2) / RINGS_BOX) * 100}%` }}
+            className="absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border"
+            style={{
+              width: `${((radius * 2) / RINGS_BOX) * 100}%`,
+              // zinc-200, faded with distance.
+              borderColor: `rgb(228 228 231 / ${ringAlpha(radius)})`,
+            }}
           />
         ))}
-        {/* Comets: ring-sized boxes masked down to a 1.5px stroke, painted with a
-            conic tail; rotating half a turn carries the head from the bottom
-            to the top. Motion-only. */}
         {RING_RADII.flatMap((radius, index) =>
           COMET_SIDES.map((side) => (
-            <span
+            <RingComet
               key={`comet-${radius}-${side}`}
-              className="absolute top-1/2 left-1/2 hidden aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full p-[1.5px] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] motion-safe:block motion-safe:animate-comet"
-              style={cometStyle(radius, index, side)}
+              radius={radius}
+              tail={COMET_TAIL}
+              unit={ORBIT_UNIT}
+              side={side}
+              alpha={ringAlpha(radius)}
+              delay={index * -COMET_STAGGER_S}
             />
           )),
         )}

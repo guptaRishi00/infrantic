@@ -8,8 +8,8 @@ import {
   ShoppingCart,
   Truck,
 } from "lucide-react";
-import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
+import { FlowLine } from "@/shared/ui/flow-line";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type {
   FeaturedProjectContent,
@@ -25,14 +25,8 @@ const icons: Record<StepIcon, LucideIcon> = {
   dispatch: Truck,
 };
 
-// Dashed "shared data" connectors, drawn as repeating gradients (no SVG). The
-// 8px dash period matches the 8px flow-x/y shift, so the march loops cleanly;
-// DASH_KEY is the still sample in the legend.
-const DASH_KEY =
-  "h-px bg-[repeating-linear-gradient(90deg,rgb(113_113_122/0.7)_0_4px,transparent_4px_8px)]";
-const DASH_X = `${DASH_KEY} motion-safe:animate-flow-x`;
-const DASH_Y =
-  "w-px bg-[repeating-linear-gradient(180deg,rgb(113_113_122/0.7)_0_4px,transparent_4px_8px)] motion-safe:animate-flow-y";
+// Dashed "shared data" connectors (shared FlowLine: compositor-only march).
+const DASH = "rgb(113 113 122 / 0.7)";
 
 /**
  * One featured client project: the before/structure/benefit story on the left
@@ -105,38 +99,36 @@ export function FeaturedProject({
                   <span className="rounded-lg border border-ink/20 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
                     {diagram.hub}
                   </span>
-                  <span aria-hidden="true" className={cn("h-8", DASH_Y)} />
+                  <FlowLine
+                    horizontal={false}
+                    color={DASH}
+                    className="relative block h-8 w-px"
+                  />
                 </div>
 
                 <ol className="relative grid grid-cols-6 gap-6 pt-6">
                   {/* Shared-data bus across the step centres (gap is 1.5rem),
                       in two halves so the data flows outward from the hub. */}
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "absolute top-0 right-1/2 left-[calc((100%-7.5rem)/12)]",
-                      DASH_X,
-                    )}
-                    style={{ animationDirection: "reverse" }}
+                  <FlowLine
+                    horizontal
+                    reverse
+                    color={DASH}
+                    className="absolute top-0 right-1/2 left-[calc((100%-7.5rem)/12)] h-px"
                   />
-                  <span
-                    aria-hidden="true"
-                    className={cn(
-                      "absolute top-0 right-[calc((100%-7.5rem)/12)] left-1/2",
-                      DASH_X,
-                    )}
+                  <FlowLine
+                    horizontal
+                    color={DASH}
+                    className="absolute top-0 right-[calc((100%-7.5rem)/12)] left-1/2 h-px"
                   />
                   {diagram.steps.map((step, index) => {
                     const Icon = icons[step.icon];
                     const last = index === diagram.steps.length - 1;
                     return (
                       <li key={step.id} className="relative">
-                        <span
-                          aria-hidden="true"
-                          className={cn(
-                            "absolute -top-6 left-1/2 h-6 -translate-x-1/2",
-                            DASH_Y,
-                          )}
+                        <FlowLine
+                          horizontal={false}
+                          color={DASH}
+                          className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2"
                         />
                         <div className="relative flex h-full min-h-[7.5rem] flex-col items-center justify-center gap-2.5 rounded-lg border border-ink/20 bg-white px-2 pt-7 pb-4 text-center shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
                           <Icon
@@ -161,7 +153,11 @@ export function FeaturedProject({
                 </ol>
 
                 <div className="flex flex-col items-center">
-                  <span aria-hidden="true" className={cn("h-8", DASH_Y)} />
+                  <FlowLine
+                    horizontal={false}
+                    color={DASH}
+                    className="relative block h-8 w-px"
+                  />
                   <span className="rounded-lg border border-ink/20 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
                     {diagram.outcome}
                   </span>
@@ -177,7 +173,12 @@ export function FeaturedProject({
                   {diagram.legend.primary}
                 </span>
                 <span className="flex items-center gap-2">
-                  <span className={cn("w-6", DASH_KEY)} />
+                  <FlowLine
+                    horizontal
+                    color={DASH}
+                    animated={false}
+                    className="relative block h-px w-6"
+                  />
                   {diagram.legend.feedback}
                 </span>
               </div>

@@ -6,6 +6,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
+import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
 import { BrandMark } from "@/shared/ui/brand-mark";
 import { IntegrationLogo } from "@/shared/ui/integration-logo";
@@ -21,7 +22,7 @@ const stackIcons: Record<TechStackIcon, LucideIcon> = {
 };
 
 // Orbit rings as % of the square diagram, and how long each takes to turn
-// once (alternating direction). Logos counter-rotate to stay upright.
+// once (alternating direction).
 const RINGS = [
   { size: 38, seconds: 40, reverse: false },
   { size: 66, seconds: 60, reverse: true },
@@ -48,11 +49,10 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
           />
         </div>
 
-        {/* The vertical mask fades the whole diagram (rings and orbiting
-            logos) at the top and bottom, so logos pass into the fade. */}
+        {/* A size container, so logo orbits can use cqw for the ring radius. */}
         <div
           aria-hidden="true"
-          className="relative mx-auto mt-10 aspect-square max-w-[50rem] [mask-image:linear-gradient(to_bottom,transparent_4%,#000_40%,#000_60%,transparent_96%)]"
+          className="@container relative mx-auto mt-10 aspect-square max-w-[50rem]"
         >
           {RINGS.map((ring) => (
             <span
@@ -66,48 +66,45 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
             <BrandMark className="size-10 sm:size-12" />
           </span>
 
-          {/* One turning square per ring; its logos sit on the ring line and
-              rotate by minus the ring's inherited --orbit-angle, so they stay
-              upright and can never drift out of sync. */}
-          {RINGS.map((ring, ringIndex) => {
-            const spin = {
-              animationDuration: `${ring.seconds}s`,
-              animationDirection: ring.reverse ? "reverse" : "normal",
-            } as const;
-            return (
-              <ul
-                key={ring.size}
-                className="absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 [rotate:var(--orbit-angle)] motion-safe:animate-orbit"
-                style={{ width: `${ring.size}%`, ...spin }}
-              >
-                {content.items
-                  .filter((item) => item.ring === ringIndex)
-                  .map((item) => {
-                    const rad = (item.angle * Math.PI) / 180;
-                    return (
-                      <li
-                        key={item.id}
-                        className={cn(
-                          "absolute -translate-x-1/2 -translate-y-1/2",
-                          item.desktopOnly && "hidden sm:block",
-                        )}
-                        style={{
-                          left: `${50 + 50 * Math.cos(rad)}%`,
-                          top: `${50 + 50 * Math.sin(rad)}%`,
-                        }}
-                      >
-                        <span className="grid size-11 place-items-center rounded-full border border-zinc-200/70 bg-white shadow-[0_10px_24px_-12px_rgb(2_28_55/0.25)] [rotate:calc(var(--orbit-angle)*-1)] sm:size-12">
-                          <IntegrationLogo
-                            id={item.id}
-                            className="block size-5 sm:size-6 [&>svg]:size-full"
-                          />
-                        </span>
-                      </li>
-                    );
-                  })}
-              </ul>
-            );
-          })}
+          {/* Each logo starts at the centre and carries one transform animation
+              (`animate-orbit`): out to its ring, around, and counter-rotated so
+              it stays upright. The static transform is the reduced-motion
+              placement. */}
+          <ul>
+            {content.items.map((item) => {
+              const ring = RINGS[item.ring];
+              return (
+                <li
+                  key={item.id}
+                  className={cn(
+                    "absolute top-1/2 left-1/2 -mt-[1.375rem] -ml-[1.375rem] [transform:rotate(var(--orbit-a))_translateX(var(--orbit-r))_rotate(calc(var(--orbit-a)*-1))] motion-safe:animate-orbit sm:-mt-6 sm:-ml-6",
+                    item.desktopOnly && "hidden sm:block",
+                  )}
+                  style={
+                    {
+                      "--orbit-a": `${item.angle}deg`,
+                      "--orbit-r": `${ring.size / 2}cqw`,
+                      animationDuration: `${ring.seconds}s`,
+                      animationDirection: ring.reverse ? "reverse" : "normal",
+                    } as CSSProperties
+                  }
+                >
+                  <span className="grid size-11 place-items-center rounded-full border border-zinc-200/70 bg-white shadow-[0_10px_24px_-12px_rgb(2_28_55/0.25)] sm:size-12">
+                    <IntegrationLogo
+                      id={item.id}
+                      className="block size-5 sm:size-6 [&>svg]:size-full"
+                    />
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* White fades over the top and bottom of the diagram, so rings and
+              logos dissolve there (static overlays, not a mask around the
+              animated logos). */}
+          <span className="pointer-events-none absolute inset-x-0 top-0 h-2/5 bg-[linear-gradient(to_bottom,#fff_10%,rgb(255_255_255/0))]" />
+          <span className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,#fff_10%,rgb(255_255_255/0))]" />
         </div>
 
         <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">

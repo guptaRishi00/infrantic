@@ -9,7 +9,7 @@ import type { IconType } from "react-icons";
 import { FaSlack } from "react-icons/fa";
 import { RiOpenaiFill } from "react-icons/ri";
 import { SiGmail, SiGoogleforms, SiJira, SiSupabase } from "react-icons/si";
-import { cn } from "@/shared/lib/cn";
+import { FlowLine, FlowPacket } from "@/shared/ui/flow-line";
 
 // The canvas is a 1000 × 540 design grid. `--u` is one design unit
 // (container width / 1000), so every position, size, corner radius and label
@@ -217,34 +217,32 @@ function LegLine({ leg, delay }: { leg: Leg; delay: number }) {
   const reverse = horizontal ? x2 < x1 : y2 < y1;
   const length = horizontal ? Math.abs(x2 - x1) : Math.abs(y2 - y1);
   if (length <= 0) return null;
+  const geometry = {
+    left: u(Math.min(x1, x2)),
+    top: u(Math.min(y1, y2)),
+    [horizontal ? "width" : "height"]: u(length),
+  };
   return (
-    <span
-      className={cn(
-        "absolute",
-        horizontal
-          ? "h-[1.5px] -translate-y-1/2 bg-[repeating-linear-gradient(90deg,rgb(255_255_255/0.4)_0_4px,transparent_4px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x"
-          : "w-[1.5px] -translate-x-1/2 bg-[repeating-linear-gradient(180deg,rgb(255_255_255/0.4)_0_4px,transparent_4px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
-      )}
-      style={{
-        left: u(Math.min(x1, x2)),
-        top: u(Math.min(y1, y2)),
-        [horizontal ? "width" : "height"]: u(length),
-        animationDirection: reverse ? "reverse" : undefined,
-      }}
-    >
-      <span
-        className={cn(
-          "absolute hidden size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-to shadow-[0_0_10px_2px_rgb(7_161_253/0.7)] motion-safe:block",
+    <>
+      <FlowLine
+        horizontal={horizontal}
+        reverse={reverse}
+        color={LINE}
+        className={
           horizontal
-            ? "top-1/2 motion-safe:animate-packet-x"
-            : "left-1/2 motion-safe:animate-packet-y",
-        )}
-        style={{
-          animationDelay: `${delay}s`,
-          animationDirection: reverse ? "reverse" : undefined,
-        }}
+            ? "absolute h-[1.5px] -translate-y-1/2"
+            : "absolute w-[1.5px] -translate-x-1/2"
+        }
+        style={geometry}
       />
-    </span>
+      <FlowPacket
+        horizontal={horizontal}
+        reverse={reverse}
+        delay={delay}
+        style={geometry}
+        dotClassName="shadow-[0_0_10px_2px_rgb(7_161_253/0.7)]"
+      />
+    </>
   );
 }
 
@@ -350,7 +348,7 @@ function AgentCard() {
   return (
     <>
       <div
-        className="absolute flex items-center border border-white/25 bg-[#07131d] shadow-[0_0_0_4px_rgb(7_150_254/0.08),0_14px_36px_-12px_rgb(7_161_253/0.45)] motion-safe:animate-agent-glow"
+        className="absolute flex items-center border border-white/25 bg-[#07131d] shadow-[0_0_0_4px_rgb(7_150_254/0.08),0_14px_36px_-12px_rgb(7_161_253/0.45)]"
         style={{
           left: u(AGENT.left),
           top: u(AGENT.top),
@@ -361,6 +359,8 @@ function AgentCard() {
           paddingLeft: u(30),
         }}
       >
+        {/* Pulse: a stronger glow on an overlay that only fades in and out. */}
+        <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 shadow-[0_0_0_6px_rgb(7_150_254/0.14),0_12px_40px_-10px_rgb(7_161_253/0.7)] motion-safe:animate-agent-glow" />
         <BrainCircuit
           aria-hidden="true"
           className="text-white"

@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
-import type { CSSProperties } from "react";
+import { type CSSProperties, Fragment } from "react";
 import { cn } from "@/shared/lib/cn";
+import { FlowLine, FlowPacket } from "@/shared/ui/flow-line";
 import type { FlowNode, FlowNodeStatus, WorkflowStep } from "../workflow.types";
 
 const statusStyles: Record<
@@ -133,22 +134,15 @@ type Segment = {
   reverse: boolean;
 };
 
-// Every connector marches in its flow direction (8px dash period = the 8px
-// flow-x/y keyframe shift, so the loop is seamless). Done work is light brand,
+// Every connector marches in its flow direction. Done work is light brand,
 // active work is full brand with a packet, queued work is grey and slower.
-const LINE: Record<FlowNodeStatus, { x: string; y: string }> = {
-  done: {
-    x: "h-[1.5px] bg-[repeating-linear-gradient(90deg,var(--color-brand-300)_0_4px,transparent_4px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
-    y: "w-[1.5px] bg-[repeating-linear-gradient(180deg,var(--color-brand-300)_0_4px,transparent_4px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
-  },
-  active: {
-    x: "h-[1.5px] bg-[repeating-linear-gradient(90deg,var(--color-brand-from)_0_4px,transparent_4px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
-    y: "w-[1.5px] bg-[repeating-linear-gradient(180deg,var(--color-brand-from)_0_4px,transparent_4px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
-  },
-  todo: {
-    x: "h-px bg-[repeating-linear-gradient(90deg,rgb(161_161_170)_0_3px,transparent_3px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
-    y: "w-px bg-[repeating-linear-gradient(180deg,rgb(161_161_170)_0_3px,transparent_3px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
-  },
+const LINE: Record<
+  FlowNodeStatus,
+  { color: string; dash: number; thick: boolean; duration?: number }
+> = {
+  done: { color: "var(--color-brand-300)", dash: 4, thick: true },
+  active: { color: "var(--color-brand-from)", dash: 4, thick: true },
+  todo: { color: "rgb(161 161 170)", dash: 3, thick: false, duration: 1.6 },
 };
 
 /**
@@ -205,37 +199,34 @@ function Connector({
           },
         ];
 
+  const line = LINE[status];
   return segments.map((segment, index) => (
-    <span
+    <Fragment
       key={`${segment.style.left}-${segment.style.top}-${segment.style.width ?? segment.style.height}`}
-      className={cn(
-        "absolute",
-        segment.horizontal
-          ? `-translate-y-1/2 ${LINE[status].x}`
-          : `-translate-x-1/2 ${LINE[status].y}`,
-      )}
-      style={{
-        ...segment.style,
-        animationDirection: segment.reverse ? "reverse" : undefined,
-        // Queued work drifts at half speed.
-        animationDuration: status === "todo" ? "1.6s" : undefined,
-      }}
     >
+      <FlowLine
+        horizontal={segment.horizontal}
+        reverse={segment.reverse}
+        color={line.color}
+        dash={line.dash}
+        duration={line.duration}
+        className={
+          segment.horizontal
+            ? cn("absolute -translate-y-1/2", line.thick ? "h-[1.5px]" : "h-px")
+            : cn("absolute -translate-x-1/2", line.thick ? "w-[1.5px]" : "w-px")
+        }
+        style={segment.style}
+      />
       {status === "active" ? (
         // Packet: travels each segment in turn along the elbow.
-        <span
-          className={cn(
-            "absolute hidden size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-to shadow-[0_0_8px_2px_rgb(7_161_253/0.55)] motion-safe:block",
-            segment.horizontal
-              ? "top-1/2 motion-safe:animate-packet-x"
-              : "left-1/2 motion-safe:animate-packet-y",
-          )}
-          style={{
-            animationDelay: `${delay + index * 0.35}s`,
-            animationDirection: segment.reverse ? "reverse" : undefined,
-          }}
+        <FlowPacket
+          horizontal={segment.horizontal}
+          reverse={segment.reverse}
+          delay={delay + index * 0.35}
+          style={segment.style}
+          dotClassName="shadow-[0_0_8px_2px_rgb(7_161_253/0.55)]"
         />
       ) : null}
-    </span>
+    </Fragment>
   ));
 }

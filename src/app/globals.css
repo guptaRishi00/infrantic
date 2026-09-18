@@ -33,14 +33,20 @@
   --animate-packet-x: packet-x 3.2s ease-in-out infinite;
   --animate-packet-y: packet-y 3.2s ease-in-out infinite;
   --animate-agent-glow: agent-glow 3.2s ease-in-out infinite;
-  /* Technology orbit: animates --orbit-angle (registered below) for one full
-     turn; duration/direction are set inline. The ring rotates by the angle and
-     its logos by minus the angle, so both always read the same value. */
+  /* Technology orbit, one animation per logo: rotate out to the ring, then
+     rotate back by the same angle so the logo stays upright. --orbit-a is the
+     start angle, --orbit-r the ring radius; duration/direction are set inline.
+     A plain transform animation, so it runs on the compositor. */
   --animate-orbit: orbit 60s linear infinite;
 
   @keyframes orbit {
+    from {
+      transform: rotate(var(--orbit-a)) translateX(var(--orbit-r))
+        rotate(calc(var(--orbit-a) * -1));
+    }
     to {
-      --orbit-angle: 360deg;
+      transform: rotate(calc(var(--orbit-a) + 360deg))
+        translateX(var(--orbit-r)) rotate(calc(var(--orbit-a) * -1 - 360deg));
     }
   }
 
@@ -56,21 +62,23 @@
     }
   }
 
+  /* All of these animate transform/opacity only (see shared/ui/flow-line.tsx),
+     so they run on the compositor and never trigger layout or paint. */
   @keyframes flow-x {
     to {
-      background-position: 8px 0;
+      transform: translateX(8px);
     }
   }
 
   @keyframes flow-y {
     to {
-      background-position: 0 8px;
+      transform: translateY(8px);
     }
   }
 
   @keyframes packet-x {
     0% {
-      left: 0%;
+      transform: translateX(0);
       opacity: 0;
     }
     10%,
@@ -79,14 +87,14 @@
     }
     60%,
     100% {
-      left: 100%;
+      transform: translateX(100%);
       opacity: 0;
     }
   }
 
   @keyframes packet-y {
     0% {
-      top: 0%;
+      transform: translateY(0);
       opacity: 0;
     }
     10%,
@@ -95,16 +103,15 @@
     }
     60%,
     100% {
-      top: 100%;
+      transform: translateY(100%);
       opacity: 0;
     }
   }
 
+  /* Applied to an overlay that carries the stronger glow; base opacity 0. */
   @keyframes agent-glow {
     50% {
-      box-shadow:
-        0 0 0 6px rgb(7 150 254 / 0.14),
-        0 12px 40px -10px rgb(7 161 253 / 0.7);
+      opacity: 1;
     }
   }
 
@@ -170,12 +177,4 @@
     var(--color-brand-from),
     var(--color-brand-to)
   );
-}
-
-/* Registered so it interpolates as an angle (see animate-orbit) and inherits
-   from each orbit ring to its logos. */
-@property --orbit-angle {
-  syntax: "<angle>";
-  inherits: true;
-  initial-value: 0deg;
 }
