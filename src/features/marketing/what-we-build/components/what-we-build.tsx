@@ -24,12 +24,12 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
     <section
       id="what-we-build"
       aria-labelledby="what-we-build-title"
-      className="scroll-mt-24 bg-brand-50/60 px-4 py-24 sm:py-28"
+      className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
     >
       <div className="mx-auto max-w-[88rem]">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-sm font-medium text-brand-700">
+            <p className="text-sm font-medium text-brand-300">
               {content.eyebrow}
             </p>
             <SectionHeading
@@ -37,6 +37,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
               title={content.title}
               description={content.description}
               align="left"
+              tone="dark"
               size="lg"
               titleWidth="max-w-[26ch]"
               className="mt-3"
@@ -44,6 +45,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
           </div>
           <ButtonLink
             href={content.allServices.href}
+            variant="secondary"
             size="sm"
             className="self-start lg:self-auto"
           >
@@ -51,7 +53,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
           </ButtonLink>
         </div>
 
-        <ul className="mt-12 grid overflow-hidden rounded-2xl border border-zinc-200/80 bg-white sm:grid-cols-2">
+        <ul className="mt-12 grid overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:grid-cols-2">
           {content.items.map((item) => {
             const Icon = icons[item.icon];
             const headingId = `build-${item.id}`;
@@ -60,29 +62,29 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
               // edge, and the outer frame hides the ones on the rim.
               <li
                 key={item.id}
-                className="-mr-px -mb-px border-r border-b border-zinc-200/80"
+                className="-mr-px -mb-px border-r border-b border-white/10"
               >
                 <article
                   aria-labelledby={headingId}
-                  className="flex h-full flex-col gap-6 p-7 transition-colors duration-200 hover:bg-zinc-50/70 sm:flex-row sm:p-10"
+                  className="flex h-full flex-col gap-6 p-7 transition-colors duration-200 hover:bg-white/[0.04] sm:flex-row sm:p-10"
                 >
-                  <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-zinc-100 text-zinc-800 ring-1 ring-zinc-200">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-white ring-1 ring-white/10">
                     <Icon aria-hidden="true" className="size-6" />
                   </span>
                   <div className="flex flex-1 flex-col">
                     <h3
                       id={headingId}
-                      className="max-w-[22ch] text-xl font-semibold tracking-tight text-balance text-ink"
+                      className="max-w-[22ch] text-xl font-semibold tracking-tight text-balance text-white"
                     >
                       {item.title}
                     </h3>
-                    <p className="mt-3 max-w-md text-[15px] leading-6 text-zinc-500">
+                    <p className="mt-3 max-w-md text-[15px] leading-6 text-zinc-400">
                       {item.description}
                     </p>
                     <Link
                       href={item.href}
                       aria-describedby={headingId}
-                      className="group/link mt-6 inline-flex items-center gap-1 self-start rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                      className="group/link mt-6 inline-flex items-center gap-1 self-start rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-300"
                     >
                       <span className="bg-brand-gradient bg-clip-text text-transparent">
                         {content.learnMoreLabel}

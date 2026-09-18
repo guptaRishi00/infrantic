@@ -1,38 +1,70 @@
+import type { CSSProperties } from "react";
 import { ButtonLink } from "@/shared/ui/button-link";
-import { IntegrationLogo } from "@/shared/ui/integration-logo";
 import type { CtaContent } from "../cta.types";
+
+// Concentric rings behind the band (px radii, centred on the content), each
+// carrying two mirrored comets on the shared `animate-comet` cycle, like the
+// hero. Comets climb from the bottom of a ring up both sides at once.
+const RING_RADII = [260, 380, 500, 620, 740] as const;
+const RINGS_BOX = 1600;
+const COMET_TAIL = 140;
+const COMET_STAGGER_S = 5.2;
+const COMET_SIDES = ["left", "right"] as const;
+
+function cometStyle(
+  radius: number,
+  index: number,
+  side: (typeof COMET_SIDES)[number],
+): CSSProperties & Record<`--${string}`, string> {
+  const tail = (COMET_TAIL / radius) * (180 / Math.PI);
+  const left = side === "left";
+  return {
+    width: `${((radius * 2) / RINGS_BOX) * 100}%`,
+    backgroundImage: left
+      ? `conic-gradient(from 180deg, transparent ${360 - tail}deg, #07a1fd ${360 - tail / 2}deg, #047efd 360deg)`
+      : `conic-gradient(from 180deg, #047efd 0deg, #07a1fd ${tail / 2}deg, transparent ${tail}deg)`,
+    "--comet-turn": left ? "180deg" : "-180deg",
+    animationDelay: `${index * -COMET_STAGGER_S}s`,
+  };
+}
 
 export function CtaBand({ content }: { content: CtaContent }) {
   return (
     <section
       id="contact"
       aria-labelledby="cta-title"
-      className="relative isolate scroll-mt-24 overflow-hidden bg-[linear-gradient(180deg,#eef8ff_0%,#d9efff_45%,#f5fbff_80%,#fff_100%)] px-4 py-24 sm:py-28"
+      className="relative isolate scroll-mt-24 overflow-hidden bg-[linear-gradient(180deg,#fff_0%,#eef8ff_16%,#d9efff_48%,#f5fbff_82%,#fff_100%)] px-4 py-24 sm:py-28"
     >
       <div
         aria-hidden="true"
         className="absolute inset-x-0 top-0 -z-10 h-2/3 bg-[radial-gradient(60%_60%_at_50%_0%,rgb(255_255_255/0.7),transparent)]"
       />
 
-      <ul aria-hidden="true" className="hidden md:block">
-        {content.badges.map((badge, index) => (
-          <li
-            key={badge.id}
-            className="absolute -z-10 -translate-x-1/2 -translate-y-1/2"
-            style={{ left: `${badge.x}%`, top: `${badge.y}%` }}
-          >
+      {/* Rings + comets: a radial mask fades them towards the sides, and this
+          wrapper's vertical mask fades the band's top and bottom edges. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,transparent,#000_20%,#000_80%,transparent)]"
+      >
+        <div className="absolute top-1/2 left-1/2 aspect-square w-[100rem] -translate-x-1/2 -translate-y-1/2 [mask-image:radial-gradient(closest-side,#000_45%,transparent_100%)]">
+          {RING_RADII.map((radius) => (
             <span
-              className="grid size-12 place-items-center rounded-full bg-white/90 shadow-[0_12px_28px_-12px_rgb(2_28_55/0.25)] ring-1 ring-white motion-safe:animate-float"
-              style={{ animationDelay: `${index * -1.1}s` }}
-            >
-              <IntegrationLogo
-                id={badge.id}
-                className="block size-6 [&>svg]:size-full"
+              key={radius}
+              className="absolute top-1/2 left-1/2 aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-brand-200/80"
+              style={{ width: `${((radius * 2) / RINGS_BOX) * 100}%` }}
+            />
+          ))}
+          {RING_RADII.flatMap((radius, index) =>
+            COMET_SIDES.map((side) => (
+              <span
+                key={`comet-${radius}-${side}`}
+                className="absolute top-1/2 left-1/2 hidden aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full p-[1.5px] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] motion-safe:block motion-safe:animate-comet"
+                style={cometStyle(radius, index, side)}
               />
-            </span>
-          </li>
-        ))}
-      </ul>
+            )),
+          )}
+        </div>
+      </div>
 
       <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
         <p className="rounded-full border border-white/70 bg-white/60 px-3 py-1 text-xs font-medium text-ink backdrop-blur">

@@ -1,5 +1,9 @@
-import { Approach, getApproachContent } from "@/features/marketing/approach";
 import { CtaBand, getCtaContent } from "@/features/marketing/cta";
+import { Faq, getFaqContent } from "@/features/marketing/faq";
+import {
+  FeaturedProject,
+  getFeaturedProjectContent,
+} from "@/features/marketing/featured-project";
 import { getHeroContent, Hero } from "@/features/marketing/hero";
 import {
   getIntegrationsContent,
@@ -16,8 +20,8 @@ import { getWorkflowContent, Workflow } from "@/features/marketing/workflow";
 
 // Statically prerendered: no request-time APIs are read on this route.
 // The page composes sections; each feature owns its content and markup.
-// Order: problem → what we build → selected work → process → services →
-// stack → philosophy → contact.
+// Order: problem → selected work → process → services → stack → what we build
+// → featured project → FAQ → contact.
 export default function HomePage() {
   return (
     <>
@@ -28,7 +32,8 @@ export default function HomePage() {
       <Services content={getServicesContent()} />
       <Integrations content={getIntegrationsContent()} />
       <WhatWeBuild content={getWhatWeBuildContent()} />
-      <Approach content={getApproachContent()} />
+      <FeaturedProject content={getFeaturedProjectContent()} />
+      <Faq content={getFaqContent()} />
       <CtaBand content={getCtaContent()} />
     </>
   );

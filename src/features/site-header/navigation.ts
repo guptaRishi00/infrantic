@@ -50,7 +50,7 @@ export const primaryNav: readonly NavItem[] = [
   { label: "How we work", href: "/#workflow" },
   { label: "Industries", href: "/#industries" },
   { label: "Technology", href: "/#technology" },
-  { label: "Approach", href: "/#approach" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 export const headerActions = {

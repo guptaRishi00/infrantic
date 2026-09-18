@@ -26,9 +26,10 @@ const statusStyles: Record<
 
 /**
  * Decorative node graph: elbow connectors under absolutely placed cards.
- * Connectors into finished work are solid, into active work they march and
- * carry a packet, into queued work they stay dashed and still. Cards rise in
- * one after another each time the panel is shown. All motion is CSS.
+ * Every connector marches in its flow direction: light brand into finished
+ * work, full brand with a travelling packet into active work, slower grey
+ * into queued work. Cards rise in one after another each time the panel is
+ * shown. All motion is CSS.
  */
 export function FlowCanvas({ step }: { step: WorkflowStep }) {
   const byId = new Map<string, FlowNode>(
@@ -132,15 +133,21 @@ type Segment = {
   reverse: boolean;
 };
 
+// Every connector marches in its flow direction (8px dash period = the 8px
+// flow-x/y keyframe shift, so the loop is seamless). Done work is light brand,
+// active work is full brand with a packet, queued work is grey and slower.
 const LINE: Record<FlowNodeStatus, { x: string; y: string }> = {
-  done: { x: "h-[1.5px] bg-brand-300", y: "w-[1.5px] bg-brand-300" },
+  done: {
+    x: "h-[1.5px] bg-[repeating-linear-gradient(90deg,var(--color-brand-300)_0_4px,transparent_4px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
+    y: "w-[1.5px] bg-[repeating-linear-gradient(180deg,var(--color-brand-300)_0_4px,transparent_4px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
+  },
   active: {
     x: "h-[1.5px] bg-[repeating-linear-gradient(90deg,var(--color-brand-from)_0_4px,transparent_4px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
     y: "w-[1.5px] bg-[repeating-linear-gradient(180deg,var(--color-brand-from)_0_4px,transparent_4px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
   },
   todo: {
-    x: "h-px bg-[repeating-linear-gradient(90deg,rgb(161_161_170)_0_3px,transparent_3px_7px)]",
-    y: "w-px bg-[repeating-linear-gradient(180deg,rgb(161_161_170)_0_3px,transparent_3px_7px)]",
+    x: "h-px bg-[repeating-linear-gradient(90deg,rgb(161_161_170)_0_3px,transparent_3px_8px)] bg-size-[8px_100%] motion-safe:animate-flow-x",
+    y: "w-px bg-[repeating-linear-gradient(180deg,rgb(161_161_170)_0_3px,transparent_3px_8px)] bg-size-[100%_8px] motion-safe:animate-flow-y",
   },
 };
 
@@ -210,6 +217,8 @@ function Connector({
       style={{
         ...segment.style,
         animationDirection: segment.reverse ? "reverse" : undefined,
+        // Queued work drifts at half speed.
+        animationDuration: status === "todo" ? "1.6s" : undefined,
       }}
     >
       {status === "active" ? (

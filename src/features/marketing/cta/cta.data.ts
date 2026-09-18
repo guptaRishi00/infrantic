@@ -14,14 +14,6 @@ const ctaContent = {
   ],
   primaryCta: { label: "Book a discovery call", href: "/contact" },
   secondaryCta: { label: "Explore our services", href: "/#services" },
-  badges: [
-    { id: "make", x: 20, y: 72 },
-    { id: "googleSheets", x: 32, y: 86 },
-    { id: "openai", x: 9, y: 34 },
-    { id: "claude", x: 88, y: 30 },
-    { id: "n8n", x: 70, y: 86 },
-    { id: "whatsapp", x: 82, y: 70 },
-  ],
 } as const satisfies CtaContent;
 
 export function getCtaContent(): CtaContent {
