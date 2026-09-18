@@ -1,43 +1,47 @@
 import type { WhatWeBuildContent } from "./what-we-build.types";
 
 const whatWeBuildContent = {
-  eyebrow: "WHAT WE BUILD",
+  eyebrow: "What we build",
   title: "Focused systems for work that is still too manual",
   description:
-    "The technical approach follows the workflow, the people involved, and the business outcome—not the other way around.",
+    "We start from the workflow, the people involved, and the outcome the business needs. The technology follows.",
+  learnMoreLabel: "Learn more",
+  // Card links point at the matching services until dedicated pages exist.
   items: [
     {
       id: "workflow-automation",
-      title: "Workflow automation\nand integrations",
-      description: "Connect repeated steps while keeping process control.",
+      title: "Workflow automation and integrations",
+      description:
+        "Connect the repeated steps between your tools, without losing control of the process.",
       icon: "workflow",
-      href: "#",
+      href: "/#services",
     },
     {
       id: "operations-dashboards",
-      title: "Operations dashboards\nand internal tools",
+      title: "Operations dashboards and internal tools",
       description:
-        "Give teams one place to update, act, and see what needs attention.",
+        "One place for teams to update work, act on it, and see what needs attention.",
       icon: "dashboard",
-      href: "#",
+      href: "/#services",
     },
     {
       id: "ai-workflows",
-      title: "AI-assisted document\nand knowledge workflows",
+      title: "AI-assisted document and knowledge workflows",
       description:
-        "Use AI as a controlled assistant for unstructured information.",
+        "AI as a controlled assistant for documents, emails, and other unstructured information.",
       icon: "ai",
-      href: "#",
+      href: "/#services",
     },
     {
       id: "custom-software",
-      title: "Custom software\nand ongoing support",
-      description: "Build focused applications when the workflow needs one.",
+      title: "Custom software and ongoing support",
+      description:
+        "Focused applications when a workflow needs one, maintained as the business grows.",
       icon: "software",
-      href: "#",
+      href: "/#services",
     },
   ],
-  allServicesHref: "#",
+  allServices: { label: "View all services", href: "/#services" },
 } as const satisfies WhatWeBuildContent;
 
 export function getWhatWeBuildContent(): WhatWeBuildContent {

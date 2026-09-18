@@ -11,6 +11,33 @@ import { cn } from "@/shared/lib/cn";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { Service, ServiceIcon, ServicesContent } from "../services.types";
 
+// Lucide strokes are single-colour; they take the brand gradient by pointing
+// `stroke` at one shared <linearGradient> (BrandIconGradient, rendered once
+// per section). userSpaceOnUse in the 24×24 icon space keeps straight lines,
+// whose bounding box has zero width, painted.
+const GRADIENT_ID = "services-icon-gradient";
+const GRADIENT_STROKE = `url(#${GRADIENT_ID})`;
+
+function BrandIconGradient() {
+  return (
+    <svg aria-hidden="true" className="absolute size-0">
+      <defs>
+        <linearGradient
+          id={GRADIENT_ID}
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          y1="0"
+          x2="24"
+          y2="24"
+        >
+          <stop offset="0" style={{ stopColor: "var(--color-brand-from)" }} />
+          <stop offset="1" style={{ stopColor: "var(--color-brand-to)" }} />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
 const icons: Record<ServiceIcon, LucideIcon> = {
   ai: Bot,
   process: Workflow,
@@ -26,6 +53,7 @@ export function Services({ content }: { content: ServicesContent }) {
       aria-labelledby="services-title"
       className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
     >
+      <BrandIconGradient />
       {/* Same container as the Problem section. */}
       <div className="mx-auto max-w-[88rem]">
         <p className="text-sm font-medium text-brand-300">{content.eyebrow}</p>
@@ -94,9 +122,12 @@ function ServiceList({
               className="flex h-full flex-col rounded-2xl border border-white/10 bg-white p-6"
             >
               <div className="flex items-center justify-between">
-                <span className="grid size-11 place-items-center rounded-xl bg-zinc-100 text-zinc-800 ring-1 ring-zinc-200">
-                  <Icon aria-hidden="true" className="size-5" />
-                </span>
+                <Icon
+                  aria-hidden="true"
+                  className="size-8"
+                  strokeWidth={1.75}
+                  stroke={GRADIENT_STROKE}
+                />
                 <span className="text-sm font-medium text-zinc-300 tabular-nums">
                   {service.number}
                 </span>
@@ -118,7 +149,8 @@ function ServiceList({
                   >
                     <Check
                       aria-hidden="true"
-                      className="mt-0.5 size-4 shrink-0 text-zinc-800"
+                      className="mt-0.5 size-4 shrink-0"
+                      stroke={GRADIENT_STROKE}
                     />
                     {capability}
                   </li>

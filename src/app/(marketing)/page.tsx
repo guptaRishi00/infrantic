@@ -23,11 +23,11 @@ export default function HomePage() {
     <>
       <Hero content={getHeroContent()} />
       <Problem content={getProblemContent()} />
-      <WhatWeBuild content={getWhatWeBuildContent()} />
       <Work content={getWorkContent()} />
       <Workflow content={getWorkflowContent()} />
       <Services content={getServicesContent()} />
       <Integrations content={getIntegrationsContent()} />
+      <WhatWeBuild content={getWhatWeBuildContent()} />
       <Approach content={getApproachContent()} />
       <CtaBand content={getCtaContent()} />
     </>

@@ -411,3 +411,13 @@
 - Conflict in `page.tsx`: sudeep had replaced Services with WhatWeBuild; locally, Work sat after Problem and the user had moved Services below Workflow. Kept both sides. Order: Hero → Problem → What we build → Selected work → Workflow → Services → Technology → Approach → CTA.
 - Merge fixups: Biome formatting (CRLF and layout) on the 4 what-we-build files, and removed an unused `LucideIcon` import. Verified: biome clean, tsc OK, `next build` → `/` static, and the dev page renders the 9 sections in that order.
 - Open items (not changed): `package-lock.json` now sits beside `bun.lock` (two lockfiles). What we build uses `max-w-[84rem]` instead of 88rem, and `animate-in`/`slide-in-from-bottom-4`/`fade-in` classes that do nothing without tailwindcss-animate.
+
+## 2026-09-18 — What we build restyled to house style
+- `what-we-build.tsx` rewritten in house style: `max-w-[88rem]`, `py-24 sm:py-28` rhythm, sentence-case eyebrow (`text-brand-700`), `SectionHeading` size lg with `titleWidth` 26ch, and "View all services" as the standard black `ButtonLink` (hover gradient) beside the heading on lg. Cards are a single bordered 2×2 grid with inner dividers only, zinc icon tiles (Workflow / LayoutDashboard / BrainCircuit / CodeXml, replacing the unrelated Blocks / Server / FolderOpen / LockKeyhole) and gradient "Learn more ↗" links with the arrow nudge (same as Problem).
+- Removed: no-op `animate-in/slide-in/fade-in` classes, blur glows, the shimmer button, the `uppercase tracking-widest` eyebrow and the `\n` forced title breaks.
+- Data/types: copy tightened; links go to `/#services` instead of `#`; `learnMoreLabel` and `allServices {label, href}` moved into data; `interface` → `type` to match the codebase.
+- Verified: CDP screenshot `wwb.png`. biome/tsc clean, `next build` → `/` static. Not committed (the user commits on request).
+
+## 2026-09-18 — Services icons use the brand gradient
+- `services.tsx`: service icon tile `bg-zinc-100 text-zinc-800 ring-zinc-200` → `bg-brand-gradient text-white`, with a soft inset highlight and a blue drop glow. This is a scoped exception to the "icons never brand blue" rule, requested by the user and noted in the map. The gradient is on the tile because lucide icons are single-colour strokes; a gradient stroke would need hand-written SVG `<linearGradient>` defs, which the no-self-coded-SVG rule forbids and which previously caused id collisions. The capability check marks are unchanged (zinc-800).
+- Verified: CDP screenshot `svc.png` shows gradient tiles on all visible cards. biome/tsc clean, `next build` → `/` static.
