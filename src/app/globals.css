@@ -22,6 +22,7 @@
   --animate-float: float 7s ease-in-out infinite;
   --animate-marquee: marquee 40s linear infinite;
   --animate-row-cycle: row-cycle 12s ease-in-out infinite;
+  --animate-comet: comet 26s linear infinite;
 
   @keyframes rise {
     from {
@@ -50,6 +51,24 @@
     100% {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  /* Half a turn (bottom → up one side → top), then a pause before the next pass.
+     `--comet-turn` (±180deg) picks the side. */
+  @keyframes comet {
+    0% {
+      opacity: 0;
+      transform: rotate(0deg);
+    }
+    8%,
+    64% {
+      opacity: 1;
+    }
+    72%,
+    100% {
+      opacity: 0;
+      transform: rotate(var(--comet-turn, 180deg));
     }
   }
 

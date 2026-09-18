@@ -227,3 +227,85 @@
 ## 2026-09-17 — Services carousel: edge fade removed
 - `services.tsx`: dropped the 1.5% `mask-image` gradient (and its `motion-reduce:[mask-image:none]` override) from the marquee wrapper; cards now meet the viewport edge crisply.
 - Verified: biome clean, tsc OK, `next build` → `/` static; no `mask-image` left in the services feature. The user stopped the dev server, so there was no live visual check.
+
+## 2026-09-18 — Hero: innermost ring removed
+- `orbit-backdrop.tsx`: dropped radius 510 from `RING_RADII` (6 rings left). `hero.data.ts`: the four badges that sat on it (WhatsApp, Supabase, Zapier, PostgreSQL) moved out to the 650 ring with the other four; the 8 badges there were re-spaced 18° apart (-138/-156/-174/163 and -42/-24/-6/17). n8n and Make stay on the 800 ring (index 1).
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane: 6 rings; at 1280 10 badges, at 1024 6 badges, 0 clipped / 0 overlaps with header/text/cards/marquee / 0 collisions at both. Headless-Edge screenshot at 1280.
+
+## 2026-09-18 — Hero badges scattered over three rings
+- `hero.data.ts`: ring 0 (650) OpenAI -135, WhatsApp -160, Supabase 165, Claude -46, Zapier -20, PostgreSQL 14; ring 1 (800) n8n -147, Make -33; ring 2 (960) Google Sheets -152, Gemini -28. `orbit-backdrop.tsx`: added a 1536 (`2xl`) entry to `BREAKPOINTS` so ring-2 badges appear on wide screens.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane: 10 badges at 1900 and 1536, 8 at 1280 (ring 2 hidden), each with 0 clipped / 0 overlaps / 0 collisions. Headless-Edge screenshot at 1900.
+
+## 2026-09-18 — Hero badges as mirrored pairs, further from the header
+- `hero.data.ts`: ring 0 OpenAI/Claude (-147/-33) + Supabase/PostgreSQL (172/8); ring 1 n8n/Make (-150/-30) + WhatsApp/Zapier (167/13); ring 2 Sheets/Gemini (-156/-24). `orbit-backdrop.tsx`: extra 1800px entry in `BREAKPOINTS` for the ring-2 pair.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1900: 10 badges, nearest is 77px below the header (was ~18px), lowest badge bottom 695 vs marquee top 787, 0 clipped / 0 overlaps / 0 collisions; at 1280: 6 badges, all clean. Headless-Edge screenshot at 1900.
+
+## 2026-09-18 — Hero: outer badge pair lower
+- `hero.data.ts`: ring-2 pair Google Sheets -156 → -163, Gemini -24 → -17 (top edge 152 → 246px at 1900; still on the ring line).
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1900: 10 badges, 0 clipped / 0 overlaps / 0 collisions.
+
+## 2026-09-18 — Hero: n8n/Make pair lower
+- `hero.data.ts`: ring-1 upper pair -150/-30 → -156/-24 (top edge 143 → 208px at 1900). Upper pairs now step down outward: 184 / 208 / 246px.
+- Trade-off: at ±24° the pair no longer fits a 1280px viewport, so `revealClass` shows it from 1536px; 1280 now shows 4 badges.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1900: 10 badges, 0 clipped / 0 overlaps / 0 collisions.
+
+## 2026-09-18 — Fix: n8n/Make badges vanished on the user's screen
+- Cause: lowering them to ±24° pushed their fit width to 1317px, and `revealClass` rounded that up to the next listed breakpoint, 1536 (`2xl`). The user's viewport is below 1536 (likely 1920 at 125% ≈ 1500 CSS px), so they were hidden. I had verified at 1900 only.
+- Fix: finer `BREAKPOINTS` steps above xl (1360/1440/1600/1680). Verified in the pane: 1366 → 6 badges, 1500 → 8 (n8n/Make back, 0 clipped/overlaps/collisions), 1700 → 10. biome/tsc/build clean.
+- Still hidden at 1500: Google Sheets/Gemini on ring 2 (need 1635px at their lowered angle).
+
+## 2026-09-18 — Hero industries row: no hover, darker, stronger label
+- `industries-marquee.tsx`: removed hover colour change and pause-on-hover; items `text-zinc-400` → `text-zinc-600` (also fixed the no-op `font-regular` → `font-normal`); label `text-sm text-zinc-400` → `text-base font-medium text-zinc-600`.
+- Verified: biome clean, tsc OK, `next build` → `/` static, no `hover:` left in the file, headless-Edge crop at 1500.
+
+## 2026-09-18 — Hero content up 24px; industries text darker
+- `hero.tsx`: text block `pt-12` → `pt-6`; to keep rings/badges fixed the orbit wrapper went `-mt-2` → `mt-4` and the cards `pt-10` → `pt-4`, so eyebrow, title, subtitle, buttons and cards all moved up 24px (badge tops unchanged at 184px). `industries-marquee.tsx`: label and items `text-zinc-600` → `text-zinc-800`.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1500: eyebrow 100px below header, 8 badges, 0 overlaps with header/eyebrow/title/subtitle/cards/marquee.
+
+## 2026-09-18 — Hero content higher, more breathing room
+- `hero.tsx`: text block `pt-6` → none (content up 24px; eyebrow now 76px below the header). Gaps widened: eyebrow→title 24 → 28, title→subtitle 16 → 20, subtitle→buttons 28 → 36, buttons→cards 32 → 48 (wrapper `mt-4` → `mt-6`, cards `pt-4` → `pt-6`). Rings and badges unchanged (first badge top still 184px).
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1500 with rise animation disabled: measured gaps 28/20/36/48, 8 badges, 0 overlaps.
+
+## 2026-09-18 — Hero ring comet
+- `orbit-backdrop.tsx`: thin (1.5px) blue comet on ring 1 (`COMET_RADIUS`). It is a ring-sized span masked to its stroke, with a conic `#0796fe` tail; `animate-comet` (new in globals.css, 9s linear) turns it half a turn so the head rises from the bottom, up the left side, then fades and pauses. Motion-safe only, and it stays below the badges.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1500: the head crosses the visible hero from about 15%–47% of the cycle (x≈62px at its widest); screenshot shows the arc on the left ring.
+
+## 2026-09-18 — Comets on every hero ring
+- `orbit-backdrop.tsx`: one comet per ring (`cometStyle`). Each has a short tail of 150 design px (≈128px at the xl scale, whatever the ring size) and alternates sides: even rings climb the left, odd rings the right (via `--comet-turn`). Delays are staggered by 4.3s.
+- `globals.css`: the comet cycle went from 9s to 26s, with the half turn over 0–72% (about 19s, slow) and a pause after. The keyframe now rotates to `var(--comet-turn)`.
+- Verified: biome clean, tsc OK, `next build` → `/` static. Pane at 1500: 6 comets on 6 radii, all 26s, sides alternate, staggered delays. Screenshot shows the short streak on the inner ring.
+
+## 2026-09-18 — Hero comets on both sides
+- User: comets never climbed the right side. Cause: comets alternated sides by ring, so the right side only got the odd (bigger) rings. At 1500px only ring 1 of those is really on screen, while the left got the inner ring 0.
+- Fix in `orbit-backdrop.tsx`: two comets per ring (`COMET_SIDES`), the right one half a cycle (13s) after the left.
+- Verified: 12 comets. Sampling a full 26s cycle at 1500: ring 0 13s visible on L and 13s on R; ring 1 9.5s L and 9.5s R; ring 2 2.5s L and 3s R. Rings 3–5 are never on screen at 1500 (their visible arcs sit above the section top) and show only on wider screens. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Hero comets: sides in sync
+- `orbit-backdrop.tsx`: dropped the 13s right-side offset (`COMET_CYCLE_S`). The two comets on a ring now share one delay and mirror each other; rings are still staggered 4.3s apart.
+- Verified: 12 comets with delays paired (0,0,-4.3,-4.3,…). Live sampling on every pair: mirror error 0.00px (x mirrored about the centre, same y, same opacity). biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Hero top fade
+- `hero.tsx`: added a white→transparent top fade (`h-32 sm:h-40`, solid white for the top 15%) at `-z-10` after the orbit in DOM order, so it paints over the rings and comets and under the text. It ends above the highest badge.
+- Verified at 1500: the fade covers 0–160px and the highest badge starts at 184px (0 badges overlap). The screenshot shows the rings dissolving under the header. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Taller header
+- `site-header.tsx`: bar height `h-14` → `h-16` (56 → 64px). Items stay centred, so the vertical padding around the buttons went from 10 to 14px on each side.
+- Verified at 1500: bar 12–76px, button padding 14/14. The hero label is still 82px below the header and the highest badge is at 184px. The `scroll-mt-24` anchors (96px) still clear the 76px header. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Header taller again
+- `site-header.tsx`: bar `h-16` → `h-[4.5rem]` (64 → 72px). Button padding is now 18/18px.
+- Verified at 1500: bar 12–84px, the hero label is 74px below it, the highest badge is at 184px, and `scroll-mt-24` (96px) still clears it. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Header horizontal padding
+- `site-header.tsx`: bar padding `pl-4 pr-2` → `pl-6 pr-[1.125rem]` (left 16 → 24px, right 8 → 18px, so the buttons have the same 18px inset on the top, bottom and right).
+- Caught in verification: the edit had merged `pl-6` into the shadow class (missing space), which silently dropped both. Fixed; checked with computed styles.
+- Verified at 1500: computed pl 24px / pr 18px, shadow present, logo inset 25px, button inset right 19px / top 18px. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Brand-blue button hovers
+- `shared/ui/button-link.tsx`: primary hover `bg-zinc-800` → `bg-brand` (#0796fe). Secondary and muted hovers → `bg-brand-50` with `border-brand-200` (they were zinc). This covers every button on the site; no other button styles exist.
+- Verified by hovering in the pane: primary computed bg rgb(7,150,254) with white text; the screenshot shows the secondary "See how we work" with the light blue tint. biome/tsc clean, `next build` → `/` static.
+- Note: white on #0796fe is about 3.1:1 contrast (below AA 4.5 for 14px text). It only applies while hovering, and the resting state stays black.
+
+## 2026-09-18 — Header hides on scroll down, shows on scroll up
+- Ported the scroll behaviour from softexedge (`resizable-navbar` Navbar, not its resize). New client island `site-header/components/auto-hide-header.tsx` wraps the server-rendered header content. It uses a passive scroll listener with an 8px direction threshold (so fling jitter cannot flap it) and only hides past 120px. It sets `data-hidden` on the header and CSS runs `-translate-y-[120px]` over 300ms ease-out (motion-reduce: instant). It never hides while a menu inside is open (`[aria-expanded=true]`), and `not-focus-within` keeps it visible for keyboard users. `site-header.tsx` now renders `<AutoHideHeader>` instead of `<header>`.
+- Verified in the pane at 1500 (the tab reports `visibilityState: hidden`, so scroll events were dispatched manually and the transition was disabled to read the end state). Results: at 0 and 60 shown; down to 700 hidden; up 5px still hidden; up to 600 shown; down to 1500 hidden; keyboard focus shown; Services menu open plus scrolling down stays shown and hides after closing; the hidden bar bottom is at -36px (fully off-screen). biome/tsc clean, `next build` → `/` static.

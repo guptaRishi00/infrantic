@@ -8,17 +8,20 @@ const heroContent = {
     "Infrantic builds AI-powered automation, custom software, and connected business systems that simplify complex operations and help companies scale.",
   primaryCta: { label: "Book a discovery call", href: "/#contact" },
   secondaryCta: { label: "See how we work", href: "/#workflow" },
+  // Mirrored left/right pairs: two pairs on ring 0, two on ring 1, one on ring 2.
+  // Upper pairs stay at least ~75px clear of the header. Wider rings need wider
+  // viewports (see revealClass in orbit-backdrop.tsx).
   integrations: [
-    { id: "openai", label: "OpenAI", ring: 1, angle: -140 },
-    { id: "n8n", label: "n8n", ring: 2, angle: -150 },
-    { id: "whatsapp", label: "WhatsApp", ring: 0, angle: -163 },
-    { id: "googleSheets", label: "Google Sheets", ring: 1, angle: -174 },
-    { id: "supabase", label: "Supabase", ring: 0, angle: 161 },
-    { id: "claude", label: "Claude", ring: 1, angle: -40 },
-    { id: "make", label: "Make", ring: 2, angle: -30 },
-    { id: "zapier", label: "Zapier", ring: 0, angle: -17 },
-    { id: "gemini", label: "Gemini", ring: 1, angle: -6 },
-    { id: "postgresql", label: "PostgreSQL", ring: 0, angle: 19 },
+    { id: "openai", label: "OpenAI", ring: 0, angle: -147 },
+    { id: "claude", label: "Claude", ring: 0, angle: -33 },
+    { id: "supabase", label: "Supabase", ring: 0, angle: 172 },
+    { id: "postgresql", label: "PostgreSQL", ring: 0, angle: 8 },
+    { id: "n8n", label: "n8n", ring: 1, angle: -156 },
+    { id: "make", label: "Make", ring: 1, angle: -24 },
+    { id: "whatsapp", label: "WhatsApp", ring: 1, angle: 167 },
+    { id: "zapier", label: "Zapier", ring: 1, angle: 13 },
+    { id: "googleSheets", label: "Google Sheets", ring: 2, angle: -163 },
+    { id: "gemini", label: "Gemini", ring: 2, angle: -17 },
   ],
   // Illustrative examples of work running quietly in the background.
   activity: [

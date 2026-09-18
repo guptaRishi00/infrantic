@@ -7,9 +7,36 @@ type CssVars = CSSProperties & Record<`--${string}`, string | number>;
 
 // Design-pixel radii of the concentric rings, centred 36px (scaled) below the
 // anchor; badges sit on them (see `ring` in hero.data.ts).
-const RING_RADII = [510, 650, 800, 960, 1120, 1285, 1450] as const;
+const RING_RADII = [650, 800, 960, 1120, 1285, 1450] as const;
 const RING_CENTER_Y = 36;
 const RINGS_BOX = 3000;
+// Every ring carries two comets, one climbing each side, with the same short
+// tail (design px). Rings are staggered across the 26s `animate-comet` cycle;
+// a ring's two comets run in sync as mirror images.
+const COMET_TAIL = 150;
+const COMET_STAGGER_S = 4.3;
+const COMET_SIDES = ["left", "right"] as const;
+
+/**
+ * Comet style for ring `index`: a conic tail whose head starts at the bottom.
+ * Left comets climb clockwise, right comets counter-clockwise.
+ */
+function cometStyle(
+  radius: number,
+  index: number,
+  side: (typeof COMET_SIDES)[number],
+): CssVars {
+  const tail = (COMET_TAIL / radius) * (180 / Math.PI);
+  const left = side === "left";
+  return {
+    width: `${((radius * 2) / RINGS_BOX) * 100}%`,
+    backgroundImage: left
+      ? `conic-gradient(from 180deg, transparent ${360 - tail}deg, #0796fe 360deg)`
+      : `conic-gradient(from 180deg, #0796fe 0deg, transparent ${tail}deg)`,
+    "--comet-turn": left ? "180deg" : "-180deg",
+    animationDelay: `${index * -COMET_STAGGER_S}s`,
+  };
+}
 
 /** Design-pixel offset of a point on a ring, relative to the backdrop anchor. */
 function pointOnRing(ring: number, angle: number) {
@@ -28,6 +55,15 @@ const BREAKPOINTS = [
   { minWidth: 768, scale: 0.64, reveal: "hidden md:block" },
   { minWidth: 1024, scale: 0.76, reveal: "hidden lg:block" },
   { minWidth: 1280, scale: 0.85, reveal: "hidden xl:block" },
+  // Finer steps above xl: the scale no longer changes, so a badge should appear
+  // as soon as it fits instead of waiting for the next Tailwind breakpoint.
+  // (Class names must stay static strings for Tailwind to generate them.)
+  { minWidth: 1360, scale: 0.85, reveal: "hidden min-[1360px]:block" },
+  { minWidth: 1440, scale: 0.85, reveal: "hidden min-[1440px]:block" },
+  { minWidth: 1536, scale: 0.85, reveal: "hidden 2xl:block" },
+  { minWidth: 1600, scale: 0.85, reveal: "hidden min-[1600px]:block" },
+  { minWidth: 1680, scale: 0.85, reveal: "hidden min-[1680px]:block" },
+  { minWidth: 1800, scale: 0.85, reveal: "hidden min-[1800px]:block" },
 ] as const;
 const EDGE_GUTTER = 8;
 
@@ -67,6 +103,18 @@ export function OrbitBackdrop({
             style={{ width: `${((radius * 2) / RINGS_BOX) * 100}%` }}
           />
         ))}
+        {/* Comets: ring-sized boxes masked down to a 1.5px stroke, painted with a
+            conic tail; rotating half a turn carries the head from the bottom
+            to the top. Motion-only. */}
+        {RING_RADII.flatMap((radius, index) =>
+          COMET_SIDES.map((side) => (
+            <span
+              key={`comet-${radius}-${side}`}
+              className="absolute top-1/2 left-1/2 hidden aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full p-[1.5px] [mask:linear-gradient(#000_0_0)_content-box_exclude,linear-gradient(#000_0_0)] motion-safe:block motion-safe:animate-comet"
+              style={cometStyle(radius, index, side)}
+            />
+          )),
+        )}
       </div>
 
       <ul className="hidden sm:block">

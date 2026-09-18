@@ -3,13 +3,14 @@ import { BrandLogo } from "@/shared/ui/brand-logo";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { NewBadge } from "@/shared/ui/new-badge";
 import { headerActions, isNavGroup, primaryNav } from "../navigation";
+import { AutoHideHeader } from "./auto-hide-header";
 import { MobileNav } from "./mobile-nav";
 import { NavDropdown } from "./nav-dropdown";
 
 export function SiteHeader() {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-3">
-      <div className="relative mx-auto flex h-14 max-w-7xl items-center justify-between rounded-2xl border border-zinc-200/80 bg-white/85 pr-2 pl-4 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)] backdrop-blur-md">
+    <AutoHideHeader>
+      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-2xl border border-zinc-200/80 bg-white/85 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)] backdrop-blur-md">
         <Link
           href="/"
           className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
@@ -57,6 +58,6 @@ export function SiteHeader() {
           actions={[headerActions.secondary, headerActions.primary]}
         />
       </div>
-    </header>
+    </AutoHideHeader>
   );
 }
