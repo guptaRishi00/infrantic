@@ -123,25 +123,27 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
           <span className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,#fff_10%,rgb(255_255_255/0))]" />
         </div>
 
-        <dl className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <dl className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
           {content.stack.map((group) => {
             const Icon = stackIcons[group.icon];
             return (
               <div
                 key={group.category}
-                className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-[0_1px_2px_rgb(0_0_0/0.03)]"
+                className="group relative flex flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/50 p-6 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-blue-300/60 hover:shadow-[0_12px_40px_rgb(59,130,246,0.15)]"
               >
-                <dt className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight text-ink">
-                  <span className="grid size-8 place-items-center rounded-lg bg-zinc-100 text-zinc-800">
-                    <Icon aria-hidden="true" className="size-4" />
+                <div className="absolute -right-20 -top-20 size-40 rounded-full bg-blue-500/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
+                
+                <dt className="relative flex items-center gap-3 text-[16px] font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950">
+                  <span className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-white to-zinc-100 text-zinc-600 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-500 group-hover:scale-110 group-hover:from-blue-500 group-hover:to-blue-600 group-hover:text-white group-hover:shadow-[0_4px_20px_rgba(59,130,246,0.3)] group-hover:ring-blue-600">
+                    <Icon aria-hidden="true" className="size-5" strokeWidth={2.5} />
                   </span>
                   {group.category}
                 </dt>
-                <dd className="mt-4 flex flex-wrap gap-1.5">
+                <dd className="relative mt-6 flex flex-wrap gap-2">
                   {group.items.map((item) => (
                     <span
                       key={item}
-                      className="rounded-md border border-zinc-200/80 bg-zinc-50 px-2 py-1 text-[13px] text-zinc-700"
+                      className="rounded-lg border border-zinc-200/60 bg-white/80 px-2.5 py-1.5 text-[13px] font-medium text-zinc-600 shadow-sm backdrop-blur-sm transition-all duration-500 group-hover:border-blue-200/80 group-hover:bg-blue-50 group-hover:text-blue-700"
                     >
                       {item}
                     </span>
@@ -151,9 +153,18 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
             );
           })}
         </dl>
-        <p className="mt-8 text-center text-[15px] text-zinc-600">
-          {content.footnote}
-        </p>
+
+        <div className="mx-auto mt-16 max-w-3xl">
+          <div className="relative overflow-hidden rounded-3xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-blue-50/30 p-8 text-center shadow-sm">
+            <div className="absolute -left-10 -top-10 size-40 rounded-full bg-blue-400/20 blur-3xl" />
+            <div className="absolute -bottom-10 -right-10 size-40 rounded-full bg-indigo-400/20 blur-3xl" />
+            <p className="relative inline-flex flex-col items-center justify-center gap-3 text-lg font-medium text-blue-950 sm:flex-row sm:text-xl">
+              <Sparkles className="hidden size-5 text-blue-500 sm:block" />
+              {content.footnote}
+              <Sparkles className="hidden size-5 text-blue-500 sm:block" />
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
