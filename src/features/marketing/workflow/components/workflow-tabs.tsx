@@ -67,10 +67,10 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
               onClick={() => setActive(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
-                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink",
+                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-[15px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink",
                 selected
                   ? "font-medium text-ink"
-                  : "text-zinc-400 hover:text-zinc-700",
+                  : "text-zinc-600 hover:text-zinc-700",
               )}
             >
               {label}

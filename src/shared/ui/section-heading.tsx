@@ -38,8 +38,8 @@ export function SectionHeading({
         className={cn(
           "leading-[1.1] font-semibold tracking-[-0.035em] text-balance",
           size === "lg"
-            ? "text-[2.125rem] sm:text-[2.625rem]"
-            : "text-3xl sm:text-4xl",
+            ? "text-[2.25rem] sm:text-[2.875rem]"
+            : "text-[2rem] sm:text-[2.5rem]",
           tone === "dark" ? "text-white" : "text-ink",
           titleWidth,
         )}
@@ -49,9 +49,9 @@ export function SectionHeading({
       {description ? (
         <p
           className={cn(
-            "max-w-md text-[15px] leading-6 text-pretty",
+            "max-w-lg text-base leading-7 text-pretty",
             size === "lg" ? "mt-4" : "mt-3",
-            tone === "dark" ? "text-zinc-400" : "text-zinc-500",
+            tone === "dark" ? "text-zinc-300" : "text-zinc-600",
           )}
         >
           {description}

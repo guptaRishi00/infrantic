@@ -8,6 +8,10 @@ const variants = {
     "border border-zinc-200 bg-white text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
   muted:
     "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
+  // White button for ink sections; fills with the brand gradient on hover. The
+  // border stays transparent so the gradient reaches the edge.
+  onDark:
+    "border border-transparent bg-white text-ink hover:bg-brand-gradient hover:text-white",
 } as const;
 
 const sizes = {

@@ -29,7 +29,7 @@ export function SiteHeader() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm text-zinc-700 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+                    className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
                   >
                     {item.label}
                     {item.badge ? <NewBadge label={item.badge} /> : null}

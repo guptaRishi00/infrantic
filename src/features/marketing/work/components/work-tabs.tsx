@@ -88,7 +88,7 @@ export function WorkTabs({ tabs, panels }: WorkTabsProps) {
               />
               <span
                 className={cn(
-                  "font-mono text-xs",
+                  "font-mono text-[13px]",
                   selected ? "text-brand-300" : "text-zinc-500",
                 )}
               >
@@ -98,13 +98,13 @@ export function WorkTabs({ tabs, panels }: WorkTabsProps) {
                 <span>
                   <span
                     className={cn(
-                      "block text-base font-semibold tracking-tight text-balance",
+                      "block text-[17px] font-semibold tracking-tight text-balance",
                       selected ? "text-white" : "text-zinc-300",
                     )}
                   >
                     {tab.title}
                   </span>
-                  <span className="mt-1.5 block text-sm text-zinc-400">
+                  <span className="mt-1.5 block text-[15px] text-zinc-300">
                     {tab.summary}
                   </span>
                 </span>

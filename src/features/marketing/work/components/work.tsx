@@ -28,7 +28,7 @@ function CasePanel({
       aria-labelledby={`case-${study.id}`}
       className="h-full rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-8"
     >
-      <p className="font-mono text-xs text-brand-300">{study.number}</p>
+      <p className="font-mono text-[13px] text-brand-300">{study.number}</p>
       <h3
         id={`case-${study.id}`}
         className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl"
@@ -42,27 +42,27 @@ function CasePanel({
 
       <dl className="mt-8 grid gap-6 border-t border-white/10 pt-6 md:grid-cols-3">
         <div>
-          <dt className="font-mono text-[11px] tracking-wide text-zinc-400 uppercase">
+          <dt className="font-mono text-xs tracking-wide text-zinc-300 uppercase">
             {labels.problem}
           </dt>
-          <dd className="mt-2 text-sm leading-6 text-zinc-300">
+          <dd className="mt-2 text-[15px] leading-6 text-zinc-300">
             {study.problem}
           </dd>
         </div>
         <div>
-          <dt className="font-mono text-[11px] tracking-wide text-zinc-400 uppercase">
+          <dt className="font-mono text-xs tracking-wide text-zinc-300 uppercase">
             {labels.built}
           </dt>
-          <dd className="mt-2 text-sm leading-6 text-zinc-300">
+          <dd className="mt-2 text-[15px] leading-6 text-zinc-300">
             {study.built}
           </dd>
         </div>
         <div className="md:border-l md:border-white/10 md:pl-6">
-          <dt className="font-mono text-[11px] tracking-wide text-brand-300 uppercase">
+          <dt className="font-mono text-xs tracking-wide text-brand-300 uppercase">
             {labels.benefits}
           </dt>
           <dd className="mt-2">
-            <ul className="space-y-1.5 text-sm leading-6 text-zinc-300">
+            <ul className="space-y-1.5 text-[15px] leading-6 text-zinc-300">
               {study.benefits.map((benefit) => (
                 <li key={benefit} className="flex gap-2">
                   <span
@@ -88,8 +88,10 @@ export function Work({ content }: { content: WorkContent }) {
       aria-labelledby="work-title"
       className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
     >
-      <div className="mx-auto max-w-[88rem]">
-        <p className="text-sm font-medium text-brand-300">{content.eyebrow}</p>
+      <div className="mx-auto max-w-[80rem]">
+        <p className="text-[15px] font-medium text-brand-300">
+          {content.eyebrow}
+        </p>
         <SectionHeading
           id="work-title"
           title={content.title}

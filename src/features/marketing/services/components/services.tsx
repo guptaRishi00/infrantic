@@ -55,8 +55,10 @@ export function Services({ content }: { content: ServicesContent }) {
     >
       <BrandIconGradient />
       {/* Same container as the Problem section. */}
-      <div className="mx-auto max-w-[88rem]">
-        <p className="text-sm font-medium text-brand-300">{content.eyebrow}</p>
+      <div className="mx-auto max-w-[80rem]">
+        <p className="text-[15px] font-medium text-brand-300">
+          {content.eyebrow}
+        </p>
         <SectionHeading
           id="services-title"
           title={content.title}
@@ -128,24 +130,24 @@ function ServiceList({
                   strokeWidth={1.75}
                   stroke={GRADIENT_STROKE}
                 />
-                <span className="text-sm font-medium text-zinc-300 tabular-nums">
+                <span className="text-[15px] font-medium text-zinc-300 tabular-nums">
                   {service.number}
                 </span>
               </div>
               <h3
                 id={headingId}
-                className="mt-5 text-lg font-semibold tracking-tight text-ink"
+                className="mt-5 text-xl font-semibold tracking-tight text-ink"
               >
                 {service.title}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-zinc-500">
+              <p className="mt-2 text-[15px] leading-6 text-zinc-600">
                 {service.description}
               </p>
               <ul className="mt-5 flex-1 space-y-2 border-t border-zinc-100 pt-5">
                 {service.capabilities.map((capability) => (
                   <li
                     key={capability}
-                    className="flex items-start gap-2 text-sm text-zinc-700"
+                    className="flex items-start gap-2 text-[15px] text-zinc-700"
                   >
                     <Check
                       aria-hidden="true"
@@ -156,7 +158,7 @@ function ServiceList({
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 rounded-xl bg-zinc-50 px-4 py-3 text-sm leading-6 text-zinc-700">
+              <p className="mt-6 rounded-xl bg-zinc-50 px-4 py-3 text-[15px] leading-6 text-zinc-700">
                 <span className="font-medium text-ink">{goalLabel}: </span>
                 {service.goal}
               </p>

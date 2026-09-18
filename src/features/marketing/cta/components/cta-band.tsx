@@ -67,7 +67,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
       </div>
 
       <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-        <p className="rounded-full border border-white/70 bg-white/60 px-3 py-1 text-xs font-medium text-ink backdrop-blur">
+        <p className="rounded-full border border-white/70 bg-white/60 px-3 py-1 text-[13px] font-medium text-ink backdrop-blur">
           {content.eyebrow}
         </p>
 
@@ -77,10 +77,10 @@ export function CtaBand({ content }: { content: CtaContent }) {
         >
           {content.title}
         </h2>
-        <p className="mt-5 max-w-md text-[15px] leading-6 text-pretty text-zinc-600">
+        <p className="mt-5 max-w-md text-base leading-6 text-pretty text-zinc-600">
           {content.description}
         </p>
-        <ul className="mt-6 flex flex-wrap justify-center gap-x-3 gap-y-2 text-xs font-medium text-zinc-700">
+        <ul className="mt-6 flex flex-wrap justify-center gap-x-3 gap-y-2 text-[13px] font-medium text-zinc-700">
           {content.commitments.map((item) => (
             <li key={item} className="flex items-center gap-1.5">
               <span

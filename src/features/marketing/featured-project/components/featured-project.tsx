@@ -52,8 +52,10 @@ export function FeaturedProject({
       aria-labelledby="featured-project-title"
       className="scroll-mt-24 bg-white px-4 py-24 sm:py-28"
     >
-      <div className="mx-auto max-w-[88rem]">
-        <p className="text-sm font-medium text-brand-700">{content.eyebrow}</p>
+      <div className="mx-auto max-w-[80rem]">
+        <p className="text-[15px] font-medium text-brand-700">
+          {content.eyebrow}
+        </p>
         <SectionHeading
           id="featured-project-title"
           title={content.title}
@@ -68,14 +70,14 @@ export function FeaturedProject({
             <dl className="divide-y divide-zinc-200/80">
               {content.facts.map((fact) => (
                 <div key={fact.number} className="flex gap-4 p-6 sm:p-7">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-zinc-300 bg-white font-mono text-[11px] text-zinc-600">
+                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-zinc-300 bg-white font-mono text-xs text-zinc-600">
                     {fact.number}
                   </span>
                   <div>
-                    <dt className="font-mono text-[11px] tracking-wide text-brand-700 uppercase">
+                    <dt className="font-mono text-xs tracking-wide text-brand-700 uppercase">
                       {fact.label}
                     </dt>
-                    <dd className="mt-2 text-sm leading-6 text-zinc-600">
+                    <dd className="mt-2 text-[15px] leading-6 text-zinc-600">
                       {fact.body}
                     </dd>
                   </div>

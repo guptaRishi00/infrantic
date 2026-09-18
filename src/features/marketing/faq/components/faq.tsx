@@ -16,9 +16,9 @@ export function Faq({ content }: { content: FaqContent }) {
       // project above it.
       className="scroll-mt-24 px-4 pt-12 pb-24 sm:pt-16 sm:pb-28"
     >
-      <div className="mx-auto grid max-w-[88rem] gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
+      <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
         <div className="lg:sticky lg:top-28">
-          <p className="text-sm font-medium text-brand-700">
+          <p className="text-[15px] font-medium text-brand-700">
             {content.eyebrow}
           </p>
           <SectionHeading
@@ -39,14 +39,14 @@ export function Faq({ content }: { content: FaqContent }) {
               open={index === 0}
               className="group"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-left text-base font-semibold tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:text-lg [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-left text-[17px] font-semibold tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:text-xl [&::-webkit-details-marker]:hidden">
                 {item.question}
                 <Plus
                   aria-hidden="true"
-                  className="size-5 shrink-0 text-zinc-500 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
+                  className="size-5 shrink-0 text-zinc-600 transition-transform duration-200 group-open:rotate-45 motion-reduce:transition-none"
                 />
               </summary>
-              <p className="max-w-2xl pr-10 pb-6 text-[15px] leading-6 text-zinc-500">
+              <p className="max-w-2xl pr-10 pb-6 text-base leading-6 text-zinc-600">
                 {item.answer}
               </p>
             </details>

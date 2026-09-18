@@ -35,9 +35,9 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
       aria-labelledby="integrations-title"
       className="scroll-mt-24 overflow-hidden px-4 pt-16 pb-24 sm:pt-20 sm:pb-28"
     >
-      <div className="mx-auto max-w-[88rem]">
+      <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col items-center text-center">
-          <p className="text-sm font-medium text-brand-700">
+          <p className="text-[15px] font-medium text-brand-700">
             {content.eyebrow}
           </p>
           <SectionHeading
@@ -118,7 +118,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
                 key={group.category}
                 className="rounded-2xl border border-zinc-200/80 bg-white p-5 shadow-[0_1px_2px_rgb(0_0_0/0.03)]"
               >
-                <dt className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-ink">
+                <dt className="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight text-ink">
                   <span className="grid size-8 place-items-center rounded-lg bg-zinc-100 text-zinc-800">
                     <Icon aria-hidden="true" className="size-4" />
                   </span>
@@ -128,7 +128,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
                   {group.items.map((item) => (
                     <span
                       key={item}
-                      className="rounded-md border border-zinc-200/80 bg-zinc-50 px-2 py-1 text-xs text-zinc-700"
+                      className="rounded-md border border-zinc-200/80 bg-zinc-50 px-2 py-1 text-[13px] text-zinc-700"
                     >
                       {item}
                     </span>
@@ -138,7 +138,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
             );
           })}
         </dl>
-        <p className="mt-8 text-center text-sm text-zinc-500">
+        <p className="mt-8 text-center text-[15px] text-zinc-600">
           {content.footnote}
         </p>
       </div>

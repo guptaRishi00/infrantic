@@ -1,12 +1,10 @@
 import {
-  ArrowUpRight,
   BrainCircuit,
   CodeXml,
   LayoutDashboard,
   type LucideIcon,
   Workflow,
 } from "lucide-react";
-import Link from "next/link";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { BuildItemIcon, WhatWeBuildContent } from "../what-we-build.types";
@@ -26,10 +24,10 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
       aria-labelledby="what-we-build-title"
       className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
     >
-      <div className="mx-auto max-w-[88rem]">
+      <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-sm font-medium text-brand-300">
+            <p className="text-[15px] font-medium text-brand-300">
               {content.eyebrow}
             </p>
             <SectionHeading
@@ -45,7 +43,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
           </div>
           <ButtonLink
             href={content.allServices.href}
-            variant="secondary"
+            variant="onDark"
             size="sm"
             className="self-start lg:self-auto"
           >
@@ -74,26 +72,22 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
                   <div className="flex flex-1 flex-col">
                     <h3
                       id={headingId}
-                      className="max-w-[22ch] text-xl font-semibold tracking-tight text-balance text-white"
+                      className="max-w-[22ch] text-2xl font-semibold tracking-tight text-balance text-white"
                     >
                       {item.title}
                     </h3>
-                    <p className="mt-3 max-w-md text-[15px] leading-6 text-zinc-400">
+                    <p className="mt-3 max-w-md text-base leading-6 text-zinc-300">
                       {item.description}
                     </p>
-                    <Link
+                    <ButtonLink
                       href={item.href}
                       aria-describedby={headingId}
-                      className="group/link mt-6 inline-flex items-center gap-1 self-start rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-300"
+                      variant="onDark"
+                      size="sm"
+                      className="mt-6 self-start"
                     >
-                      <span className="bg-brand-gradient bg-clip-text text-transparent">
-                        {content.learnMoreLabel}
-                      </span>
-                      <ArrowUpRight
-                        aria-hidden="true"
-                        className="size-4 text-brand-to transition-transform duration-200 ease-out group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 motion-reduce:transition-none"
-                      />
-                    </Link>
+                      {content.learnMoreLabel}
+                    </ButtonLink>
                   </div>
                 </article>
               </li>

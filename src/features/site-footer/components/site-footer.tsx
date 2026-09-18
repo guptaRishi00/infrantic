@@ -21,14 +21,14 @@ export function SiteFooter() {
 
   return (
     <footer className="px-4 pt-24 pb-10 sm:pt-28">
-      <div className="mx-auto max-w-[88rem]">
+      <div className="mx-auto max-w-[80rem]">
         <div className="border-b border-zinc-100 pb-10">
           <BrandLogo className="h-auto w-full" />
         </div>
 
         <div className="mt-10 grid gap-10 md:grid-cols-[1.4fr_2fr]">
           <div>
-            <p className="max-w-xs text-sm leading-6 text-zinc-500">
+            <p className="max-w-xs text-[15px] leading-6 text-zinc-500">
               {footerTagline}
             </p>
             <ul className="mt-5 flex gap-2">
@@ -54,13 +54,15 @@ export function SiteFooter() {
           >
             {footerColumns.map((column) => (
               <div key={column.title}>
-                <h2 className="text-sm font-medium text-ink">{column.title}</h2>
+                <h2 className="text-[15px] font-medium text-ink">
+                  {column.title}
+                </h2>
                 <ul className="mt-4 space-y-2.5">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-sm text-zinc-500 transition-colors hover:text-ink"
+                        className="text-[15px] text-zinc-500 transition-colors hover:text-ink"
                       >
                         {link.label}
                       </Link>
@@ -72,7 +74,7 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <p className="mt-14 text-xs text-zinc-400">
+        <p className="mt-14 text-[13px] text-zinc-400">
           © {year} {siteConfig.name}. All rights reserved.
         </p>
       </div>

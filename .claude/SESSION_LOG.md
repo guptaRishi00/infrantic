@@ -453,3 +453,29 @@
 - `cta-band.tsx`: the background gradient now starts and ends in white (`#fff 0% → #eef8ff 16% → #d9efff 48% → #f5fbff 82% → #fff 100%`), so the band no longer has a hard top edge against the white FAQ. The rings/comets box sits inside a new full-band wrapper with a vertical mask (`transparent → #000 20% … 80% → transparent`), so the rings fade at the top and bottom as well as the sides (the existing radial mask).
 - `faq.tsx`: `py-24 sm:py-28` → `pt-12 pb-24 sm:pt-16 sm:pb-28`. The Featured project → FAQ gap went from 224 to 176px on desktop and from 192 to 144px on mobile; recorded as a rhythm exception in the map.
 - Verified: CDP screenshot `faq-cta2.png` (Featured project bottom → FAQ → CTA → footer top). biome/tsc clean, `next build` → `/` static. Not committed.
+
+## 2026-09-18 — Font → Plus Jakarta Sans; all sections narrowed to 80rem
+- No font was named, so I chose Plus Jakarta Sans (modern geometric sans, fits AI/automation B2B). `layout.tsx` uses `Plus_Jakarta_Sans` from `next/font/google` (built in, no new dependency) as `--font-brand-sans`, and `globals.css` maps `--font-sans` to it. Geist Mono is kept for the mono labels.
+- Width: "reduce Problem, then resize the others" → every section container `max-w-[88rem]` → `max-w-[80rem]` (1280px) in problem, services, workflow, work, integrations, what-we-build, featured-project, faq and site-footer. This matches the header bar (`max-w-7xl` = 80rem), so content and header now share the same left edge.
+- Gotcha: after the bulk `sed`, the running dev server kept serving stale CSS (still containing 84/88rem rules, but not the new 80rem class) and computed widths stayed at 1453px. Touching files did not help. I restarted the dev server I had started (killed PID 18032 on :3000 and relaunched `bun run dev`); the production build had the rule all along.
+- Verified in the pane after the restart: body font is "Plus Jakarta Sans" (loaded) and Geist Mono is loaded. At 1500, all 9 containers are 1280@102, the same as the header (1280@102), with 0 hero badge/text overlaps and no page overflow. At 1024 the header nav stays on one row, bar children don't overlap, and nothing overflows. CDP screenshot `font-top.png`. biome/tsc clean, `next build` → `/` static. Not committed.
+- Possible follow-up: the headings' tight negative tracking was tuned for Geist and reads slightly tight in Jakarta.
+
+## 2026-09-18 — "Learn more" links → standard buttons
+- User: make "Learn more" like the other CTAs. Replaced the gradient-text + nudging-arrow links with the shared `ButtonLink` (size sm), keeping `href` and `aria-describedby` (the card heading). Problem cards (white): primary black button, hover brand gradient. What we build (ink): `variant="secondary"` (white), matching its "View all services" button. Removed the now-unused `Link` and `ArrowUpRight` imports from both files.
+- Verified: CDP screenshots `lm-problem.png` (6 black buttons) and `lm-wwb.png` (4 white buttons). biome/tsc clean, `next build` → `/` static. Not committed.
+
+## 2026-09-18 — What we build buttons: gradient hover
+- `shared/ui/button-link.tsx`: new `onDark` variant (`border-transparent bg-white text-ink hover:bg-brand-gradient hover:text-white`) for buttons on ink sections. I used a variant rather than hover overrides on `secondary`, because `cn()` does not dedupe conflicting utilities, so `hover:border-*` / `hover:bg-*` clashes would resolve by emission order.
+- `what-we-build.tsx`: "View all services" and all 4 "Learn more" buttons use `variant="onDark"`.
+- Verified in the pane (a real hover): the hovered "View all services" computes `linear-gradient(90deg, rgb(4,126,253), rgb(7,161,253))` with white text and a transparent border, while the others stay white with ink text; all 5 buttons carry the variant. biome/tsc clean, `next build` → `/` static. Not committed.
+
+## 2026-09-18 — Header links semibold
+- Added `font-semibold` to the desktop nav links (`site-header.tsx`), the "Services" dropdown trigger (`nav-dropdown.tsx`) and the mobile menu links (`mobile-nav.tsx`). The dropdown panel items were not changed (their titles are already `font-medium`).
+- Verified at 1024 (the tightest desktop width): the 5 top-level items compute weight 600, the nav stays one row (36px), there is 49px clearance between logo, nav and actions, and the bar doesn't scroll. biome/tsc clean, `next build` → `/` static. Not committed.
+
+## 2026-09-18 — Bigger, more readable type outside the hero
+- Scripted a one-step bump of every text-size token (sm:/md:/lg: prefixed too): 10→11px, 11→12, xs→13, 13→14, sm→15, 15→16, base→17, lg→xl, xl→2xl. It ran over problem, services, workflow, workflow-tabs, work, work-tabs, integrations, what-we-build, featured-project (only the left/story part, not the diagram), faq, cta-band and site-footer; 60 tokens changed. Contrast: on light sections zinc-500→600 and zinc-400→500; on ink sections (work, work-tabs, what-we-build) zinc-400→300.
+- `section-heading.tsx`: lg title 34/42 → 36/46px, md 30/36 → 32/40px, description 15px leading-6 max-w-md zinc-500/400 → 16px leading-7 max-w-lg zinc-600/300. The hero doesn't use it, so it's untouched.
+- Excluded on purpose: the hero (user), the header (just tuned), and the fixed-layout illustrations (automation-flow, app-mocks, flow-canvas, the featured-project diagram).
+- Verified at 1500: 0 clipped text elements; Problem h2 46px; FAQ answers 16px; no page overflow. At 375: no elements past the viewport outside the intentional scrollers. CDP screenshots `fs-problem.png`, `fs-wwb.png` and `fs-faq.png`. biome/tsc clean, `next build` → `/` static. Not committed.

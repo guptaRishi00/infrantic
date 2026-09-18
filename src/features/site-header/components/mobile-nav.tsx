@@ -100,7 +100,7 @@ function MobileLink({
     <Link
       href={link.href}
       onClick={onNavigate}
-      className="flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] text-zinc-800 transition-colors hover:bg-zinc-50"
+      className="flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
     >
       {link.label}
       {link.badge ? <NewBadge label={link.badge} /> : null}

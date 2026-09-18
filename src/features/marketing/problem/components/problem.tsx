@@ -1,5 +1,4 @@
 import {
-  ArrowUpRight,
   FileSearch,
   FileSpreadsheet,
   Hourglass,
@@ -8,7 +7,7 @@ import {
   TriangleAlert,
   Unplug,
 } from "lucide-react";
-import Link from "next/link";
+import { ButtonLink } from "@/shared/ui/button-link";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { GapIcon, ProblemContent } from "../problem.types";
 
@@ -30,8 +29,10 @@ export function Problem({ content }: { content: ProblemContent }) {
       // padding alone sets the gap.
       className="scroll-mt-24 px-4 pb-24 sm:pb-28"
     >
-      <div className="mx-auto max-w-[88rem]">
-        <p className="text-sm font-medium text-brand-700">{content.eyebrow}</p>
+      <div className="mx-auto max-w-[80rem]">
+        <p className="text-[15px] font-medium text-brand-700">
+          {content.eyebrow}
+        </p>
         <SectionHeading
           id="problem-title"
           title={content.title}
@@ -55,37 +56,30 @@ export function Problem({ content }: { content: ProblemContent }) {
                     <span className="grid size-10 place-items-center rounded-xl bg-zinc-100 text-zinc-800">
                       <Icon aria-hidden="true" className="size-5" />
                     </span>
-                    <span className="text-xs font-medium tracking-wide text-zinc-400 uppercase">
+                    <span className="text-[13px] font-medium tracking-wide text-zinc-600 uppercase">
                       {content.gapLabel}
                     </span>
                   </div>
                   <h3
                     id={headingId}
-                    className="mt-5 text-lg font-semibold tracking-tight text-ink"
+                    className="mt-5 text-xl font-semibold tracking-tight text-ink"
                   >
                     {gap.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">
+                  <p className="mt-2 text-[15px] leading-6 text-zinc-600">
                     {gap.symptom}
                   </p>
-                  <p className="mt-4 flex-1 border-t border-zinc-100 pt-4 text-sm leading-6 text-zinc-500">
+                  <p className="mt-4 flex-1 border-t border-zinc-100 pt-4 text-[15px] leading-6 text-zinc-600">
                     {gap.impact}
                   </p>
-                  <Link
+                  <ButtonLink
                     href={gap.href}
                     aria-describedby={headingId}
-                    className="group/link mt-5 inline-flex items-center gap-1 self-start rounded-md text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                    size="sm"
+                    className="mt-5 self-start"
                   >
-                    {/* Gradient text needs its own box for bg-clip-text; the
-                        arrow takes the gradient's end colour. */}
-                    <span className="bg-brand-gradient bg-clip-text text-transparent">
-                      {content.learnMoreLabel}
-                    </span>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      className="size-4 text-brand-to transition-transform duration-200 ease-out group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 motion-reduce:transition-none"
-                    />
-                  </Link>
+                    {content.learnMoreLabel}
+                  </ButtonLink>
                 </article>
               </li>
             );
