@@ -27,7 +27,7 @@ export function Services({ content }: { content: ServicesContent }) {
       className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
     >
       {/* Same container as the Problem section. */}
-      <div className="mx-auto max-w-[84rem]">
+      <div className="mx-auto max-w-[88rem]">
         <p className="text-sm font-medium text-brand-300">{content.eyebrow}</p>
         <SectionHeading
           id="services-title"

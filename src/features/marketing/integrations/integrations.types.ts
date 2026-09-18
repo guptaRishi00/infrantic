@@ -3,9 +3,10 @@ import type { IntegrationId } from "@/shared/ui/integration-logo";
 export type ConstellationItem = {
   id: IntegrationId;
   label: string;
-  /** Centre position in % of the constellation box. */
-  x: number;
-  y: number;
+  /** Orbit ring the logo rides on (0 = innermost). */
+  ring: 0 | 1 | 2;
+  /** Starting angle on the ring, in degrees clockwise from 3 o'clock. */
+  angle: number;
   /** Hide on narrow screens where the constellation gets crowded. */
   desktopOnly?: boolean;
 };

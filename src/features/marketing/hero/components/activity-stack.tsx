@@ -142,7 +142,7 @@ function Avatar({
         aria-hidden="true"
         className={cn(
           "absolute -top-0.5 -right-0.5 grid size-3 place-items-center rounded-full ring-2 ring-white",
-          badge === "verified" ? "bg-brand" : "bg-emerald-500",
+          badge === "verified" ? "bg-brand-gradient" : "bg-emerald-500",
         )}
       >
         <Check

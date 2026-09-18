@@ -2,14 +2,32 @@
 
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import { type PointerEvent, useEffect, useId, useRef, useState } from "react";
 import type { NavGroup } from "../navigation";
+
+// Grace period before a hover-opened menu closes, so a pointer cutting a corner
+// between the trigger and the panel doesn't drop it.
+const HOVER_CLOSE_DELAY_MS = 150;
 
 export function NavDropdown({ group }: { group: NavGroup }) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const panelId = useId();
+
+  // Mouse opens on hover; touch and keyboard keep click-to-toggle.
+  function onPointerEnter(event: PointerEvent) {
+    if (event.pointerType !== "mouse") return;
+    clearTimeout(closeTimer.current);
+    setOpen(true);
+  }
+  function onPointerLeave(event: PointerEvent) {
+    if (event.pointerType !== "mouse") return;
+    closeTimer.current = setTimeout(() => setOpen(false), HOVER_CLOSE_DELAY_MS);
+  }
+
+  useEffect(() => () => clearTimeout(closeTimer.current), []);
 
   useEffect(() => {
     if (!open) return;
@@ -36,13 +54,28 @@ export function NavDropdown({ group }: { group: NavGroup }) {
   }, [open]);
 
   return (
-    <div ref={rootRef} className="relative">
+    <div
+      ref={rootRef}
+      className="relative"
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+    >
       <button
         ref={buttonRef}
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={(event) => {
+          // A mouse click on a hover-opened menu shouldn't close it again.
+          if (
+            (event.nativeEvent as globalThis.PointerEvent).pointerType ===
+            "mouse"
+          ) {
+            setOpen(true);
+            return;
+          }
+          setOpen((value) => !value);
+        }}
         className="flex items-center gap-1 rounded-md px-3 py-2 text-sm text-zinc-700 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
       >
         {group.label}
@@ -52,12 +85,15 @@ export function NavDropdown({ group }: { group: NavGroup }) {
         />
       </button>
 
+      {/* Padding (not margin) so the gap under the trigger is still part of the
+          hover area. pt-7 clears the 72px header bar (the trigger ends 18px
+          above its bottom edge) and leaves a 10px gap below it. */}
       <div
         id={panelId}
         hidden={!open}
-        className="absolute top-full left-1/2 mt-3 w-72 -translate-x-1/2 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-[0_12px_32px_-12px_rgb(0_0_0/0.18)]"
+        className="absolute top-full left-1/2 w-72 -translate-x-1/2 pt-7"
       >
-        <ul>
+        <ul className="rounded-xl border border-zinc-200 bg-white p-1.5 shadow-[0_12px_32px_-12px_rgb(0_0_0/0.18)]">
           {group.items.map((item) => (
             <li key={item.label}>
               <Link

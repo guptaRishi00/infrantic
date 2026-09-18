@@ -9,6 +9,8 @@ type SectionHeadingProps = {
   tone?: "light" | "dark";
   /** "lg" is a slightly larger title with a bit more space above the description. */
   size?: "md" | "lg";
+  /** Title measure; override for longer headlines. */
+  titleWidth?: string;
   className?: string;
 };
 
@@ -20,6 +22,7 @@ export function SectionHeading({
   align = "center",
   tone = "light",
   size = "md",
+  titleWidth = "max-w-[20ch]",
   className,
 }: SectionHeadingProps) {
   return (
@@ -33,11 +36,12 @@ export function SectionHeading({
       <h2
         id={id}
         className={cn(
-          "max-w-[20ch] leading-[1.1] font-semibold tracking-[-0.035em] text-balance",
+          "leading-[1.1] font-semibold tracking-[-0.035em] text-balance",
           size === "lg"
             ? "text-[2.125rem] sm:text-[2.625rem]"
             : "text-3xl sm:text-4xl",
           tone === "dark" ? "text-white" : "text-ink",
+          titleWidth,
         )}
       >
         {title}

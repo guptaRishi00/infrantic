@@ -29,7 +29,7 @@ export function Approach({ content }: { content: ApproachContent }) {
       aria-labelledby="approach-title"
       className="scroll-mt-24 px-4 py-24 sm:py-28"
     >
-      <div className="mx-auto max-w-[84rem]">
+      <div className="mx-auto max-w-[88rem]">
         <div className="flex flex-col items-center text-center">
           <p className="text-sm font-medium text-brand-700">
             {content.eyebrow}
@@ -84,7 +84,7 @@ export function Approach({ content }: { content: ApproachContent }) {
             </p>
           </article>
 
-          <article className="flex flex-col rounded-3xl bg-[radial-gradient(120%_90%_at_100%_0%,#0796fe_0%,#0c2f55_45%,#021c37_100%)] p-6 text-white sm:p-8">
+          <article className="flex flex-col rounded-3xl bg-[radial-gradient(120%_90%_at_100%_0%,#047efd_0%,#0c2f55_45%,#021c37_100%)] p-6 text-white sm:p-8">
             <p className="text-xs font-medium tracking-wide text-brand-200/70 uppercase">
               {philosophy.label}
             </p>

@@ -3,10 +3,9 @@ import type { ComponentProps } from "react";
 import { cn } from "@/shared/lib/cn";
 
 const variants = {
-  primary:
-    "bg-black text-white shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(0_0_0/0.2)] hover:bg-brand",
+  primary: "bg-black text-white hover:bg-brand-gradient",
   secondary:
-    "border border-zinc-200 bg-white text-zinc-800 shadow-[0_1px_2px_rgb(0_0_0/0.04)] hover:border-brand-200 hover:bg-brand-50",
+    "border border-zinc-200 bg-white text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
   muted:
     "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
 } as const;

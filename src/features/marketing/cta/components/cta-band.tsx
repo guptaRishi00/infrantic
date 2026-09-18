@@ -53,7 +53,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
             <li key={item} className="flex items-center gap-1.5">
               <span
                 aria-hidden="true"
-                className="size-1.5 rounded-full bg-brand"
+                className="size-1.5 rounded-full bg-brand-gradient"
               />
               {item}
             </li>

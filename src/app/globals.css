@@ -17,12 +17,97 @@
   --color-ink: #021c37;
   --color-ink-800: #0c2f55;
   --color-ink-700: #1a416b;
+  /* The brand blue as it's actually drawn: a gradient (see bg-brand-gradient).
+     `brand` above stays as the flat mid-tone for borders, rings and text. */
+  --color-brand-from: #047efd;
+  --color-brand-to: #07a1fd;
 
   --animate-rise: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-float: float 7s ease-in-out infinite;
   --animate-marquee: marquee 40s linear infinite;
   --animate-row-cycle: row-cycle 12s ease-in-out infinite;
   --animate-comet: comet 26s linear infinite;
+  /* Selected-work automation flow: marching dashes, travelling packets and a
+     soft pulse on the agent. */
+  --animate-flow-x: flow-x 0.8s linear infinite;
+  --animate-flow-y: flow-y 0.8s linear infinite;
+  --animate-packet-x: packet-x 3.2s ease-in-out infinite;
+  --animate-packet-y: packet-y 3.2s ease-in-out infinite;
+  --animate-agent-glow: agent-glow 3.2s ease-in-out infinite;
+  /* Technology orbit: animates --orbit-angle (registered below) for one full
+     turn; duration/direction are set inline. The ring rotates by the angle and
+     its logos by minus the angle, so both always read the same value. */
+  --animate-orbit: orbit 60s linear infinite;
+
+  @keyframes orbit {
+    to {
+      --orbit-angle: 360deg;
+    }
+  }
+
+  /* Indeterminate progress bar on active workflow nodes. */
+  --animate-progress: progress 1.8s ease-in-out infinite;
+
+  @keyframes progress {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+
+  @keyframes flow-x {
+    to {
+      background-position: 8px 0;
+    }
+  }
+
+  @keyframes flow-y {
+    to {
+      background-position: 0 8px;
+    }
+  }
+
+  @keyframes packet-x {
+    0% {
+      left: 0%;
+      opacity: 0;
+    }
+    10%,
+    50% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      left: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes packet-y {
+    0% {
+      top: 0%;
+      opacity: 0;
+    }
+    10%,
+    50% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      top: 100%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes agent-glow {
+    50% {
+      box-shadow:
+        0 0 0 6px rgb(7 150 254 / 0.14),
+        0 12px 40px -10px rgb(7 161 253 / 0.7);
+    }
+  }
 
   @keyframes rise {
     from {
@@ -83,4 +168,21 @@
       transform: translateY(-6px);
     }
   }
+}
+
+/* Brand blue fill. Use instead of a flat bg-brand wherever blue is painted as a surface. */
+@utility bg-brand-gradient {
+  background-image: linear-gradient(
+    90deg,
+    var(--color-brand-from),
+    var(--color-brand-to)
+  );
+}
+
+/* Registered so it interpolates as an angle (see animate-orbit) and inherits
+   from each orbit ring to its logos. */
+@property --orbit-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
 }

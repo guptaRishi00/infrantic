@@ -309,3 +309,99 @@
 ## 2026-09-18 — Header hides on scroll down, shows on scroll up
 - Ported the scroll behaviour from softexedge (`resizable-navbar` Navbar, not its resize). New client island `site-header/components/auto-hide-header.tsx` wraps the server-rendered header content. It uses a passive scroll listener with an 8px direction threshold (so fling jitter cannot flap it) and only hides past 120px. It sets `data-hidden` on the header and CSS runs `-translate-y-[120px]` over 300ms ease-out (motion-reduce: instant). It never hides while a menu inside is open (`[aria-expanded=true]`), and `not-focus-within` keeps it visible for keyboard users. `site-header.tsx` now renders `<AutoHideHeader>` instead of `<header>`.
 - Verified in the pane at 1500 (the tab reports `visibilityState: hidden`, so scroll events were dispatched manually and the transition was disabled to read the end state). Results: at 0 and 60 shown; down to 700 hidden; up 5px still hidden; up to 600 shown; down to 1500 hidden; keyboard focus shown; Services menu open plus scrolling down stays shown and hides after closing; the hidden bar bottom is at -36px (fully off-screen). biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Services dropdown opens on hover
+- `nav-dropdown.tsx`: `pointerenter`/`pointerleave` (mouse only) on the root open the menu and close it after a 150ms grace. A mouse click keeps it open instead of toggling it shut. Touch and keyboard (`pointerType` "") keep click-to-toggle; Esc and outside-focus still close. The panel gap changed from `mt-3` to `pt-3` on an outer wrapper (the styling moved onto the `ul`), so the 12px gap is part of the hover area.
+- Verified in the pane: hover opens it (aria-expanded true, panel shown, hoverable gap 0px, visual gap 12px); moving into the panel keeps it open; moving away closes it; a mouse click keeps it open; keyboard-style `.click()` toggles open and then closed; Esc restores focus. The screenshot shows the open panel. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Dropdown below the bar, header radius
+- `nav-dropdown.tsx`: panel wrapper `pt-3` → `pt-7`. The menu used to start 12px under the trigger, which overlapped the 72px bar by 6px. It now starts 10px below the bar and the gap is still hoverable.
+- `site-header.tsx`: bar `rounded-2xl` → `rounded-xl` (16 → 12px).
+- Verified at 1500 by hovering in the pane: bar bottom 84, menu top 94 (gap 10px), hover zone continuous from the trigger bottom (66), computed bar radius 12px; the screenshot shows the menu clear of the bar. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Brand blue is a gradient (#047EFD → #07A1FD)
+- `globals.css`: new tokens `--color-brand-from` #047efd and `--color-brand-to` #07a1fd, plus `@utility bg-brand-gradient` (90deg).
+- Applied to every blue fill: primary button hover (`hover:bg-brand-gradient`), hero verified badge (activity-stack), CTA and benefit dots, workflow active step dot (flow-canvas), comet tails (#07a1fd → head #047efd). Blue→ink tiles (problem, integrations) are now `#07a1fd,#047efd_30%,#021c37`; the radial blue→ink cards (approach, benefit hero visual) start from #047efd, with #07a1fd before it in benefits.
+- Left flat on purpose: `border-brand` and focus/ring shadows (a border cannot take a gradient without a mask hack), plus the `brand-50…700` tints and text shades.
+- Verified in the pane: the hovered primary computes `linear-gradient(90deg, rgb(4,126,253), rgb(7,161,253))`, the static dots and badges compute the same, the tiles compute the new 3-stop gradient, and the comet conic uses the two stops. The screenshot shows the gradient button on hover. biome/tsc clean, `next build` → `/` static.
+- Note: the switch from background-image on hover is instant; the old background-color faded over 150ms.
+
+## 2026-09-18 — Button shadows removed
+- `shared/ui/button-link.tsx`: dropped the primary inset highlight and drop shadow and the secondary drop shadow (muted had none). These were the only button shadows (checked with grep; workflow-tabs has none).
+- Verified: the pane's computed `box-shadow` is `none` on all 20 buttons and button-styled links on `/`. Biome flagged the now-short line (formatting only; fixed with `--write`). biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Problem section rebuilt as label + title + gap cards
+- The user supplied new copy (rephrased as asked). Layout: eyebrow "Where work slows down", h2 (`size="lg"`, left), then a 3/2/1-column grid of 6 "Operational gap" cards. Each card has a zinc icon tile, the label, an h3, a symptom, an impact line under a divider, and "Learn more ↗".
+- Removed the old tool tags, the effects list and the ink resolution card (with their types, react-icons and the BrandMark tile).
+- "Learn more" goes to `/#services` for all six for now; no per-gap pages exist. Links use `aria-describedby` on the card h3 so screen readers can tell them apart.
+- Map note fixed: BrandMark is no longer used in problem.
+- Verified: pane at 1500 shows 6 cards in 2 rows (heights 314/290, equal within a row), a 3-line title and a 1344px container. CDP headless screenshot `infrantic-shots/problem.png` looks right. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Learn more gradient + arrow nudge; tighter hero → Problem gap
+- `problem.tsx`: the "Learn more" label is gradient text (`bg-brand-gradient bg-clip-text text-transparent` on its own span) and the arrow is `text-brand-to` (#07a1fd). Hovering the link (`group/link`) nudges the arrow 2px up-right over 200ms ease-out (no motion under reduced motion).
+- Problem top padding `py-24 sm:py-28` → `pt-12 sm:pt-16` (bottom unchanged). The hero → Problem gap went from 224 to 176px on desktop and from 192 to 144px on mobile. Recorded as the one exception to the section-rhythm rule in the map.
+- Verified at 1500: the text computes the 90deg gradient with a text clip and transparent colour; the arrow is rgb(7,161,253); a real hover gives the arrow `translate: 2px -2px`; the marquee bottom → Problem label is 176px. CDP screenshot `problem2.png` shows the blue gradient links. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Hero → Problem gap reduced again
+- `problem.tsx`: top padding `pt-12 sm:pt-16` → none (bottom `pb-24 sm:pb-28` unchanged). The gap is now just the hero's bottom padding: 112px on desktop (was 176) and 96px on mobile (was 144).
+- `#problem` anchor: `scroll-mt-24` (96px) still clears the 84px header.
+- Verified at 1500: marquee bottom → "Where work slows down" is 112px and the computed padding-top is 0px. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Problem section narrower side gutters
+- `problem.tsx`: container `max-w-[84rem]` → `max-w-[88rem]` (1344 → 1408px). At 1500 the side gutters go from 71 to 39px (excluding the 15px scrollbar), and cards from 437 to 459px wide.
+- Problem is now wider than the other sections (Services, Workflow, Benefits, Technology and Approach stay 84rem); noted in the map.
+- Verified in the pane at 1500: Problem 1408 vs Services 1344, cards 459/459/459. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — All sections match Problem's width
+- `max-w-[84rem]` → `max-w-[88rem]` in services, workflow, benefits, integrations, approach and the site footer (Problem was already 88rem). Left alone: the header bar (`max-w-7xl`, sized separately) and the intentionally narrow inner columns (hero text, CTA band, workflow tabs, technology diagram).
+- Verified at 1500: all 7 containers are 1408px wide with their left edge at 39px, and there's no horizontal overflow. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Wider Problem title
+- `shared/ui/section-heading.tsx`: new optional `titleWidth` prop (default `max-w-[20ch]`, applied through the prop instead of hard-coded, because `cn()` does not resolve conflicting utilities). `problem.tsx` passes `max-w-[34ch]`.
+- Verified at 1500: the Problem h2 max-width is 975px and it now wraps to 2 lines (was 3). Every other section h2 keeps its previous max-width (Services/Benefits/Technology/Approach 492px, Workflow 574px, CTA 590px). biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Outcomes removed, new "Selected work" section
+- Deleted `features/marketing/benefits` (Outcomes bento with Unsplash portraits) and the Unsplash `remotePatterns` in `next.config.ts`, which only it used.
+- New `features/marketing/work`: types, data (3 case studies, reworded from the user's screenshots), `components/work.tsx` (server, `bg-ink`, id `work`), `work-tabs.tsx` (client WAI-ARIA tabs: arrow keys on both axes plus Home/End; panels share one grid cell so the height stays 1220px on every tab), `automation-flow.tsx`, `app-mocks.tsx`. Replaces Benefits in `page.tsx`, between Workflow and Technology.
+- Automation flow: CSS-only (no hand-drawn SVG, per the icon rule). Nodes and wires are placed by % on a 2:1 canvas; wires run centre to centre under the opaque white tiles. Motion: marching dashes (`animate-flow-x/y`), glowing packets travelling in order (`animate-packet-x/y`, staggered delays) and a pulsing agent (`animate-agent-glow`); new keyframes in globals.css, all `motion-safe`. Logos: Sheets, Slack (FaSlack; no SiSlack), Gmail, OpenAI, Supabase, Jira, keeping their brand colours.
+- Mocks: the proofreader ("ProofDesk", fictional) and the task board, in brand colours, with amber/emerald only as status colours. Each visual is role="img" with a text description and the inner UI is aria-hidden. On phones the visuals scroll inside their frame (min-w 40rem).
+- Not added, as asked: the two header CTAs. Also left out "View project" because no project pages exist.
+- Verified: CDP headless screenshots `infrantic-shots/work0-2.png` for each tab. In the pane at 1500: 3 tabs switch correctly, ArrowDown and End move focus, 10 wires and 10 packets animate (`flow-x` running), 1 visible panel at a time, no page overflow. At 375: the tab strip and canvas scroll internally with no page overflow. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Workflow: smaller panel radius, refined and animated flow
+- `workflow.tsx` StepPanel: outer `rounded-[1.75rem]` → `rounded-2xl` (28 → 16px), inner `rounded-3xl` → `rounded-xl` (24 → 12px). In `flow-canvas.tsx` the canvas went `rounded-2xl` → `rounded-lg`.
+- `flow-canvas.tsx` refined: cards are rounded-lg with a status pill (Done/In progress/Queued) and a clearer status icon. Emerald check for done; a pinging gradient dot for active; a dashed hollow ring for todo, whose card is also dashed. Active cards have a brand glow and an indeterminate gradient progress bar (new `animate-progress` keyframe in globals.css).
+- Connectors are now styled by the target's status: done is solid brand-300; active is marching gradient dashes (`animate-flow-x/y`, same as Selected work) with a packet that runs each elbow segment in turn, respecting direction; todo is static grey dashes. Cards rise in with a 90ms stagger each time a tab is shown. All `motion-safe`.
+- Verified: CDP screenshots `workflow0.png` (Discover) and `workflow2.png` (Build). In the pane the active panel runs flow-x, flow-y, packet-x, packet-y, rise, ping and progress; computed radii are 16/12/8px. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Selected work automation rebuilt to match the user's reference
+- `work/components/automation-flow.tsx` rewritten to the n8n-style reference. Stock form → "AI AGENT / Tools agent" card (Chat Model, Memory and Tool ports) → Route badge → Slack ("Approval request") and Email. The agent's ports feed Chat Model (OpenAI), Supabase, Memory (lucide MemoryStick) and Jira.
+- Layout: a 1000×540 design grid. `--u` = `calc(100cqw/1000)` on a child of an `@container`, so positions, tile sizes, radii and labels scale together (labels have `max()` minimums). The frame keeps `min-w-[40rem]` with an internal scroll on phones.
+- Connectors are still CSS-only: `straight` / `hvh` / `vhv` route builders produce straight legs (marching dashes + glowing packets, direction-aware, staggered) and quarter-circle corners (dashed borders on two edges with one rounded corner), with CSS-triangle arrowheads. Dark tiles use `#07131d`. Logos keep their brand colours, except OpenAI (white) and Slack (its red #E01E5A), whose originals would vanish on dark.
+- `work.data.ts` visualLabel updated to the new nodes.
+- Verified: CDP screenshot `work-flow-crop.png` matches the reference. In the pane (canvas 640px) a tile is 60px (94u × 0.64); 10 flow-x, 10 flow-y, 10 packet-x, 10 packet-y and the agent glow are running; no page overflow. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Selected work automation scaled down
+- `automation-flow.tsx`: the `@container` that defines `--u` is now `mx-auto w-[88%]` inside the frame, which keeps `min-w-[40rem]`. The whole graph (tiles, lines, radii, labels) renders 12% smaller and centred, and the canvas is 12% shorter. The Selected work section at 1500 went from 1261 to 1193px.
+- Verified: CDP screenshot `work-flow2-crop.png` shows the graph centred with even margins. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Technology: logos orbit on the ring lines
+- `integrations.tsx`: the constellation box went from 16:9 with a radial mask to a square `max-w-[36rem]` with 3 full rings (34/58/84% = r 98/167/242px). The 112% ring and the mask are gone. Logos sit exactly on the ring lines and each ring's `<ul>` turns (40s, then 60s reversed, then 80s). Removed the per-logo `animate-float` bob (float is still used by the CTA band).
+- Data: `ConstellationItem` changed from `x/y` to `ring` + `angle`, spread evenly (3/4/5 logos per ring). `desktopOnly` kept for Python, PostgreSQL, Vercel and GitHub.
+- Upright logos: the first version gave each logo its own reverse animation, and the CDP shot caught Vercel's triangle tilted 90° (the animations can start at different times, e.g. desktop-only logos shown later). Fixed by animating one registered `@property --orbit-angle` (inherits) per ring: the ring uses `rotate: var(--orbit-angle)` and the logo `rotate: calc(var(--orbit-angle) * -1)`.
+- Section top padding `py-24 sm:py-28` → `pt-16 sm:pt-20` (bottom unchanged); noted as a rhythm exception in the map.
+- Verified in the pane at 1500, seeking to 7s, 21s and 33s: logo distance from the centre is always 98/167/242px (on the lines), each logo's rotate equals minus its ring's, logo bounding boxes stay 48×48 (upright), and there are only 3 animations in total. CDP screenshot `tech2-crop.png` shows every logo upright. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Technology rings bigger, fading top and bottom
+- `integrations.tsx`: the diagram went from `max-w-[36rem]` to `max-w-[44rem]` (576 → 704px). Ring radii at desktop go from 98/167/242 to about 120/204/296px; the logos follow automatically (ring-relative placement).
+- The ring lines moved into a wrapper with `mask-image: linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent)`. Only the lines fade; the orbiting logos are outside the wrapper and stay fully visible.
+- Verified: CDP screenshot `tech3-crop.png` shows larger rings whose tops and bottoms fade out with the logos intact. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Technology rings: bigger again, stronger fade (repeat request)
+- The user re-sent the same request, so the first pass read as too subtle. `integrations.tsx`: diagram `max-w-[44rem]` → `max-w-[50rem]` (800px), rings 34/58/84% → 38/66/94%. Desktop radii are now about 152/264/376px (were 120/204/296).
+- Fade mask on the ring lines strengthened from `transparent, #000 30%, #000 70%, transparent` to `transparent 4%, #000 40%, #000 60%, transparent 96%`, so the tops and bottoms fully disappear. Logos are still unmasked.
+- Verified: CDP screenshot `tech4-crop.png` shows clearly larger rings, with lines vanishing at the top and bottom and all logos visible. biome/tsc clean, `next build` → `/` static.
+
+## 2026-09-18 — Technology: logos fade with the rings
+- `integrations.tsx`: the vertical fade mask moved from the ring-lines wrapper (now removed) to the whole diagram container. Logos now fade out as they orbit past the top and bottom, the same as the lines, instead of floating over the fade. The centre brand tile sits in the fully opaque middle band, so it is unaffected.
+- Verified: CDP screenshot `tech5-crop.png`. Vercel (top) and Next.js (bottom) are faded into the mask; mid-band logos are fully opaque. biome/tsc clean, `next build` → `/` static.

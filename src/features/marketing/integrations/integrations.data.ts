@@ -5,19 +5,26 @@ const integrationsContent = {
   title: "Modern engineering, AI, and automation",
   description:
     "We combine modern software engineering with AI and automation technologies.",
+  // Spread evenly per ring; the rings turn, so these are starting angles.
   items: [
-    { id: "openai", label: "OpenAI", x: 12, y: 14 },
-    { id: "claude", label: "Claude", x: 28, y: 44 },
-    { id: "n8n", label: "n8n", x: 5, y: 56, desktopOnly: true },
-    { id: "make", label: "Make", x: 20, y: 84 },
-    { id: "zapier", label: "Zapier", x: 40, y: 86 },
-    { id: "python", label: "Python", x: 62, y: 14, desktopOnly: true },
-    { id: "gemini", label: "Gemini", x: 90, y: 26 },
-    { id: "supabase", label: "Supabase", x: 88, y: 58 },
-    { id: "nextjs", label: "Next.js", x: 72, y: 76 },
-    { id: "postgresql", label: "PostgreSQL", x: 64, y: 93, desktopOnly: true },
-    { id: "vercel", label: "Vercel", x: 80, y: 8, desktopOnly: true },
-    { id: "github", label: "GitHub", x: 36, y: 12, desktopOnly: true },
+    { id: "openai", label: "OpenAI", ring: 0, angle: 0 },
+    { id: "claude", label: "Claude", ring: 0, angle: 120 },
+    { id: "gemini", label: "Gemini", ring: 0, angle: 240 },
+    { id: "n8n", label: "n8n", ring: 1, angle: 45 },
+    { id: "make", label: "Make", ring: 1, angle: 135 },
+    { id: "zapier", label: "Zapier", ring: 1, angle: 225 },
+    { id: "python", label: "Python", ring: 1, angle: 315, desktopOnly: true },
+    { id: "supabase", label: "Supabase", ring: 2, angle: 10 },
+    { id: "nextjs", label: "Next.js", ring: 2, angle: 82 },
+    {
+      id: "postgresql",
+      label: "PostgreSQL",
+      ring: 2,
+      angle: 154,
+      desktopOnly: true,
+    },
+    { id: "vercel", label: "Vercel", ring: 2, angle: 226, desktopOnly: true },
+    { id: "github", label: "GitHub", ring: 2, angle: 298, desktopOnly: true },
   ],
   stack: [
     {

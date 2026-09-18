@@ -31,8 +31,8 @@ function cometStyle(
   return {
     width: `${((radius * 2) / RINGS_BOX) * 100}%`,
     backgroundImage: left
-      ? `conic-gradient(from 180deg, transparent ${360 - tail}deg, #0796fe 360deg)`
-      : `conic-gradient(from 180deg, #0796fe 0deg, transparent ${tail}deg)`,
+      ? `conic-gradient(from 180deg, transparent ${360 - tail}deg, #07a1fd ${360 - tail / 2}deg, #047efd 360deg)`
+      : `conic-gradient(from 180deg, #047efd 0deg, #07a1fd ${tail / 2}deg, transparent ${tail}deg)`,
     "--comet-turn": left ? "180deg" : "-180deg",
     animationDelay: `${index * -COMET_STAGGER_S}s`,
   };

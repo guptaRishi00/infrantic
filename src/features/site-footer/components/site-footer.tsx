@@ -21,7 +21,7 @@ export function SiteFooter() {
 
   return (
     <footer className="px-4 pt-24 pb-10 sm:pt-28">
-      <div className="mx-auto max-w-[84rem]">
+      <div className="mx-auto max-w-[88rem]">
         <div className="border-b border-zinc-100 pb-10">
           <BrandLogo className="h-auto w-full" />
         </div>
