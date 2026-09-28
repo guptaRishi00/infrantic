@@ -56,38 +56,22 @@ export function Services({ content }: { content: ServicesContent }) {
       <BrandIconGradient />
       {/* Same container as the Problem section. */}
       <div className="mx-auto max-w-[80rem]">
-        <p className="text-[15px] font-medium text-brand-300">
+        <p className="text-center text-[15px] font-medium text-brand-300">
           {content.eyebrow}
         </p>
         <SectionHeading
           id="services-title"
           title={content.title}
           description={content.description}
-          align="left"
+          align="center"
           tone="dark"
           className="mt-3"
         />
       </div>
 
-      {/* Edge-to-edge infinite marquee: -mx-4 cancels the section's px-4. The list
-          is rendered twice and the track slides -50%. Each card carries its own
-          right padding (not flex gap) so both halves are exactly equal. Pauses on
-          hover. Reduced motion: one manually scrollable row. */}
-      <div className="-mx-4 mt-12 overflow-hidden motion-reduce:overflow-x-auto">
-        <div
-          className="flex w-max hover:[animation-play-state:paused] motion-safe:animate-marquee"
-          style={{ animationDuration: "60s" }}
-        >
-          <ServiceList
-            services={content.services}
-            goalLabel={content.goalLabel}
-          />
-          <ServiceList
-            services={content.services}
-            goalLabel={content.goalLabel}
-            className="motion-reduce:hidden"
-            decorative
-          />
+      <div className="mx-auto mt-16 max-w-[80rem] pl-6 pr-[1.125rem]">
+        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory">
+          <ServiceList services={content.services} />
         </div>
       </div>
     </section>
@@ -96,72 +80,73 @@ export function Services({ content }: { content: ServicesContent }) {
 
 function ServiceList({
   services,
-  goalLabel,
-  className,
-  decorative = false,
 }: {
   services: readonly Service[];
-  goalLabel: string;
-  className?: string;
-  /** The duplicate copy exists only for the loop; hide it from assistive tech. */
-  decorative?: boolean;
 }) {
   return (
-    <ul
-      aria-hidden={decorative || undefined}
-      className={cn("flex shrink-0", className)}
-    >
+    <ul className="flex shrink-0">
       {services.map((service) => {
         const Icon = icons[service.icon];
-        const headingId = decorative ? undefined : `service-${service.id}`;
+        const headingId = `service-${service.id}`;
         return (
           <li
             key={service.id}
-            className="w-[19.5rem] shrink-0 pr-4 sm:w-[22rem]"
+            className="w-[20rem] shrink-0 pr-6 sm:w-[24rem] snap-start"
           >
             <article
               aria-labelledby={headingId}
-              className="flex h-full flex-col rounded-2xl border border-white/10 bg-white p-6"
+              className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8 transition-colors duration-500 hover:bg-gradient-to-br hover:from-blue-600 hover:to-indigo-700 hover:border-transparent"
             >
               <div className="flex items-center justify-between">
-                <Icon
-                  aria-hidden="true"
-                  className="size-8"
-                  strokeWidth={1.75}
-                  stroke={GRADIENT_STROKE}
-                />
-                <span className="text-[15px] font-medium text-zinc-300 tabular-nums">
+                <div className="relative flex size-12 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 transition-colors duration-500 group-hover:bg-white/10 group-hover:ring-white/20">
+                  <Icon
+                    aria-hidden="true"
+                    className="absolute inset-0 m-auto size-6 transition-opacity duration-500 group-hover:opacity-0"
+                    strokeWidth={1.75}
+                    stroke={GRADIENT_STROKE}
+                  />
+                  <Icon
+                    aria-hidden="true"
+                    className="absolute inset-0 m-auto size-6 text-white opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                    strokeWidth={1.75}
+                  />
+                </div>
+                <span className="text-[13px] font-semibold tracking-widest text-zinc-500 transition-colors duration-500 group-hover:text-blue-200">
                   {service.number}
                 </span>
               </div>
               <h3
                 id={headingId}
-                className="mt-5 text-xl font-semibold tracking-tight text-ink"
+                className="mt-8 text-2xl font-semibold tracking-tight text-white transition-colors duration-500"
               >
                 {service.title}
               </h3>
-              <p className="mt-2 text-[15px] leading-6 text-zinc-600">
+              <p className="mt-3 text-[15px] leading-relaxed text-zinc-400 transition-colors duration-500 group-hover:text-blue-50/90">
                 {service.description}
               </p>
-              <ul className="mt-5 flex-1 space-y-2 border-t border-zinc-100 pt-5">
+              <ul className="mt-8 flex-1 space-y-4 border-t border-white/10 pt-8 transition-colors duration-500 group-hover:border-white/20">
                 {service.capabilities.map((capability) => (
                   <li
                     key={capability}
-                    className="flex items-start gap-2 text-[15px] text-zinc-700"
+                    className="flex items-start gap-3 text-[15px] text-zinc-300 transition-colors duration-500 group-hover:text-white"
                   >
-                    <Check
-                      aria-hidden="true"
-                      className="mt-0.5 size-4 shrink-0"
-                      stroke={GRADIENT_STROKE}
-                    />
-                    {capability}
+                    <div className="relative mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-colors duration-500 group-hover:bg-white/20 group-hover:ring-white/30">
+                      <Check
+                        aria-hidden="true"
+                        className="absolute inset-0 m-auto size-3 transition-opacity duration-500 group-hover:opacity-0"
+                        stroke={GRADIENT_STROKE}
+                        strokeWidth={3}
+                      />
+                      <Check
+                        aria-hidden="true"
+                        className="absolute inset-0 m-auto size-3 text-white opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                        strokeWidth={3}
+                      />
+                    </div>
+                    <span className="leading-snug">{capability}</span>
                   </li>
                 ))}
               </ul>
-              <p className="mt-6 rounded-xl bg-zinc-50 px-4 py-3 text-[15px] leading-6 text-zinc-700">
-                <span className="font-medium text-ink">{goalLabel}: </span>
-                {service.goal}
-              </p>
             </article>
           </li>
         );
