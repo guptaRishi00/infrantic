@@ -44,7 +44,7 @@ export function FeaturedProject({
     <section
       id="featured-project"
       aria-labelledby="featured-project-title"
-      className="scroll-mt-24 bg-white px-4 py-24 sm:py-28"
+      className="scroll-mt-24 bg-white px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <p className="text-[15px] font-medium text-brand-700">
@@ -91,6 +91,10 @@ export function FeaturedProject({
             <div className="flex h-full min-w-[46rem] flex-col px-6 py-8 sm:px-10">
               <p className="font-mono text-[11px] tracking-wide text-zinc-500 uppercase">
                 {diagram.label}
+              </p>
+              <p className="mt-2 flex items-center gap-1.5 text-[13px] text-zinc-500 md:hidden">
+                Swipe to see all six steps
+                <ArrowRight aria-hidden="true" className="size-3.5" />
               </p>
 
               {/* Vertically centred between the label and the legend. */}

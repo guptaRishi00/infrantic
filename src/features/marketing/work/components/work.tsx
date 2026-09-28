@@ -86,7 +86,7 @@ export function Work({ content }: { content: WorkContent }) {
     <section
       id="work"
       aria-labelledby="work-title"
-      className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
+      className="scroll-mt-24 bg-ink px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <p className="text-[15px] font-medium text-brand-300">

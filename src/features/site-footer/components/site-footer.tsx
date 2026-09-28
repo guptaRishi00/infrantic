@@ -20,7 +20,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="px-4 pt-24 pb-10 sm:pt-28">
+    <footer className="px-4 pt-16 pb-10 sm:pt-28">
       <div className="mx-auto max-w-[80rem]">
         <div className="border-b border-zinc-100 pb-10">
           <BrandLogo className="h-auto w-full" />
@@ -57,12 +57,12 @@ export function SiteFooter() {
                 <h2 className="text-[15px] font-medium text-ink">
                   {column.title}
                 </h2>
-                <ul className="mt-4 space-y-2.5">
+                <ul className="mt-4 space-y-2.5 max-lg:mt-3 max-lg:space-y-1">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[15px] text-zinc-500 transition-colors hover:text-ink"
+                        className="text-[15px] text-zinc-500 transition-colors hover:text-ink max-lg:inline-block max-lg:py-1"
                       >
                         {link.label}
                       </Link>

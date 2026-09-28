@@ -9,7 +9,7 @@ export function Hero({ content }: { content: HeroContent }) {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative isolate overflow-hidden px-4 pt-28 pb-24 sm:pt-36 sm:pb-28"
+      className="relative isolate overflow-hidden px-4 pt-28 pb-16 sm:pt-36 sm:pb-28"
     >
       <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
         <div className="motion-safe:animate-rise">
@@ -64,7 +64,7 @@ export function Hero({ content }: { content: HeroContent }) {
             order, so it paints over the rings and under the logos. */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -inset-x-4 -top-32 -bottom-24 -z-10 bg-[linear-gradient(to_bottom,rgb(255_255_255/0),#fff_55%)] sm:-bottom-28"
+          className="pointer-events-none absolute -inset-x-4 -top-32 -bottom-16 -z-10 bg-[linear-gradient(to_bottom,rgb(255_255_255/0),#fff_55%)] sm:-bottom-28"
         />
         <IndustriesMarquee industries={content.industries} />
       </div>

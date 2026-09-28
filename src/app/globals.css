@@ -290,3 +290,50 @@
     var(--color-brand-to)
   );
 }
+
+/* Scroll-driven reveals for inner pages: cards rise in as they enter the
+   viewport and step timelines fill as you read. Driven by the scroll timeline
+   (no JS, compositor-only opacity/transform). Browsers without scroll timelines,
+   and reduced-motion users, simply see everything in place. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@keyframes grow-y {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    .reveal-grow-y {
+      transform-origin: top;
+      animation: grow-y linear both;
+      animation-timeline: view();
+      animation-range: cover 5% cover 55%;
+    }
+
+    .reveal-grow-x {
+      transform-origin: left;
+      animation: grow-x linear both;
+      animation-timeline: view();
+      animation-range: entry 20% cover 45%;
+    }
+  }
+}

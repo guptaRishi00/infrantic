@@ -20,40 +20,42 @@ export function isNavGroup(item: NavItem): item is NavGroup {
 export const serviceLinks: readonly NavLink[] = [
   {
     label: "AI Automation",
-    href: "/#services",
+    href: "/services#ai-automation",
     description: "Reduce manual work without removing human control.",
   },
   {
     label: "Business Process Automation",
-    href: "/#services",
+    href: "/services#process-automation",
     description: "Faster, more consistent operations.",
   },
   {
     label: "Custom Software",
-    href: "/#services",
+    href: "/services#custom-software",
     description: "Software that fits the way you work.",
   },
   {
     label: "Systems & Integrations",
-    href: "/#services",
+    href: "/services#systems-integrations",
     description: "One connected digital ecosystem.",
   },
   {
     label: "Data & Operational Intelligence",
-    href: "/#services",
+    href: "/services#data-intelligence",
     description: "Visibility into what is happening and why.",
   },
 ];
 
 export const primaryNav: readonly NavItem[] = [
+  { label: "Challenges", href: "/challenges" },
   { label: "Services", items: serviceLinks },
-  { label: "How we work", href: "/#workflow" },
-  { label: "Industries", href: "/#industries" },
-  { label: "Technology", href: "/#technology" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Case studies", href: "/case-studies" },
+  { label: "Industries", href: "/industries" },
+  { label: "Process", href: "/process" },
+  { label: "About", href: "/about" },
+  { label: "Careers", href: "/careers" },
 ];
 
 export const headerActions = {
-  secondary: { label: "The problem", href: "/#problem" },
+  secondary: { label: "Challenges", href: "/challenges" },
   primary: { label: "Book a call", href: "/#contact" },
 } as const satisfies Record<string, NavLink>;

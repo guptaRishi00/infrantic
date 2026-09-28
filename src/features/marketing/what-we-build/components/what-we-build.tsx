@@ -22,7 +22,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
     <section
       id="what-we-build"
       aria-labelledby="what-we-build-title"
-      className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
+      className="scroll-mt-24 bg-ink px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

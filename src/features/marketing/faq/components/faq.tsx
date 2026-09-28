@@ -14,7 +14,7 @@ export function Faq({ content }: { content: FaqContent }) {
       aria-labelledby="faq-title"
       // Shorter top padding on purpose: pulls the FAQ closer to the featured
       // project above it.
-      className="scroll-mt-24 px-4 pt-12 pb-24 sm:pt-16 sm:pb-28"
+      className="scroll-mt-24 px-4 pt-12 pb-16 sm:pt-16 sm:pb-28"
     >
       <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
         <div className="lg:sticky lg:top-28">

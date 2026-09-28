@@ -19,7 +19,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
     <section
       id="contact"
       aria-labelledby="cta-title"
-      className="relative isolate scroll-mt-24 overflow-hidden bg-[linear-gradient(180deg,#fff_0%,#eef8ff_16%,#d9efff_48%,#f5fbff_82%,#fff_100%)] px-4 py-24 sm:py-28"
+      className="relative isolate scroll-mt-24 overflow-hidden bg-[linear-gradient(180deg,#fff_0%,#eef8ff_16%,#d9efff_48%,#f5fbff_82%,#fff_100%)] px-4 py-16 sm:py-28"
     >
       <div
         aria-hidden="true"

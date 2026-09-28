@@ -29,7 +29,7 @@ export function SiteHeader() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+                    className="flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-zinc-700 xl:px-3 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
                   >
                     {item.label}
                     {item.badge ? <NewBadge label={item.badge} /> : null}
@@ -41,22 +41,25 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <ButtonLink
-            href={headerActions.secondary.href}
-            variant="muted"
-            size="sm"
-          >
-            {headerActions.secondary.label}
-          </ButtonLink>
+          {/* The secondary action repeats the first nav item; only show it
+              once there is room for both (xl). */}
+          <span className="hidden xl:contents">
+            <ButtonLink
+              href={headerActions.secondary.href}
+              variant="muted"
+              size="sm"
+            >
+              {headerActions.secondary.label}
+            </ButtonLink>
+          </span>
           <ButtonLink href={headerActions.primary.href} size="sm">
             {headerActions.primary.label}
           </ButtonLink>
         </div>
 
-        <MobileNav
-          items={primaryNav}
-          actions={[headerActions.secondary, headerActions.primary]}
-        />
+        {/* The secondary action repeats the first nav item, which the menu
+            already lists. */}
+        <MobileNav items={primaryNav} actions={[headerActions.primary]} />
       </div>
     </AutoHideHeader>
   );

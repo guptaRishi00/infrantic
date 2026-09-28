@@ -34,7 +34,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
     <section
       id="technology"
       aria-labelledby="integrations-title"
-      className="scroll-mt-24 overflow-hidden px-4 pt-16 pb-24 sm:pt-20 sm:pb-28"
+      className="scroll-mt-24 overflow-hidden px-4 pt-16 pb-16 sm:pt-20 sm:pb-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col items-center text-center">
@@ -132,10 +132,14 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
                 className="group relative flex flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/50 p-6 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-blue-300/60 hover:shadow-[0_12px_40px_rgb(59,130,246,0.15)]"
               >
                 <div className="absolute -right-20 -top-20 size-40 rounded-full bg-blue-500/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-                
+
                 <dt className="relative flex items-center gap-3 text-[16px] font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950">
                   <span className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-white to-zinc-100 text-zinc-600 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-500 group-hover:scale-110 group-hover:from-blue-500 group-hover:to-blue-600 group-hover:text-white group-hover:shadow-[0_4px_20px_rgba(59,130,246,0.3)] group-hover:ring-blue-600">
-                    <Icon aria-hidden="true" className="size-5" strokeWidth={2.5} />
+                    <Icon
+                      aria-hidden="true"
+                      className="size-5"
+                      strokeWidth={2.5}
+                    />
                   </span>
                   {group.category}
                 </dt>

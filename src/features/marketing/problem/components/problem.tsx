@@ -27,7 +27,7 @@ export function Problem({ content }: { content: ProblemContent }) {
       aria-labelledby="problem-title"
       // No top padding on purpose: this section follows the hero, whose bottom
       // padding alone sets the gap.
-      className="scroll-mt-24 px-4 pb-24 sm:pb-28"
+      className="scroll-mt-24 px-4 pb-16 sm:pb-28"
     >
       <div className="mx-auto max-w-[80rem] pl-6 pr-[1.125rem]">
         <p className="text-[15px] font-medium text-brand-700">
@@ -54,31 +54,35 @@ export function Problem({ content }: { content: ProblemContent }) {
                 >
                   <div className="flex h-full flex-col">
                     <div className="mb-2">
-                        <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-b from-zinc-50 to-zinc-100/50 text-zinc-800 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-300">
-                          <Icon aria-hidden="true" className="size-6" strokeWidth={2.5} />
-                        </span>
-                      </div>
-                      <h3
-                        id={headingId}
-                        className="mt-6 text-xl font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950"
-                      >
-                        {gap.title}
-                      </h3>
-                      <p className="mt-2 text-[15px] leading-6 text-zinc-600">
-                        {gap.symptom}
-                      </p>
-                      <p className="mt-4 flex-1 border-t border-zinc-100 pt-4 text-[15px] leading-6 text-zinc-600 transition-colors duration-500 group-hover:border-blue-100">
-                        {gap.impact}
-                      </p>
-                      <ButtonLink
-                        href={gap.href}
-                        aria-describedby={headingId}
-                        size="sm"
-                        className="mt-5 self-start"
-                      >
-                        {content.learnMoreLabel}
-                      </ButtonLink>
+                      <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-b from-zinc-50 to-zinc-100/50 text-zinc-800 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-300">
+                        <Icon
+                          aria-hidden="true"
+                          className="size-6"
+                          strokeWidth={2.5}
+                        />
+                      </span>
                     </div>
+                    <h3
+                      id={headingId}
+                      className="mt-6 text-xl font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950"
+                    >
+                      {gap.title}
+                    </h3>
+                    <p className="mt-2 text-[15px] leading-6 text-zinc-600">
+                      {gap.symptom}
+                    </p>
+                    <p className="mt-4 flex-1 border-t border-zinc-100 pt-4 text-[15px] leading-6 text-zinc-600 transition-colors duration-500 group-hover:border-blue-100">
+                      {gap.impact}
+                    </p>
+                    <ButtonLink
+                      href={gap.href}
+                      aria-describedby={headingId}
+                      size="sm"
+                      className="mt-5 self-start"
+                    >
+                      {content.learnMoreLabel}
+                    </ButtonLink>
+                  </div>
                 </article>
               </li>
             );

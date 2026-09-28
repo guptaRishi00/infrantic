@@ -14,10 +14,12 @@ export const footerColumns: readonly FooterColumn[] = [
   {
     title: "Company",
     links: [
-      { label: "The problem we solve", href: "/#problem" },
-      { label: "How we work", href: "/#workflow" },
-      { label: "Industries", href: "/#industries" },
-      { label: "Technology", href: "/#technology" },
+      { label: "About", href: "/about" },
+      { label: "Challenges", href: "/challenges" },
+      { label: "Case studies", href: "/case-studies" },
+      { label: "Industries", href: "/industries" },
+      { label: "Process", href: "/process" },
+      { label: "Careers", href: "/careers" },
       { label: "FAQ", href: "/#faq" },
     ],
   },

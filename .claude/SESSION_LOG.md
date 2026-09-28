@@ -492,3 +492,99 @@
 - Findings worth keeping: `var()` in transform keyframes and short iterations × many elements (React's root `animationiteration` listener) both keep waking the main thread. A probe that pauses and plays animations via JS gives misleading per-animation numbers; disable groups with injected CSS instead.
 - After: **0 layouts/s, 6–18 style recalcs/s, main thread 6–19% at idle (headless, no GPU), ~100 MB layers (4 big: two viewport layers, the page, the services marquee)**. Visuals compared via CDP screenshots of the hero, Selected work, How we work, Technology, Featured project and CTA: unchanged. biome/tsc clean, `next build` → `/` static.
 - Git note: the user committed and pushed during this task (commits up to `d41fa1d` include my intermediate state with `var()` keyframes). The final fixes (literal keyframes, long iterations, orbit nesting, blur/mask removals) are still uncommitted in the working tree. The user also removed the featured-project step number badges and the `page.tsx` header comment themselves; I left both alone.
+
+## 2026-09-28 — Seven inner pages (Challenges, Services, Case studies, Industries, Process, About, Careers)
+- Reference (glitchaisolutions.com) has the same nav; used its section rhythm (hero → problem → services → case studies → industries → principles → team → stack → process → FAQ → CTA) as a guide, in our own style and copy.
+- New `marketing/page-blocks`: PageHero, FeatureGrid, SplitSection, Steps, BeforeAfter, Stats, BlockHeading + a lucide icon map. All static except what the reused sections already animate; nothing new animates (per the perf rules).
+- Seven page features + routes under `app/(marketing)/<slug>/page.tsx`, each with `metadata`. Every page: hero + 5–7 sections + `CtaBand` (footer comes from the layout). Reused home sections: Problem, WhatWeBuild, Services data (via new ServiceDetails rows with anchors), Work, FeaturedProject, Workflow, Integrations, FAQ.
+- Copy is in brand tone and avoids unverifiable claims: hero stats are site facts (5 service lines, 5 stages, 10 industries, 3 case studies). Careers roles are marked "we hire when a project needs it" and every Apply goes to `/#contact` (no careers mailbox exists). "Discuss this" per service also → `/#contact`.
+- Nav: header → the seven pages (Services stays a dropdown, items now `/services#<id>`); footer Company column mirrors them. Seven items wrapped at 1024 (nav 56px), fixed with `px-2 xl:px-3` on links and showing the secondary "Challenges" button only from `xl` (`hidden xl:contents` wrapper, because `cn()` would not resolve `hidden` vs the button's `inline-flex`).
+- Review fixes: Case studies hero title no longer duplicates the Selected work heading beneath it; Industries sector grid uses 2 columns so 10 cards don't leave an orphan.
+- Verified: `next build` → all 8 routes static; every route 200 with 6–8 sections. CDP checks per page at 1500/1280/1024/375: nav one row (36px) at ≥1024, burger at 375, no header overlap, no horizontal overflow, 0 clipped text on the new pages. Full-page screenshots `infrantic-shots/pg-*.png` reviewed. biome/tsc clean. Not committed.
+
+## 2026-09-28 — Pull from main
+- `git fetch` + `git pull --ff-only origin main`: already up to date. Local, `origin/main` and the remote (`ls-remote`) are all `07b6c77`. The uncommitted work (the seven inner pages plus the perf fixes) is untouched.
+- Noted, not pulled: `origin/sudeep` has one new commit, `73d13ab` "UI polish: enhance marketing cards, fix layout bugs, and improve tech stack aesthetics" (2026-09-18), touching integrations.tsx, problem.tsx and services.tsx. Our working tree changes integrations.tsx (orbit perf rebuild) and services.tsx, so merging it will need conflict resolution.
+
+## 2026-09-28 — Pull from main (Sudeep's PR #1)
+- `git pull --ff-only origin main`: fast-forwarded `07b6c77` → `281f283` ("Merge pull request #1 from guptaRishi00/sudeep", carrying `73d13ab` UI polish). It touched integrations.tsx, problem.tsx and services.tsx. None of these had local changes: the perf fixes were already committed in `07b6c77`, which corrects my previous log entry that said they were uncommitted.
+- Perf regression check on the pulled files: no `--orbit-angle`, `mask-image`, `animate-float` or `background-position`; the `animate-orbit-back` orbit is intact. One `backdrop-blur` came in on the Technology stack tag chips (static, small, over static cards), so it's left in and mentioned to the user.
+- The pulled files failed `bun run lint` (CRLF/format in all 3, plus an unused import in services.tsx). Fixed with `biome check --write` (+ `--unsafe` for the import). The whitespace-insensitive diff is only line wrapping plus the removed import. Left uncommitted.
+- Verified on the merged tree with the seven uncommitted pages: lint clean, tsc OK, `next build` → all 9 routes static.
+
+## 2026-09-28 — Services back to an edge-to-edge infinite marquee
+- Sudeep's PR #1 had turned the Services row into a contained (`max-w-[80rem]`), manually scrolled, snap row. `services.tsx` now restores the marquee around his new card design: a `-mx-4` full-bleed viewport (`overflow-hidden`; `motion-reduce:overflow-x-auto`), a `w-max` track with `motion-safe:animate-marquee` (translateX -50%, compositor-only) at 60s, hover pause, and two `ServiceList` copies. The second copy is `aria-hidden`, has no heading ids, and is `motion-reduce:hidden`. Cards keep their own `pr-6` so the halves are exactly equal. Dropped `snap-start`, which does nothing on a moving track.
+- Verified in the pane at 1500: the viewport spans 0 → 1485 (the full client width), both lists are 1920px (half the track, so the loop is seamless), the animation `marquee` 60s is running, and there's no page overflow. Headless screenshot `infrantic-shots/svc-marquee.png` shows cards bleeding off both edges. biome/tsc clean, `next build` → static. (The old CDP shot scripts had been cleared from temp; a replacement `section-shot.mjs` is in the session scratchpad.)
+- Noted for the user, not changed: the card hover uses `from-blue-600 to-indigo-700`, which conflicts with the "no violet/indigo" brand rule (brand is the #047EFD→#07A1FD gradient).
+
+## 2026-09-28 — Inner pages: no home-section reuse
+- User rule: pages other than home must not reuse home-page section components; build page-specific variants with a design tweak and new content (CtaBand + footer stay shared, as asked earlier). Saved to auto-memory and the map.
+- Replaced all 11 reuses on 6 pages:
+  - Challenges: Problem → `GapRows` (numbered rows pairing "what you see today" with "what changes"; new copy).
+  - Services: WhatWeBuild → focus-areas `FeatureGrid` (ink, new copy); Integrations → `StackShowcase` (static logo grid).
+  - Case studies: Work → `CaseList` (stacked write-ups: sector, tools, challenge, what we built as steps, results); FeaturedProject → `FeaturedCase` (ink: facts row, 6-stage numbered flow, before/after).
+  - Process: Workflow → `EngagementTimeline` (6 phases with "you'll see" and "your time").
+  - About: Integrations → `StackShowcase` (different grouping and copy from Services).
+  - Faq → `PageFaq` on Challenges, Services, Industries and Process, each with 5 page-specific questions and its own `<details name>` group.
+- All new components are static (per the perf rules). New blocks live in page-blocks (`PageFaq`, `StackShowcase`; `blockIcons` is now exported); bespoke ones sit in the page feature folders with their content types in `<page>.data.ts`.
+- Verified: grep for home-section imports in inner page folders returns none. biome/tsc clean; `next build` gives 9 static routes; all 7 inner routes 200 with 6–8 sections. CDP checks at 1500/1024/375: nav one row, no overlap, no overflow, 0 clipped text. Section screenshots `infrantic-shots/v-*.png` and `v-sheet1/2.png` reviewed. Not committed.
+
+## 2026-09-28 — FAQ back to the home component on inner pages
+- User: the FAQ, CTA band and footer may reuse the home components everywhere; the new FAQ design didn't look good. Challenges, Services, Industries and Process now render the home `Faq`. Each keeps its own five questions: the `faq` objects in their data files now satisfy `FaqContent` (id/group/cta dropped, the home description line added), and `FaqContent` is exported from `features/marketing/faq`.
+- Removed `page-blocks/components/page-faq.tsx`, its export, and the `PageFaqContent`/`FaqEntry` types. Memory and map rule updated: FAQ, CTA band and footer are the allowed shared home sections.
+- Verified: biome/tsc clean; `next build` gives 9 static routes; the 4 pages return 200 with `id="faq"`. CDP screenshot `infrantic-shots/faq-process.png` shows the home FAQ layout with the Process questions. Not committed.
+
+## 2026-09-28 — Inner pages: hero automation visuals + scroll reveals
+- User: the inner pages read as a block of text, with no movement or automation graphs. Added motion that pulls readers down the page, all CSS and compositor-only, and no new dependencies.
+- **Hero visuals** (`page-blocks/components/hero-visual.tsx`, `PageHero.visual`, shown from `md`):
+  - "flow" graphs built from the existing `FlowLine`/`FlowPacket` primitives, with nodes, a hub and a record card:
+    - Challenges: scattered tools → Infrantic → Order #1042.
+    - Services: 5 service lines → your system.
+    - Case studies: procurement flow with an AI agent.
+    - Process: 5 stages plus a loop.
+    - Careers: You → Map → Build → Ship staircase.
+  - "orbit" diagrams using the `RingComet`s: Industries (10 sectors) and About (disciplines and tools).
+  - Data lives in each page's `*.data.ts`.
+- **Scroll reveals** (`globals.css`): `.reveal` (rise and fade), `.reveal-grow-y` (the `Steps` progress line) and `.reveal-grow-x` are scroll-driven (`animation-timeline: view()`), gated on `@supports` and no-reduced-motion. They're applied to FeatureGrid cards (plus hover lift), SplitSection panel, Steps, BeforeAfter, Stats, StackShowcase, GapRows, CaseList, ServiceDetails, OpenRoles, FeaturedCase stages and EngagementTimeline phases.
+- Fix: the FeaturedCase and EngagementTimeline packet tracks overflowed the page on Process; they now sit in `overflow-hidden` wrappers.
+- Perf bug found and fixed: /about idled at ≈190 ms/s main thread with 60 recalcs/s.
+  - Bisect: cells with `.reveal` inside a `rounded-2xl overflow-hidden` grid (the Stats and StackShowcase blocks) forced a mask layer, which pushed the CTA comets onto the main thread. `contain: paint/strict` on the CTA didn't help.
+  - Fix: `.reveal` moved to the Stats/StackShowcase grid itself. GapRows and OpenRoles drop the parent clip, and so does ServiceDetails (with `bg-white` moved to the list); OpenRoles rows round their own first/last corners.
+  - The rule is now in the map's animation perf rules.
+- Verified:
+  - biome/tsc clean; `next build` gives 9 static routes.
+  - CDP probe at 1500×900 on `next start`, all 7 pages: `timeline: view()`, no horizontal overflow, 0 layouts/s. Main thread was 6–10 ms/s, except Industries at 28 in the probe (6–7 in a dedicated 3-run harness). About went 167 → 6–8.
+  - Screenshots of the reworked Stats, GapRows, ServiceDetails and OpenRoles show rounded corners intact.
+- Map: PageHero/HeroVisual, reveals, the no-reveal-in-rounded-clip rule, and fixed stale notes (the "reused home sections" wording, numbered GapRows, `--comet-turn`). Not committed.
+
+## 2026-09-28 — Transient horizontal scroll, timeline centring, frameless hero diagrams
+- **Transient horizontal scrollbar** (user: it appears when an animation starts and disappears when it ends, on "some page"). I couldn't reproduce it after the earlier Process packet-clip fix. Checks run:
+  - CDP on `next start`, all 8 routes, at 390/768/900/1024/1100/1229/1280/1366/1440/1500/1536/1600/1920, at DPR 1 and 1.25, with and without visible scrollbars.
+  - Every time-based animation paused and seeked 0–30s in 250ms steps, and scroll-driven reveals pinned at 0/50/100%. Checked both the document's scroll size and every element-level scroll container against its t=0 baseline.
+  - Per-frame sampling from navigation start.
+  - In the user's pane (dev :3000): client-side navigation plus slow scrolling.
+  - Every check came out 0.
+  - Added `overflow-x-clip` to `<body>` (`src/app/layout.tsx`) as a guard. Clip doesn't make a scroll container, so sticky still works: the FAQ heading holds at 112px and releases at its container's end (measured).
+- **EngagementTimeline:** dots are `self-center` over their cards. The track now spans `calc((100%-5rem)/12)` from each side, so it starts and ends at the first and last dot centres. Measured at 1500: dot cx = card cx for all 6; track 210→1290 = first→last dot.
+- **Hero diagrams:** removed the canvas frame (background, dots, border, radius, shadow) and the caption text, so the diagrams sit on the hero wash. The invisible `overflow-hidden` stays for the packets. The now-unused `caption` field is gone from both visual types and all 7 data files.
+- Verified: biome/tsc clean; `next build` gives 9 static routes. Screenshots `scratchpad/shots/t-hero-*.png` and `t-process-timeline.png` reviewed, with no labels clipped. Map updated. Not committed.
+
+## 2026-09-28 — Small-screen pass (desktop ≥1024 untouched)
+- User: desktop (lg and up) is right and must not change; optimise smaller screens.
+- **Audit:**
+  - CDP at 375/430/768: every route, full-page shots, tap targets, text <12px, clipped text, off-screen elements.
+  - `ui-visual-validator` agent reviewed the contact sheets.
+  - Found no overflow or clipping. Tiny text only in the home illustration mocks, which are deliberately sized.
+- **Changes** (all base classes overridden at `sm`/`lg`, or `max-lg:`/`md:max-lg:`/`md:hidden`):
+  - Phone rhythm: sections `py-24` → `py-16` (192 → 128px between blocks). Also FAQ/Integrations/Problem `pb`, home hero `pb`, footer `pt`, and the marquee fade `-bottom-16` to match. PageHero `pt-36 pb-20` → `pt-32 pb-16`. 24 files, one class each. Phone pages are 380–510px shorter.
+  - Mobile menu: `max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain`. It ended at 670px on a 667px iPhone SE; now 646px, and it scrolls on shorter screens. Dropped the duplicate "Challenges" secondary button; only "Book a call" remains, full width.
+  - Footer links `max-lg:inline-block max-lg:py-1` with `max-lg:space-y-1`: tap height 19 → 27px.
+  - PageHero diagram between md and lg: `md:max-lg:mx-auto md:max-lg:w-full md:max-lg:max-w-lg`, so it's not 736px wide under the text.
+  - CaseList challenge/built/changed `md:grid-cols-3` → `lg:grid-cols-3` (stacks on tablets; the columns were ~200px).
+  - Featured-project diagram: phone-only "Swipe to see all six steps →" hint (`md:hidden`).
+- **Not changed:** the agent's footer suggestion (1 column below `sm`). The 2+1 grid is conventional, and 3 stacked columns would add length.
+- **Verified:**
+  - biome/tsc clean; `next build` gives 9 static routes.
+  - Desktop proof: layout dump of every rendered element (box, font-size, colour) at 1024/1280/1500 on all 8 routes. A repeat of the baseline shows 0 noise. After the changes: 17,876 elements, 0 differences, identical page heights. The only deltas are zero-size elements inside the hidden mobile menu.
+  - Small widths: 0 horizontal overflow at 375/768. Crops reviewed (768 process hero, 768 case list, 375 featured project with hint).
+- Map: rhythm numbers, marquee coupling, the desktop-frozen rule with the dump method, mobile-nav notes. Not committed.

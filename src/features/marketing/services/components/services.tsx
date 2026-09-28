@@ -51,7 +51,7 @@ export function Services({ content }: { content: ServicesContent }) {
     <section
       id="services"
       aria-labelledby="services-title"
-      className="scroll-mt-24 bg-ink px-4 py-24 sm:py-28"
+      className="scroll-mt-24 bg-ink px-4 py-16 sm:py-28"
     >
       <BrandIconGradient />
       {/* Same container as the Problem section. */}
@@ -69,9 +69,22 @@ export function Services({ content }: { content: ServicesContent }) {
         />
       </div>
 
-      <div className="mx-auto mt-16 max-w-[80rem] pl-6 pr-[1.125rem]">
-        <div className="flex overflow-x-auto pb-8 snap-x snap-mandatory">
+      {/* Edge-to-edge infinite marquee: -mx-4 cancels the section's px-4. The
+          list is rendered twice and the track slides -50% (transform only, so
+          it runs on the compositor). Each card carries its own right padding
+          (not flex gap) so both halves are exactly equal. Pauses on hover.
+          Reduced motion: one manually scrollable row. */}
+      <div className="-mx-4 mt-16 overflow-hidden motion-reduce:overflow-x-auto">
+        <div
+          className="flex w-max hover:[animation-play-state:paused] motion-safe:animate-marquee"
+          style={{ animationDuration: "60s" }}
+        >
           <ServiceList services={content.services} />
+          <ServiceList
+            services={content.services}
+            className="motion-reduce:hidden"
+            decorative
+          />
         </div>
       </div>
     </section>
@@ -80,19 +93,24 @@ export function Services({ content }: { content: ServicesContent }) {
 
 function ServiceList({
   services,
+  className,
+  decorative = false,
 }: {
   services: readonly Service[];
+  className?: string;
+  /** The duplicate copy exists only for the loop; hide it from assistive tech. */
+  decorative?: boolean;
 }) {
   return (
-    <ul className="flex shrink-0">
+    <ul
+      aria-hidden={decorative || undefined}
+      className={cn("flex shrink-0", className)}
+    >
       {services.map((service) => {
         const Icon = icons[service.icon];
-        const headingId = `service-${service.id}`;
+        const headingId = decorative ? undefined : `service-${service.id}`;
         return (
-          <li
-            key={service.id}
-            className="w-[20rem] shrink-0 pr-6 sm:w-[24rem] snap-start"
-          >
+          <li key={service.id} className="w-[20rem] shrink-0 pr-6 sm:w-[24rem]">
             <article
               aria-labelledby={headingId}
               className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8 transition-colors duration-500 hover:bg-gradient-to-br hover:from-blue-600 hover:to-indigo-700 hover:border-transparent"

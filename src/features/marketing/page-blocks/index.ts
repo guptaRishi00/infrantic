@@ -1,0 +1,10 @@
+export { type BlockIcon, blockIcons } from "./block-icons";
+export { BeforeAfter } from "./components/before-after";
+export { BlockHeading } from "./components/block-heading";
+export { FeatureGrid } from "./components/feature-grid";
+export { PageHero } from "./components/page-hero";
+export { SplitSection } from "./components/split-section";
+export { StackShowcase } from "./components/stack-showcase";
+export { Stats } from "./components/stats";
+export { Steps } from "./components/steps";
+export type * from "./page-blocks.types";

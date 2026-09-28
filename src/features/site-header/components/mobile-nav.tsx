@@ -47,7 +47,7 @@ export function MobileNav({ items, actions }: MobileNavProps) {
         id={panelId}
         hidden={!open}
         aria-label="Mobile"
-        className="absolute inset-x-0 top-full mt-2 rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_16px_40px_-16px_rgb(0_0_0/0.2)]"
+        className="absolute inset-x-0 top-full mt-2 max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-2xl border border-zinc-200 bg-white p-2 shadow-[0_16px_40px_-16px_rgb(0_0_0/0.2)]"
       >
         <ul className="flex flex-col">
           {items.map((item) =>
@@ -71,7 +71,7 @@ export function MobileNav({ items, actions }: MobileNavProps) {
             ),
           )}
         </ul>
-        <div className="mt-2 grid grid-cols-2 gap-2 border-t border-zinc-100 pt-3">
+        <div className="mt-2 grid auto-cols-fr grid-flow-col gap-2 border-t border-zinc-100 pt-3">
           {actions.map((action, index) => (
             <ButtonLink
               key={action.href}

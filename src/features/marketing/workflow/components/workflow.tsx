@@ -9,7 +9,7 @@ export function Workflow({ content }: { content: WorkflowContent }) {
     <section
       id="workflow"
       aria-labelledby="workflow-title"
-      className="scroll-mt-24 px-4 py-24 sm:py-28"
+      className="scroll-mt-24 px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <SectionHeading
