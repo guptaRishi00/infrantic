@@ -20,7 +20,7 @@ const featuredProjectContent = {
       body: "Less manual consolidation, clear ownership at every stage, and delivery risks visible while there is still time to act.",
     },
   ],
-  cta: { label: "Discuss a similar project", href: "/#contact" },
+  cta: { label: "Discuss a similar project", href: "/contact" },
   diagram: {
     label: "Connected operating structure",
     hub: "Shared internal order ID",

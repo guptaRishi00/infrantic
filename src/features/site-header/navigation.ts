@@ -45,17 +45,36 @@ export const serviceLinks: readonly NavLink[] = [
   },
 ];
 
+/** The three sector pages (no /sectors overview); also used by the footer. */
+export const sectorLinks: readonly NavLink[] = [
+  {
+    label: "Healthcare",
+    href: "/sectors/healthcare",
+    description: "Less paperwork between patients, staff, and systems.",
+  },
+  {
+    label: "Tech product companies",
+    href: "/sectors/tech-product-companies",
+    description: "Internal tools and automation around your product.",
+  },
+  {
+    label: "Marketing",
+    href: "/sectors/marketing",
+    description: "Reporting, leads, and approvals without the busywork.",
+  },
+];
+
 export const primaryNav: readonly NavItem[] = [
-  { label: "Challenges", href: "/challenges" },
   { label: "Services", items: serviceLinks },
+  { label: "Products", href: "/products" },
+  { label: "Sectors", items: sectorLinks },
   { label: "Case studies", href: "/case-studies" },
-  { label: "Industries", href: "/industries" },
-  { label: "Process", href: "/process" },
+  { label: "Challenges", href: "/challenges" },
   { label: "About", href: "/about" },
   { label: "Careers", href: "/careers" },
 ];
 
 export const headerActions = {
   secondary: { label: "Challenges", href: "/challenges" },
-  primary: { label: "Book a call", href: "/#contact" },
+  primary: { label: "Book a call", href: "/contact" },
 } as const satisfies Record<string, NavLink>;

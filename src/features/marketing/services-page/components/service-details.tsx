@@ -52,7 +52,7 @@ export function ServiceDetails({
                   {service.description}
                 </p>
                 <ButtonLink
-                  href="/#contact"
+                  href="/contact"
                   size="sm"
                   className="mt-6"
                   aria-label={`${discussLabel}: ${service.title}`}

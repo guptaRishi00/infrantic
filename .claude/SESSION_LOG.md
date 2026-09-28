@@ -588,3 +588,77 @@
   - Desktop proof: layout dump of every rendered element (box, font-size, colour) at 1024/1280/1500 on all 8 routes. A repeat of the baseline shows 0 noise. After the changes: 17,876 elements, 0 differences, identical page heights. The only deltas are zero-size elements inside the hidden mobile menu.
   - Small widths: 0 horizontal overflow at 375/768. Crops reviewed (768 process hero, 768 case list, 375 featured project with hint).
 - Map: rhythm numbers, marquee coupling, the desktop-frozen rule with the dump method, mobile-nav notes. Not committed.
+
+## 2026-09-28 — Contact page
+- New `/contact` (static) with feature `features/marketing/contact/`:
+  - data (intro, "what happens next", details, form copy, 5-question FAQ);
+  - `contact-page.tsx`: intro left, form card right from lg; on phones the form comes straight after the heading;
+  - `contact-form.tsx` (client);
+  - `contact.actions.ts` (server action);
+  - `contact.delivery.ts`.
+- The page ends with the home `Faq` and has no CtaBand, because that button targets this page. Before this, the CTA band's "Book a discovery call" already linked to `/contact`, which was a 404.
+- User decisions (asked): design now, wire delivery later; placeholder contact details. `deliverContactRequest` only logs "received, not delivered" with no personal data. Placeholders are flagged in `contact.data.ts` and the map.
+- Form:
+  - Fields: name*, work email*, company, phone, interest chips (radio, `has-checked:` styling), message* (≥20), honeypot.
+  - The server re-validates everything (public POST endpoint). After an error it echoes values as `defaultValue`s, so React's post-action reset keeps them. Focus goes to the first invalid field, or to the success heading.
+  - The success panel is an `<output>` with a "Send another message" reset (remount via key).
+  - Pending state uses a spinner (`motion-safe`).
+- Repointed all 20 `/#contact` links (hero/page CTAs, header "Book a call", footer, service rows) to `/contact`.
+- Verified:
+  - biome/tsc clean; build gives 10 static routes including `/contact`.
+  - CDP on `next start`:
+    - Invalid submit (browser validation bypassed) → server errors on email/message; name, email, message and interest kept; focus on email.
+    - Valid submit → success panel, focus on its h2; the server log shows exactly one `[contact]` line.
+    - Honeypot → success shown, no delivery line.
+  - 0 overflow at 375/768/1024/1500; contact cards untruncated at 375–1500 (a first 3-col xl layout truncated, fixed). Screenshots reviewed.
+- Not committed.
+
+## 2026-09-28 — Products + Sectors pages; Industries and Process removed
+- (The preceding "map Book a call to contact" task needed no change: every Book a call/discovery call link already pointed to `/contact`. Confirmed in source, dev-server HTML, and the pane.)
+- User decisions (asked):
+  - Remove Industries and Process.
+  - Products = packaged offerings derived from existing site content.
+  - Sectors = a hover dropdown only (no `/sectors` page) with Healthcare, Tech product companies, Marketing.
+  - Case studies and Contact already existed.
+- New:
+  - `/products`: `features/marketing/products` (data, `ProductCatalog` cards: icon, summary, "Replaces", included list, works-with logos, "Discuss this product" → /contact), then Steps (ink), Faq, CtaBand.
+  - `/sectors/[slug]`: `features/marketing/sectors` with one `SectorPage` layout and per-sector content. `generateStaticParams` + `dynamicParams = false`; `PageProps<"/sectors/[slug]">` with awaited params.
+  - Each sector: flow hero diagram, 6-item friction grid, 4 systems (ink, → /products), approach split, 4 FAQs. No compliance certifications or prices claimed.
+- Nav: Services ▾, Products, Sectors ▾ (`sectorLinks` in `site-header/navigation.ts`), Case studies, Challenges, About, Careers.
+- Footer: 4 columns (added Sectors; Company swaps Industries/Process for Products; "Book a discovery call" → "Contact us"), `grid-cols-2 lg:grid-cols-4`.
+- Removed routes and feature folders for industries and process (incl. EngagementTimeline). Repointed their links: case-studies secondary → /products, challenges "See how we work" → /#workflow.
+- Verified:
+  - biome clean; `next build` → /products static and 3 sector pages SSG; industries/process gone; tsc exit 0.
+  - On `next start`: new routes 200. `/sectors`, `/sectors/foo`, `/industries`, `/process` all 404.
+  - A crawl of every internal link on 11 pages: only `/privacy` and `/terms` 404, both pre-existing.
+  - Header one row at 1024/1280/1500. Sectors hover dropdown lists the 3 pages. Mobile menu has Services and Sectors groups.
+  - 0 overflow at 1500/375. Screenshots reviewed (nav dropdown, products and healthcare at 1500, products at 375).
+- Noted, not changed: About still says "10 Industries we build for".
+- Not committed.
+
+## 2026-09-28 — Distinct hero visuals for the three sector pages
+- User: the sector heroes reused the same automation diagram (Healthcare and Marketing = the Challenges "4 sources → hub → record" layout; Tech = the Case-studies flow). Wanted something different and creative.
+- New bespoke visuals in `sectors/components/visuals/` (shared `VisualFrame`: 5:4, one `role="img"` label, inner `aria-hidden`), passed via a new optional `aside` prop on `PageHero`. The old `visual` data and shared wires were removed from `sectors.data.ts`.
+  - **Healthcare:** referral card with an ECG strip (static SVG trace; a full-width layer carrying a small white erase gap and a glowing dot sweeps across it, like a patient monitor), a 5-step care pathway (done ticks, the current step pulsing, a packet to the next), a WhatsApp reminder toast, and an "AI first pass · awaiting doctor" card.
+  - **Tech product companies:** dark "events · production" console with an event stream scrolling upward (duplicated list, `marquee-y` 40s, unrounded clip, static fade overlays; tags ok/new/ai/warn), an admin-panel card (seats, onboarding toggle, refund approved), and an "AI ticket routed" toast.
+  - **Marketing:** a four-stage funnel with lead packets falling through it, a "Client report · Week 38" card whose bars rise (`bar-rise`, staggered), and "new lead assigned" / "report sent to client" toasts offset by 6s.
+- New keyframes in `globals.css` (`ecg-sweep`, `marquee-y`, `toast`, `bar-rise`): transform/opacity only, literal values, 12s+ iterations, everything behind `motion-safe:` (reduced motion shows a static, complete picture).
+- Verified:
+  - biome/tsc clean; build OK (3 sector pages SSG).
+  - CDP on `next start`: idle main thread 10–13 ms/s and 0 layouts/s on all three (Products, on the old diagram, measured 36–40). 0 page overflow at 1500/1024/768.
+  - Healthcare toast initially covered the "In progress" pill at 1024. Card widths were retuned; a script check found no text in the referral card covered by either floating card at 1024 or 1500.
+  - Screenshots reviewed at 1500 and 1024.
+- Not committed.
+
+## 2026-09-28 — Sector heroes, third pass: one bold illustration each
+- User rejected the UI-mock card visuals ("doesn't look good"). I asked for a direction with 4 previewed options; they chose "one bold illustration, 2–3 labels max".
+- Rewrote `sectors/components/visuals/`. Each drawing is one SVG (500×400 viewBox) in brand-gradient strokes. Motion is HTML overlays positioned with `X()/Y()` helpers, reusing the compositor-only `FlowPacket` via a new `Packet` segment helper in `visual-frame.tsx`:
+  - **Healthcare:** a large heartbeat trace. Its flat line branches (orthogonal) to three node circles, Patients / Staff / Systems (the headline's words), with packets on the branches, a pulsing peak, and a soft radial scan beam (`scan-sweep`) crossing the stage.
+  - **Tech:** a circuit board. A dark "Your product" chip (glow pulse) with 12 orthogonal traces to pads, 8 packets, and labels API / Webhooks / Admin.
+  - **Marketing:** a big gradient funnel with leads falling through it and out along an outlet into four rising bars (`bar-rise`, staggered), a trend arrow, and labels "Leads" / "+18%".
+- `globals.css`: `ecg-sweep` became `scan-sweep`; the unused `marquee-y` and `toast` keyframes were removed.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP on `next start`: idle 6–11 ms/s main thread, 0 layouts/s. 0 overflow at 1500/1024/768.
+  - Screenshots reviewed. The first scan beam had hard edges and was switched to a radial gradient, re-shot mid-sweep with animations paused.
+- Not committed.

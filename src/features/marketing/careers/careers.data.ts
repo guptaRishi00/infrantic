@@ -18,7 +18,7 @@ const hero = {
   title: "Build the systems businesses actually run on",
   description:
     "Small team, real client problems, modern tools. If you like turning messy operations into clear, working systems, we would like to hear from you.",
-  primaryCta: { label: "Introduce yourself", href: "/#contact" },
+  primaryCta: { label: "Introduce yourself", href: "/contact" },
   secondaryCta: { label: "See what we build", href: "/case-studies" },
   visual: {
     kind: "flow",
@@ -256,7 +256,7 @@ const careersContent = {
   rolesDescription:
     "We hire when a project needs it, so openings change. If none of these match but the work does, introduce yourself anyway.",
   applyLabel: "Apply",
-  introduceCta: { label: "Send an introduction", href: "/#contact" },
+  introduceCta: { label: "Send an introduction", href: "/contact" },
   roles,
   dayToDay,
   hiring,

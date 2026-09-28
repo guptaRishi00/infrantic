@@ -11,7 +11,7 @@ const hero = {
   title: "Technology built around the way your business operates",
   description:
     "Five service lines, one team. We connect and automate the systems you already run, and build software only where a workflow genuinely needs it.",
-  primaryCta: { label: "Book a discovery call", href: "/#contact" },
+  primaryCta: { label: "Book a discovery call", href: "/contact" },
   secondaryCta: { label: "See case studies", href: "/case-studies" },
   stats: [
     { value: "5", label: "Service lines, combined per project" },
@@ -138,7 +138,7 @@ const engage = {
     "Clear ownership of code, data, and accounts: they stay yours",
     "Support and refinement after launch, as the business changes",
   ],
-  cta: { label: "Discuss where to start", href: "/#contact" },
+  cta: { label: "Discuss where to start", href: "/contact" },
   panel: {
     label: "Ways to work with us",
     items: [

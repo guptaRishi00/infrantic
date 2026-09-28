@@ -1,4 +1,8 @@
-import { type NavLink, serviceLinks } from "@/features/site-header/navigation";
+import {
+  type NavLink,
+  sectorLinks,
+  serviceLinks,
+} from "@/features/site-header/navigation";
 
 export type FooterColumn = { title: string; links: readonly NavLink[] };
 export type SocialId = "facebook" | "linkedin" | "x";
@@ -15,18 +19,21 @@ export const footerColumns: readonly FooterColumn[] = [
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Challenges", href: "/challenges" },
+      { label: "Products", href: "/products" },
       { label: "Case studies", href: "/case-studies" },
-      { label: "Industries", href: "/industries" },
-      { label: "Process", href: "/process" },
+      { label: "Challenges", href: "/challenges" },
       { label: "Careers", href: "/careers" },
       { label: "FAQ", href: "/#faq" },
     ],
   },
   {
+    title: "Sectors",
+    links: sectorLinks.map(({ label, href }) => ({ label, href })),
+  },
+  {
     title: "Get in touch",
     links: [
-      { label: "Book a discovery call", href: "/#contact" },
+      { label: "Contact us", href: "/contact" },
       { label: "Privacy Policy", href: "/privacy" },
       { label: "Terms of Service", href: "/terms" },
     ],

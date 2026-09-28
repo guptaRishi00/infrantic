@@ -280,6 +280,37 @@
       transform: translateX(-50%);
     }
   }
+
+  /* Sector hero illustrations (sectors/components/visuals). Long, multi-pass
+     iterations and transform/opacity only, like everything above. */
+  --animate-scan-sweep: scan-sweep 12s linear infinite;
+  --animate-bar-rise: bar-rise 12s ease-in-out infinite;
+
+  /* A full-width layer carrying a soft beam at its edge crosses the stage:
+     three 4s passes per iteration. */
+  @keyframes scan-sweep {
+    0%,
+    33.34%,
+    66.67% {
+      transform: translateX(0);
+    }
+    33.33%,
+    66.66%,
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes bar-rise {
+    0%,
+    100% {
+      transform: scaleY(0.15);
+    }
+    18%,
+    82% {
+      transform: scaleY(1);
+    }
+  }
 }
 
 /* Brand blue fill. Use instead of a flat bg-brand wherever blue is painted as a surface. */

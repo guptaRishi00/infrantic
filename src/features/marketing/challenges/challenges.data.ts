@@ -28,8 +28,8 @@ const hero = {
   title: "Where growing businesses lose time",
   description:
     "Operational drag is rarely one broken tool. It is the work between people, files, and systems: chasing updates, rebuilding reports, approving by email. Here is where we see it, and what it costs.",
-  primaryCta: { label: "Book a discovery call", href: "/#contact" },
-  secondaryCta: { label: "See how we work", href: "/process" },
+  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  secondaryCta: { label: "See how we work", href: "/#workflow" },
   stats: [
     { value: "6", label: "Recurring operational gaps we fix" },
     { value: "1", label: "Shared source of truth per workflow" },
@@ -234,7 +234,7 @@ const signs = {
     "Month-end means a week of consolidation",
     "Nobody can say where a request is without asking around",
   ],
-  cta: { label: "Talk through your workflow", href: "/#contact" },
+  cta: { label: "Talk through your workflow", href: "/contact" },
   panel: {
     label: "Typical starting points",
     items: [

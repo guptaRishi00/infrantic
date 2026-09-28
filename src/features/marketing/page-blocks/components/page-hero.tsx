@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { ButtonLink } from "@/shared/ui/button-link";
 import type { PageHeroContent } from "../page-blocks.types";
 import { HeroVisual } from "./hero-visual";
@@ -7,7 +8,16 @@ import { HeroVisual } from "./hero-visual";
  * optional stat row. Static background only (a soft brand wash), so it costs
  * nothing at idle. Top padding clears the fixed header.
  */
-export function PageHero({ content }: { content: PageHeroContent }) {
+export function PageHero({
+  content,
+  aside,
+}: {
+  content: PageHeroContent;
+  /** A bespoke visual for the right column; takes precedence over `content.visual`. */
+  aside?: ReactNode;
+}) {
+  const visual =
+    aside ?? (content.visual ? <HeroVisual content={content.visual} /> : null);
   return (
     <section
       aria-labelledby="page-title"
@@ -46,9 +56,9 @@ export function PageHero({ content }: { content: PageHeroContent }) {
               </div>
             ) : null}
           </div>
-          {content.visual ? (
+          {visual ? (
             <div className="hidden md:block md:max-lg:mx-auto md:max-lg:w-full md:max-lg:max-w-lg">
-              <HeroVisual content={content.visual} />
+              {visual}
             </div>
           ) : null}
         </div>

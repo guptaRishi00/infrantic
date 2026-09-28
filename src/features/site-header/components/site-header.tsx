@@ -41,7 +41,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          {/* The secondary action repeats the first nav item; only show it
+          {/* The secondary action repeats a nav item; only show it
               once there is room for both (xl). */}
           <span className="hidden xl:contents">
             <ButtonLink
