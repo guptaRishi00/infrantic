@@ -896,3 +896,9 @@
   - CDP (`seven.mjs`, `numbers.mjs`, `glance.mjs`): spacing/offset numbers above. About stats 0|0|0|0 before scroll → 5|5|6|1 in view, figures aligned per row at 1500/768/375, 0 overflow.
   - Screenshots of the numbers, gap table, glance, challenges and careers heroes reviewed.
 - Not committed.
+
+## 2026-09-29 — Favicon: Infrantic mark replaces the default Next/Vercel triangle
+- New `src/app/icon.svg`: a 64×64 rounded tile (rx 15) with the site's hub gradient (#07a1fd → #047efd → #021c37) and the white "I" glyph taken verbatim from `/brand/logo-svg.svg` (the signal and stem paths, scaled to 44 units tall and centred), matching the BrandMark tiles.
+- `src/app/favicon.ico` regenerated from that SVG: rendered in headless Edge at 256px on a transparent background, then Pillow-packed at 16/32/48/256.
+- Verified: biome clean; build lists `/icon.svg`; home and /services `<head>` carry `rel="icon"` links for `/favicon.ico` (256x256) and `/icon.svg` (sizes any) with content hashes; both serve 200 (`image/x-icon` 19,270 B, `image/svg+xml` 880 B). Preview at 16/32/48/256 reviewed: legible at 16px, transparent corners.
+- Not committed.
