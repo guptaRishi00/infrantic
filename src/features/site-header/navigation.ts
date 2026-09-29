@@ -75,6 +75,5 @@ export const primaryNav: readonly NavItem[] = [
 ];
 
 export const headerActions = {
-  secondary: { label: "Challenges", href: "/challenges" },
   primary: { label: "Book a call", href: "/contact" },
 } as const satisfies Record<string, NavLink>;

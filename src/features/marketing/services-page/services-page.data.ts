@@ -143,6 +143,11 @@ const engage = {
     label: "Ways to work with us",
     items: [
       {
+        term: "Product start",
+        detail:
+          "Begin from one of our six products, configured around your process instead of designed from scratch.",
+      },
+      {
         term: "First system",
         detail:
           "One workflow, mapped, built, and handed over with documentation and training.",

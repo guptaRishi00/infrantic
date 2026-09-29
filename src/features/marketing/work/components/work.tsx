@@ -26,17 +26,23 @@ function CasePanel({
   return (
     <article
       aria-labelledby={`case-${study.id}`}
-      className="h-full rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-8"
+      className="flex h-full flex-col rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgb(255_255_255/0.055),rgb(255_255_255/0.015))] p-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] sm:p-8"
     >
-      <p className="font-mono text-[13px] text-brand-300">{study.number}</p>
-      <h3
-        id={`case-${study.id}`}
-        className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl"
-      >
-        {study.title}
-      </h3>
+      <div className="flex items-baseline gap-3">
+        <span className="shrink-0 rounded-full border border-brand-300/30 bg-brand-300/10 px-2.5 py-0.5 font-mono text-[12px] text-brand-300">
+          {study.number}
+        </span>
+        <h3
+          id={`case-${study.id}`}
+          className="text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl"
+        >
+          {study.title}
+        </h3>
+      </div>
 
-      <div className="mt-6">
+      {/* Panels share the tallest one's height; the visual takes up any spare
+          height so the notes always sit at the bottom (no empty band). */}
+      <div className="mt-6 flex flex-1 flex-col">
         <CaseVisual study={study} />
       </div>
 
@@ -49,7 +55,7 @@ function CasePanel({
             {study.problem}
           </dd>
         </div>
-        <div>
+        <div className="md:border-l md:border-white/10 md:pl-6">
           <dt className="font-mono text-xs tracking-wide text-zinc-300 uppercase">
             {labels.built}
           </dt>
@@ -80,7 +86,7 @@ function CasePanel({
   );
 }
 
-/** Selected work: case-study tabs beside an animated/illustrated detail panel. */
+/** Selected work: case-study tabs above an animated/illustrated detail panel. */
 export function Work({ content }: { content: WorkContent }) {
   return (
     <section

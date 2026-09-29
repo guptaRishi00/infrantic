@@ -42,7 +42,7 @@ export function Problem({ content }: { content: ProblemContent }) {
           className="mt-3"
         />
 
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
           {content.gaps.map((gap) => {
             const Icon = icons[gap.icon];
             const headingId = `gap-${gap.id}`;
@@ -50,7 +50,7 @@ export function Problem({ content }: { content: ProblemContent }) {
               <li key={gap.id}>
                 <article
                   aria-labelledby={headingId}
-                  className="group flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-blue-50/20 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200/80 hover:shadow-[0_8px_30px_rgb(59,130,246,0.12)]"
+                  className="group group/card relative flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-blue-50/20 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200/80 hover:shadow-[0_8px_30px_rgb(59,130,246,0.12)]"
                 >
                   <div className="flex h-full flex-col">
                     <div className="mb-2">
@@ -78,6 +78,7 @@ export function Problem({ content }: { content: ProblemContent }) {
                       href={gap.href}
                       aria-describedby={headingId}
                       size="sm"
+                      stretched
                       className="mt-5 self-start"
                     >
                       {content.learnMoreLabel}

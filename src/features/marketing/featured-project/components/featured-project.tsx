@@ -25,13 +25,14 @@ const icons: Record<StepIcon, LucideIcon> = {
   dispatch: Truck,
 };
 
-// Dashed "shared data" connectors (shared FlowLine: compositor-only march).
-const DASH = "rgb(113 113 122 / 0.7)";
+// Dashed "shared data" connectors in the brand blue (shared FlowLine:
+// compositor-only march).
+const DASH = "rgb(4 126 253 / 0.55)";
 
 /**
- * One featured client project: the before/structure/benefit story on the left
- * and its connected operating structure on the right. Steps are a real ordered
- * list; the connectors around them are decorative.
+ * One featured client project: the before/structure/benefit story on top and
+ * its connected operating structure below. Steps are a real ordered list; the
+ * connectors around them are decorative.
  */
 export function FeaturedProject({
   content,
@@ -59,9 +60,9 @@ export function FeaturedProject({
           className="mt-3"
         />
 
-        <div className="mt-12 grid overflow-hidden rounded-2xl border border-zinc-200/80 lg:grid-cols-[22rem_1fr]">
-          <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/60 lg:border-r lg:border-b-0">
-            <dl className="divide-y divide-zinc-200/80">
+        <div className="mt-12 flex flex-col overflow-hidden rounded-2xl border border-zinc-200/80">
+          <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/60">
+            <dl className="divide-y divide-zinc-200/80 md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
               {content.facts.map((fact) => (
                 <div key={fact.number} className="flex gap-4 p-6 sm:p-7">
                   <span className="grid size-8 shrink-0 place-items-center rounded-full border border-zinc-300 bg-white font-mono text-xs text-zinc-600">
@@ -78,7 +79,7 @@ export function FeaturedProject({
                 </div>
               ))}
             </dl>
-            <div className="mt-auto border-t border-zinc-200/80 p-6 sm:p-7">
+            <div className="border-t border-zinc-200/80 p-6 sm:p-7">
               <ButtonLink href={content.cta.href} size="sm">
                 {content.cta.label}
               </ButtonLink>
@@ -100,7 +101,7 @@ export function FeaturedProject({
               {/* Vertically centred between the label and the legend. */}
               <div className="my-auto py-8">
                 <div className="flex flex-col items-center">
-                  <span className="rounded-lg border border-ink/20 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+                  <span className="rounded-lg bg-ink px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_0_4px_rgb(7_150_254/0.08)]">
                     {diagram.hub}
                   </span>
                   <FlowLine
@@ -135,6 +136,12 @@ export function FeaturedProject({
                           className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2"
                         />
                         <div className="relative flex h-full min-h-[7.5rem] flex-col items-center justify-center gap-2.5 rounded-lg border border-ink/20 bg-white px-2 pt-7 pb-4 text-center shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+                          <span
+                            aria-hidden="true"
+                            className="absolute top-2 left-2.5 font-mono text-[10px] text-zinc-400"
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
                           <Icon
                             aria-hidden="true"
                             className="size-5 text-zinc-800"
@@ -162,7 +169,7 @@ export function FeaturedProject({
                     color={DASH}
                     className="relative block h-8 w-px"
                   />
-                  <span className="rounded-lg border border-ink/20 bg-white px-4 py-2.5 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+                  <span className="rounded-lg border border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700">
                     {diagram.outcome}
                   </span>
                 </div>

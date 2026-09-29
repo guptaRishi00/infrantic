@@ -64,7 +64,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
               >
                 <article
                   aria-labelledby={headingId}
-                  className="flex h-full flex-col gap-6 p-7 transition-colors duration-200 hover:bg-white/[0.04] sm:flex-row sm:p-10"
+                  className="group/card relative flex h-full flex-col gap-6 p-7 transition-colors duration-200 hover:bg-white/[0.04] sm:flex-row sm:p-10"
                 >
                   <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-white ring-1 ring-white/10">
                     <Icon aria-hidden="true" className="size-6" />
@@ -84,6 +84,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
                       aria-describedby={headingId}
                       variant="onDark"
                       size="sm"
+                      stretched
                       className="mt-6 self-start"
                     >
                       {content.learnMoreLabel}

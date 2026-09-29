@@ -1,9 +1,9 @@
 import {
+  BrainCircuit,
   CodeXml,
   type LucideIcon,
   Plug,
   Server,
-  Sparkles,
   Workflow,
 } from "lucide-react";
 import type { CSSProperties } from "react";
@@ -14,7 +14,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import type { IntegrationsContent, TechStackIcon } from "../integrations.types";
 
 const stackIcons: Record<TechStackIcon, LucideIcon> = {
-  ai: Sparkles,
+  ai: BrainCircuit,
   automation: Workflow,
   software: CodeXml,
   infrastructure: Server,
@@ -163,9 +163,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
             <div className="absolute -left-10 -top-10 size-40 rounded-full bg-blue-400/20 blur-3xl" />
             <div className="absolute -bottom-10 -right-10 size-40 rounded-full bg-indigo-400/20 blur-3xl" />
             <p className="relative inline-flex flex-col items-center justify-center gap-3 text-lg font-medium text-blue-950 sm:flex-row sm:text-xl">
-              <Sparkles className="hidden size-5 text-blue-500 sm:block" />
               {content.footnote}
-              <Sparkles className="hidden size-5 text-blue-500 sm:block" />
             </p>
           </div>
         </div>

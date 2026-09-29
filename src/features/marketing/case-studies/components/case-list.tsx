@@ -82,7 +82,7 @@ export function CaseList({ content }: { content: CaseListContent }) {
                             key={step}
                             className="flex gap-3 text-[15px] leading-6 text-zinc-700"
                           >
-                            <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border border-zinc-200 font-mono text-[11px] text-zinc-500">
+                            <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full border border-zinc-200 font-mono text-[11px] leading-none text-zinc-500 tabular-nums">
                               {index + 1}
                             </span>
                             {step}

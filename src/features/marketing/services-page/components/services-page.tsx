@@ -15,7 +15,7 @@ export function ServicesPage() {
   const services = getServicesContent();
   return (
     <>
-      <PageHero content={content.hero} />
+      <PageHero content={content.hero} padBottom="pb-10 sm:pb-14" />
       <FeatureGrid content={content.focus} />
       <ServiceDetails
         eyebrow={content.detailsEyebrow}

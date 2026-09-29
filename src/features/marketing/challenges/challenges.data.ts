@@ -20,6 +20,8 @@ export type GapRowsContent = {
     title: string;
     today: string;
     change: string;
+    /** The product on /products that closes this gap (card anchor). */
+    product: { name: string; href: string };
   }[];
 };
 
@@ -29,7 +31,7 @@ const hero = {
   description:
     "Operational drag is rarely one broken tool. It is the work between people, files, and systems: chasing updates, rebuilding reports, approving by email. Here is where we see it, and what it costs.",
   primaryCta: { label: "Book a discovery call", href: "/contact" },
-  secondaryCta: { label: "See how we work", href: "/#workflow" },
+  secondaryCta: { label: "See the products that fix these", href: "/products" },
   stats: [
     { value: "6", label: "Recurring operational gaps we fix" },
     { value: "1", label: "Shared source of truth per workflow" },
@@ -38,7 +40,7 @@ const hero = {
   visual: {
     kind: "flow",
     label:
-      "Spreadsheets, WhatsApp, email, and a CRM all feed Infrantic, which keeps one shared order record up to date.",
+      "Spreadsheets, WhatsApp, email, and a CRM all feed Infrantic, which keeps one live operations status up to date: approvals routed, the weekly report sent, and a risk flagged early.",
     nodes: [
       {
         id: "sheets",
@@ -79,10 +81,10 @@ const hero = {
         id: "record",
         x: 78,
         y: 52,
-        label: "Order #1042",
+        label: "Operations status",
         variant: "record",
-        kicker: "Shared record",
-        lines: ["Costing approved", "Materials ordered", "Dispatch due Friday"],
+        kicker: "Live workspace",
+        lines: ["Approvals routed", "Report sent Monday", "1 risk flagged"],
       },
     ],
     wires: [
@@ -319,6 +321,7 @@ const gaps = {
         "Updates are scattered across calls, WhatsApp groups, email, and spreadsheets, so every status check means asking someone.",
       change:
         "One shared record per order or request, updated where the work happens and visible to everyone who needs it.",
+      product: { name: "Shared Order Record", href: "/products#shared-record" },
     },
     {
       id: "approvals",
@@ -328,6 +331,7 @@ const gaps = {
         "Requests sit waiting because nobody is sure who owns the decision or what they need to make it.",
       change:
         "Requests go to a named approver with the context attached, a deadline, and a reminder.",
+      product: { name: "Approval Flow", href: "/products#approval-flow" },
     },
     {
       id: "reports",
@@ -337,6 +341,10 @@ const gaps = {
         "Someone exports, cleans, and formats the same numbers by hand before every review.",
       change:
         "Reports assemble themselves from live data on a schedule, and dashboards stay current in between.",
+      product: {
+        name: "Operations Dashboard",
+        href: "/products#operations-dashboard",
+      },
     },
     {
       id: "truth",
@@ -346,6 +354,7 @@ const gaps = {
         "Sales, operations, and finance each track the same order in a different file.",
       change:
         "Systems are connected, so an update in one place reaches the others without re-typing.",
+      product: { name: "System Connector", href: "/products#system-connector" },
     },
     {
       id: "late",
@@ -355,6 +364,10 @@ const gaps = {
         "Shortages, delays, and overdue tasks are noticed once a customer or supplier is already affected.",
       change:
         "Exceptions trigger alerts early, while there is still time to reorder, reschedule, or escalate.",
+      product: {
+        name: "Operations Dashboard",
+        href: "/products#operations-dashboard",
+      },
     },
     {
       id: "review",
@@ -364,6 +377,10 @@ const gaps = {
         "Senior people spend hours reading PDFs and scans for the same predictable issues.",
       change:
         "AI does the first pass and flags likely problems; the expert reviews and makes the call.",
+      product: {
+        name: "Document Review Assistant",
+        href: "/products#document-review",
+      },
     },
   ],
 } as const satisfies GapRowsContent;

@@ -113,51 +113,41 @@ function ServiceList({
           <li key={service.id} className="w-[20rem] shrink-0 pr-6 sm:w-[24rem]">
             <article
               aria-labelledby={headingId}
-              className="group flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8 transition-colors duration-500 hover:bg-gradient-to-br hover:from-blue-600 hover:to-indigo-700 hover:border-transparent"
+              className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8"
             >
               <div className="flex items-center justify-between">
-                <div className="relative flex size-12 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10 transition-colors duration-500 group-hover:bg-white/10 group-hover:ring-white/20">
+                <div className="flex size-12 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10">
                   <Icon
                     aria-hidden="true"
-                    className="absolute inset-0 m-auto size-6 transition-opacity duration-500 group-hover:opacity-0"
+                    className="size-6"
                     strokeWidth={1.75}
                     stroke={GRADIENT_STROKE}
                   />
-                  <Icon
-                    aria-hidden="true"
-                    className="absolute inset-0 m-auto size-6 text-white opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                    strokeWidth={1.75}
-                  />
                 </div>
-                <span className="text-[13px] font-semibold tracking-widest text-zinc-500 transition-colors duration-500 group-hover:text-blue-200">
+                <span className="text-[13px] font-semibold tracking-widest text-zinc-500">
                   {service.number}
                 </span>
               </div>
               <h3
                 id={headingId}
-                className="mt-8 text-2xl font-semibold tracking-tight text-white transition-colors duration-500"
+                className="mt-8 text-2xl font-semibold tracking-tight text-white"
               >
                 {service.title}
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-zinc-400 transition-colors duration-500 group-hover:text-blue-50/90">
+              <p className="mt-3 text-[15px] leading-relaxed text-zinc-400">
                 {service.description}
               </p>
-              <ul className="mt-8 flex-1 space-y-4 border-t border-white/10 pt-8 transition-colors duration-500 group-hover:border-white/20">
+              <ul className="mt-8 flex-1 space-y-4 border-t border-white/10 pt-8">
                 {service.capabilities.map((capability) => (
                   <li
                     key={capability}
-                    className="flex items-start gap-3 text-[15px] text-zinc-300 transition-colors duration-500 group-hover:text-white"
+                    className="flex items-start gap-3 text-[15px] text-zinc-300"
                   >
-                    <div className="relative mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10 transition-colors duration-500 group-hover:bg-white/20 group-hover:ring-white/30">
+                    <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-white/5 ring-1 ring-white/10">
                       <Check
                         aria-hidden="true"
-                        className="absolute inset-0 m-auto size-3 transition-opacity duration-500 group-hover:opacity-0"
+                        className="size-3"
                         stroke={GRADIENT_STROKE}
-                        strokeWidth={3}
-                      />
-                      <Check
-                        aria-hidden="true"
-                        className="absolute inset-0 m-auto size-3 text-white opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                         strokeWidth={3}
                       />
                     </div>

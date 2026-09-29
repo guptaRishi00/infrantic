@@ -33,7 +33,7 @@ export function ProductCatalog({
               <li
                 key={product.id}
                 id={product.id}
-                className="reveal flex scroll-mt-28 flex-col rounded-2xl border border-zinc-200/80 bg-white p-6 transition-transform duration-300 hover:-translate-y-1 sm:p-7"
+                className="reveal group/card relative flex scroll-mt-28 flex-col rounded-2xl border border-zinc-200/80 bg-white p-6 transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-brand-200 sm:p-7"
               >
                 <div className="flex items-center justify-between">
                   <span className="grid size-11 place-items-center rounded-xl border border-zinc-200 bg-zinc-50">
@@ -93,12 +93,12 @@ export function ProductCatalog({
                     <Link
                       href={content.cta.href}
                       aria-label={`${content.cta.label}: ${product.name}`}
-                      className="group inline-flex items-center gap-1.5 rounded-md text-[14px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                      className="inline-flex items-center gap-1.5 rounded-md text-[14px] font-medium text-ink group-hover/card:text-brand-700 after:absolute after:inset-0 after:content-[''] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
                     >
                       {content.cta.label}
                       <ArrowRight
                         aria-hidden="true"
-                        className="size-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                        className="size-4 transition-transform duration-200 group-hover/card:translate-x-0.5 motion-reduce:transition-none"
                       />
                     </Link>
                   </div>

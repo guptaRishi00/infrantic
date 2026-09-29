@@ -10,7 +10,12 @@ import { NavDropdown } from "./nav-dropdown";
 export function SiteHeader() {
   return (
     <AutoHideHeader>
-      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-xl border border-zinc-200/80 bg-white/95 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)]">
+      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-2xl border border-zinc-200/80 bg-white/95 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)]">
+        {/* Faint brand hairline along the bottom edge. */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-10 bottom-0 h-px bg-[linear-gradient(90deg,rgb(4_126_253/0),rgb(4_126_253/0.45),rgb(7_161_253/0))]"
+        />
         <Link
           href="/"
           className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
@@ -29,9 +34,13 @@ export function SiteHeader() {
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-zinc-700 xl:px-3 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+                    className="group flex items-center gap-1.5 rounded-md px-2 py-2 text-sm font-semibold text-zinc-700 xl:px-3 focus-visible:outline-2 focus-visible:outline-ink"
                   >
-                    {item.label}
+                    {/* The gradient is always clipped to the text; it shows
+                        when the text colour goes transparent on hover. */}
+                    <span className="bg-brand-gradient bg-clip-text transition-colors group-hover:text-transparent">
+                      {item.label}
+                    </span>
                     {item.badge ? <NewBadge label={item.badge} /> : null}
                   </Link>
                 </li>
@@ -41,24 +50,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          {/* The secondary action repeats a nav item; only show it
-              once there is room for both (xl). */}
-          <span className="hidden xl:contents">
-            <ButtonLink
-              href={headerActions.secondary.href}
-              variant="muted"
-              size="sm"
-            >
-              {headerActions.secondary.label}
-            </ButtonLink>
-          </span>
           <ButtonLink href={headerActions.primary.href} size="sm">
             {headerActions.primary.label}
           </ButtonLink>
         </div>
 
-        {/* The secondary action repeats the first nav item, which the menu
-            already lists. */}
         <MobileNav items={primaryNav} actions={[headerActions.primary]} />
       </div>
     </AutoHideHeader>

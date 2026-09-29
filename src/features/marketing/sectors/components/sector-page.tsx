@@ -10,8 +10,8 @@ import { HealthcareVisual } from "./visuals/healthcare-visual";
 import { MarketingVisual } from "./visuals/marketing-visual";
 import { TechVisual } from "./visuals/tech-visual";
 
-// Each sector has its own hero visual (deliberately not the shared flow
-// diagram): a care pathway, a product event stream, a campaign funnel.
+// Each sector has its own bold hero illustration (deliberately not the shared
+// flow diagram): a branching heartbeat, a circuit board, a campaign bullseye.
 const visuals: Record<SectorSlug, () => React.JSX.Element> = {
   healthcare: HealthcareVisual,
   "tech-product-companies": TechVisual,

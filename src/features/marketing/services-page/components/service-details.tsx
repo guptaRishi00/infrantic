@@ -25,7 +25,7 @@ export function ServiceDetails({
     <section
       id="service-lines"
       aria-labelledby="service-lines-title"
-      className="scroll-mt-24 px-4 py-16 sm:py-28"
+      className="scroll-mt-24 px-4 pt-16 pb-12 sm:pt-28 sm:pb-20"
     >
       <div className="mx-auto max-w-[80rem]">
         <BlockHeading
@@ -39,7 +39,7 @@ export function ServiceDetails({
             <li
               key={service.id}
               id={service.id}
-              className="reveal scroll-mt-28 grid gap-8 p-7 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
+              className="reveal group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
             >
               <div>
                 <p className="font-mono text-[13px] text-brand-700">
@@ -54,6 +54,7 @@ export function ServiceDetails({
                 <ButtonLink
                   href="/contact"
                   size="sm"
+                  stretched
                   className="mt-6"
                   aria-label={`${discussLabel}: ${service.title}`}
                 >

@@ -14,7 +14,7 @@ const statusStyles: Record<
     label: "Done",
   },
   active: {
-    card: "border-brand-200 shadow-[0_0_0_4px_rgb(7_150_254/0.08),0_12px_28px_-14px_rgb(4_126_253/0.45)]",
+    card: "border-brand-200",
     pill: "bg-brand-50 text-brand-700",
     label: "In progress",
   },
@@ -73,7 +73,7 @@ function NodeCard({ node, index }: { node: FlowNode; index: number }) {
     >
       <div
         className={cn(
-          "rounded-lg border bg-white px-3 py-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.04)] motion-safe:animate-rise",
+          "rounded-lg border bg-white px-3 py-2.5 motion-safe:animate-rise",
           style.card,
         )}
         style={{ animationDelay: `${120 + index * 90}ms` }}

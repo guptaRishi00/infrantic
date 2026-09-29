@@ -662,3 +662,237 @@
   - CDP on `next start`: idle 6–11 ms/s main thread, 0 layouts/s. 0 overflow at 1500/1024/768.
   - Screenshots reviewed. The first scan beam had hard edges and was switched to a radial gradient, re-shot mid-sweep with animations paused.
 - Not committed.
+
+## 2026-09-29 — Inner pages aligned with Products and Sectors (home untouched)
+- User: "except for the homepage, change the content of the other pages according to the new pages added". Read as: the inner pages still described the pre-09-28 structure (Industries, Process) and never pointed at Products or the three Sectors.
+- Audit of every inner page's data: stale only on About ("10 Industries we build for" twice; "not from a product", which contradicts /products). Challenges' secondary CTA still went to the home `#workflow` anchor left over from the removed Process page. Careers, Case studies (already → /products), Contact: nothing stale.
+- **About:** hero stat → "3 Sectors we specialise in"; numbers stat → "6 Products to start from"; story point → "we map how the work runs before choosing what to build"; "What we do" adds "plus six products to start from"; "Who it's for" names Healthcare, tech product companies, and marketing teams.
+- **Challenges:** secondary CTA → "See the products that fix these" (/products). Each of the 6 gap rows gets a product link under "What changes" (`product` field on `GapRowsContent`, rendered in `gap-rows.tsx` with the product-catalog link style): status → Shared Order Record, approvals → Approval Flow, reports and late problems → Operations Dashboard, departments' own truth → System Connector, first-pass checking → Document Review Assistant.
+- **Services:** "Ways to work with us" panel gains "Product start" first.
+- Not changed: home (excluded), Careers, Case studies (their real client sectors are not the three sector pages), Contact (its interest chips are service lines; a "product" option would need the server enum too — offered to the user).
+- Verified: tsc 0; `biome check` clean; `next build` OK; on `next start` all 9 routes 200, all 5 linked product anchors exist once on /products, /about has 0 "industries we build". Headless shots at 1500 and 375 of the gap rows, About numbers, Services engagement: no overflow, link text "Product: Shared Order Record" (accessible name has the space). Not committed.
+
+## 2026-09-29 — /sectors/marketing hero: megaphone replaces the funnel
+- User: change the illustration on the right of the /sectors/marketing hero. Kept the direction they chose on 09-28 (one bold illustration, 2–3 labels, brand-gradient strokes, compositor-only motion) but a new subject: the funnel-and-bars was replaced.
+- `sectors/components/visuals/marketing-visual.tsx` rewritten: a campaign megaphone (cone + navy cap + grip, gradient fill and stroke, mouth ellipse), three sound waves out of the mouth, and orthogonal traces to three channel pads (lucide MousePointerClick / Mail / AtSign) labelled Ads, Email, Social. Motion: the three waves pulse with the existing `agent-glow` (staggered 0.35s), each wave its own HTML-level `<svg>` layer so the opacity animates on the compositor, not an SVG child repaint; resting waves stay drawn at 22% so reduced motion still shows them. Five `Packet`s run the traces. No new keyframes, no new dependencies; `bar-rise` is now unused by this file (still defined in globals.css).
+- Gotcha hit: I first wrote the file CRLF; this repo's biome formatter expects LF (unlike softexedge). Fixed.
+- Verified: tsc 0, `biome check` clean, `next build` (3 sector pages SSG). Headless on `next start`: pads circular (52/40/45 px at 1500/1024/768), labels inside the frame, 0 horizontal overflow; at 375 the visual is hidden (existing md+ rule). Idle at 1500: 0 ms/s script, 10 ms/s tasks, 0 layouts/s (siblings measured 6–13). Screenshots at 1500 and 1024 reviewed. Not committed.
+
+## 2026-09-29 — /sectors/marketing hero illustration replaced
+- The file on disk had already been changed outside this session, from my funnel to a megaphone (waves, Ads/Email/Social pads). The user asked to change it.
+- New "on target" illustration (`marketing-visual.tsx`, same one-bold-illustration style, 3 labels):
+  - a bullseye at (320,200) with rings r=150/105/62 on a soft radial fill;
+  - each ring has a sweeping arc: an HTML ring with only `border-t` coloured, rotated with the existing `orbit`/`orbit-back` keyframes at 18/13/9s; transform only, no mask, `motion-safe` only;
+  - Ads/Email/Social pads on the left, their traces merging into one line that runs into the centre;
+  - 6 packets, and a gradient "customer" disc (Users icon) that pulses (`agent-glow`).
+- Also fixed the stale `sector-page.tsx` comment.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP on `next start`: 9 ms/s idle main thread, 0 layouts/s; 0 overflow at 1500/1024/768.
+  - Screenshots reviewed at 1500 and 1024.
+- Not committed.
+- Removed the now-unused `bar-rise` keyframes from globals.css (nothing references them after the change); map updated.
+
+## 2026-09-29 — Hero stats restyled like SoftexEdge
+- User asked for the inner-page `content.stats` (the PageHero stat row: 6 pages, with Sectors covering 3) to look like SoftexEdge's. The match is `softexedge-sept-2026/src/components/*/AgencyStats.tsx`, which sits under that site's service heroes: no card, centred big tight-tracked numbers that count up in view, gradient suffix, uppercase tracked labels, vertical hairline dividers. (The home `StatsSection` is a scroll-scrubbed full section, not the analogue.)
+- New `page-blocks/components/hero-stats.tsx` (client), used by `PageHero` in place of the old bordered `gap-px` card grid:
+  - figures `text-5xl` / `sm:text-4xl` / `lg:text-[4rem]`, semibold, `-0.045em` tracking;
+  - labels 12px semibold, 0.16em tracking, uppercase;
+  - `sm:border-l` dividers (`border-t` when stacked on phones); `motion-safe:animate-rise` entrance.
+- Count-up: no framer-motion (no new dependency). IntersectionObserver + rAF, 1.6s ease-out cubic, starts at 0 like SoftexEdge. Numeric values only ("Yours", "Human" etc. render as-is); `prefix`/`suffix` kept, suffix in the brand gradient. An sr-only copy holds the final value (visible counter `aria-hidden`); reduced motion jumps to the final value.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP on `next start`:
+    - count-up sampled 0|0 → 3|1 → 6|1 on products and 0|0|0 → 6|1|0 on challenges;
+    - off-screen stats wait: 375 About showed 1|0|0 before scrolling and 1|5|3 after;
+    - no wrap at 1500/768/375 (incl. "Your stack", "Handover" at 768); 0 overflow;
+    - settled idle 7–9 ms/s, 0 layouts (one 30 ms/s noise sample; the repeat was 9).
+  - Screenshots reviewed at 1500, 768 and 375.
+- Not committed.
+
+## 2026-09-29 — Hero stats spacing
+- User: less space below the hero stat row, slightly more above.
+- `hero-stats.tsx`: `mt-14` → `mt-16` (56 → 64px).
+- `page-hero.tsx`: section bottom padding is conditional (`cn`): `pb-8 sm:pb-12` with stats, and the unchanged `pb-16 sm:pb-24` without (Careers).
+- Measured on `next start`:
+  - last label → section end: 64px at 1500 (was 112) and 60px at 375 (was 92);
+  - stats margin-top 64px;
+  - Careers padding unchanged (96 / 64px).
+- biome/tsc clean; build OK; screenshot reviewed. Not committed.
+
+## 2026-09-29 — Hero stats spacing, second pass
+- User re-sent the same request; read as "further in the same direction".
+- Stats `mt-16` → `mt-20` (80px). With stats, the hero's bottom padding `pb-8 sm:pb-12` → `pb-4 sm:pb-6`.
+- Measured on `next start`: last label → section end 40px at 1500 (was 64, originally 112) and 44px at 375 (was 60, originally 92); Careers unchanged (96 / 64px).
+- biome/tsc clean; build OK; screenshot reviewed. Not committed.
+
+## 2026-09-29 — Clickable cards: card hover drives the button, whole card follows the link
+- `shared/ui/button-link.tsx`: new `stretched` prop. It adds `after:absolute after:inset-0 after:content-['']` (stretched link) plus literal `group-hover/card:` versions of each variant's hover look (primary/onDark → brand gradient, onDark text white, secondary/muted → brand-50). A named `group/card` avoids clashing with the existing `group` classes inside cards.
+- Applied (card gets `group/card relative`):
+  - home Problem articles and What-we-build articles ("Learn more");
+  - Services detail rows ("Discuss this"; added a row hover tint `hover:bg-zinc-50/80` with `first:rounded-t-2xl last:rounded-b-2xl` so it respects the list's rounded border);
+  - Products cards ("Discuss this product", a plain `Link`: same `after:` layer; `group-hover/card:` for its colour and arrow; card border tints on hover).
+- Skipped, with reasons: Challenges gap rows (text link to a product, not a button); the home Featured project card (sideways-scrolling diagram an overlay would block); the How-we-work step panel (tab panel); Open Roles and Contact cards were already whole-card links.
+- First tsc run failed: `cn()` doesn't accept arrays (`'false | string[]' is not assignable…`). Fixed by passing the two classes as separate conditionals.
+- Verified:
+  - biome clean; tsc exit 0; build OK.
+  - A CDP test on `next start` (`scratchpad/cardlink2.mjs`), for all four card types:
+    - hit-tests at two corners and the card body land on the link;
+    - exactly 1 focusable element per card;
+    - a real mouse hover on the card corner changes the button's computed style (gradient, or brand text on Products);
+    - clicking an empty corner navigates to the link's href (`/#services`, `/contact`).
+    - Result: ALL PASS.
+- Trade-off: text inside these cards can no longer be selected by dragging (the overlay sits on top).
+- Not committed.
+
+## 2026-09-29 — Work: tabs on top, new automation
+- `work-tabs.tsx`: the tablist is a horizontal segmented bar above the panel at every width (`lg:grid-cols-3`, snap scroller below lg, `bg-white/[0.08]` + gradient underline on the active tab). The vertical lg column and chevrons are gone. Keys are now Left/Right/Home/End (Up/Down dropped: the list is horizontal).
+- `work.tsx` CasePanel: from xl a two-column grid (title and notes left, visual right spanning both rows, notes stacked in one column); below xl unchanged (title, visual, 3-col notes). The xl breakpoint is because the mocks and the graph need ≥ 40rem.
+- `automation-flow.tsx`: same canvas, connectors and tiles; new graph for case 01 — Schedule "Every morning" → Supabase "Low-stock items" → AI AGENT "Supplier picker" (Chat Model / Memory / Tool ports → OpenAI, Memory, Google Sheets "Price list") → "Over budget?" → Slack "Manager approval" / Gmail "Send RFQ", with mono branch labels. `straight()` draws a downward arrow for vertical wires. `visualLabel` in `work.data.ts` updated.
+- Two label collisions found by the test were fixed: "Over budget" × the Slack label (branch labels moved left of the branch line, right-aligned), and "Chat Model" × "Memory" port labels at phone scale (ports spread 400/492/584).
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP (`scratchpad/worktabs.mjs`) at 1500/1024/375:
+    - tabs above the panel, one row (3×418 / 3×322 / scroller 256);
+    - Right/Right/Right/Left/End/Home → selected 1,2,0,2,2,0 with focus following;
+    - section height identical on every tab; 0 overflow; 0 label clashes.
+  - Screenshots reviewed.
+- Perf: the home page idles at ~110–158 ms/s (noisy). With everything outside #work frozen it drops to 11 ms/s, so Work (incl. the new graph) is a small share. A per-section bisect shows the cost spread across the animated sections (workflow, hero, work largest). Pre-existing; flagged as a follow-up, not fixed here.
+- Not committed.
+
+## 2026-09-29 — Work tabs: undo my over-reach, keep only "tabs on top"
+- User: I had asked only to put the 01/02/03 tabs on top (the container becomes flex-col) and to change the automation; I shouldn't have restyled the tabs or reworked the panel.
+- Restored `work-tabs.tsx` and `work.tsx` to their original UI. vs HEAD the only changes are:
+  - outer `grid lg:grid-cols-[18rem_1fr]` → `flex flex-col`;
+  - tablist loses `lg:flex-col` and gets `lg:divide-x` instead of `lg:divide-y`;
+  - comments updated.
+  - Tab cards, chevrons, the left gradient marker, the both-axes arrow keys and the stacked case panel are all original again.
+- Kept: the new automation graph (daily supplier run) from the previous entry.
+- Verified:
+  - biome/tsc clean; build OK.
+  - `worktabs.mjs` at 1500/1024/375: tabs above the panel in one row (3×426 / 3×330 / scroller 256); keys 1,2,0,2,2,0 with focus following; equal heights on every tab; 0 overflow; 0 label clashes.
+  - Screenshot at 1500 shows the original tab design in a row.
+- Lesson: "make X on top" means move it, not restyle it; keep unrequested UI untouched.
+- Not committed.
+
+## 2026-09-29 — "move the tabs on top" (repeat): no code change
+- The user repeated the request, frustrated. Checked what their dev server serves instead of editing blind:
+  - `curl :3000/` has the Work wrapper `mt-12 flex flex-col gap-4` and the tablist without `lg:flex-col` (horizontal row, `lg:divide-x`);
+  - in the pane at 1500: 3 tabs side by side at y=342 (426px each), tablist bottom 504 < panel top 534.
+- The tabs are already a row above the panel in the running code. Asked the user to hard-refresh, or to send a screenshot or describe the placement they want (e.g. tabs attached to the top of the panel card), rather than guessing again.
+
+## 2026-09-29 — Work case panel: slight card refresh
+- `work.tsx` CasePanel only (tabs, automation and mocks untouched):
+  - card fill `bg-white/[0.03]` → a soft vertical gradient (5.5% → 1.5% white) with an inset top hairline highlight;
+  - the case number becomes a small outlined brand chip, baseline-aligned in one row with the title (was a line above it);
+  - the "What we built" column gets the same `md:border-l` divider as "Operational benefit", so all three notes columns are evenly separated.
+- No overflow clipping added (animation rule respected).
+- Verified:
+  - biome/tsc clean; build OK.
+  - `worktabs.mjs` at 1500/1024/375: tabs still above the panel; keys/heights/0 overflow/0 label clashes unchanged.
+  - Screenshots at 1500 and 375 reviewed. The chip first centred against a 3-line phone title, so it was switched to `items-baseline`.
+- Not committed.
+
+## 2026-09-29 — Navbar: gradient hover, Challenges button removed, slight restyle
+- `site-header.tsx`:
+  - removed the xl-only "Challenges" secondary button (and the stale comment); `navigation.ts` `headerActions.secondary` deleted (no other users);
+  - the bar goes `rounded-xl` → `rounded-2xl`, plus a faint brand hairline along the bottom edge (height kept at 72px: the dropdown `pt-7` and hero padding depend on it);
+  - nav links: label span with `bg-brand-gradient bg-clip-text` that goes `text-transparent` on hover (gradient text), and an `::after` gradient underline `scale-x-0 → 100` from the left (`motion-reduce` disables the transition).
+- `nav-dropdown.tsx`: triggers get the same gradient text and underline, held while `aria-expanded`; menu item labels turn gradient on hover and focus-visible. Chevrons stay zinc (no-blue-icons rule).
+- The "Challenges" nav link is unchanged.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP (`scratchpad/navbar.mjs`):
+    - nav one row at 1024/1280/1500; the only header button outside the nav is "Book a call"; the /challenges link is still in the nav; bar radius 16px, height 72;
+    - real-mouse hover: Products text zinc → transparent over the clipped gradient; Services trigger transparent/gradient while open; first menu item rgb(2,28,55) → transparent on hover.
+  - Screenshots show the gradient text + underline on hover and in the open menu. (The `::after` read `transform: none` because Tailwind v4 `scale-x` uses the `scale` property; the screenshot confirms the underline.)
+- Not committed.
+
+## 2026-09-29 — Header: underline hover removed
+- Removed the `::after` gradient underline (and the `relative` it needed) from the nav links (`site-header.tsx`) and dropdown triggers (`nav-dropdown.tsx`). Gradient text hover is kept.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP: `::after` content is `none` at rest, on hover and while open; Products text still goes transparent over the gradient on hover; Services trigger and menu items unchanged.
+  - Screenshot shows gradient "Products" with no underline.
+- Not committed.
+
+## 2026-09-29 — Problem ("Where work slows down") card row gap
+- `problem.tsx`: card grid `gap-4` → `gap-x-4 gap-y-6`. Vertical gap 16 → 24px; horizontal unchanged.
+- Verified: biome/tsc clean; build OK. CDP measured row gap 24px and column gap 16px at 1500 and 768, row gap 24px at 375 (single column); 0 overflow.
+- Not committed.
+
+## 2026-09-29 — Selected work: a different automation (fan-in stock sync)
+- Only `automation-flow.tsx` and the case-01 `visualLabel` in `work.data.ts` changed; tabs and panel untouched.
+- The previous graphs were all "trigger → agent card with tool ports → fork". The new one changes the shape: three event sources fan in and one linear pipeline runs:
+  - Shopify "New order", Warehouse "Barcode scan", Returns "Form" → Merge "One stream" → Update stock (Code) → Supabase "Stock levels" → AI "Reorder check" (pulsing glow) → Slack "Reorder alert".
+  - Removed: agent card, ports, branch labels, the unused `vhv`.
+  - `NodeTile` gained optional `rotate` (merge icon points downstream) and `glow`.
+- The first render had the source tiles too close (tiles covering the labels above) and the merge icon pointing upstream. Fixed: sources at y 110/270/430, `rotate: 90`.
+- `scratchpad/worktabs.mjs` now also flags text hidden under a tile (the old text-vs-text check had missed it).
+- Verified:
+  - biome/tsc clean; build OK.
+  - At 1500/1024/375: 16 labels, 0 clashes (text or tile); tabs, keys and heights unchanged; 0 overflow.
+  - Screenshot reviewed.
+- Not committed.
+
+## 2026-09-29 — Work panels: no empty band under the notes
+- Cause: the tab panels share one grid cell (tallest sets the height) and the shorter cards stretched (`h-full`). After the new automation, case 01's visual was 578px at 1500 against ~340px for the app mocks, leaving about 270px empty under the notes in cases 02/03 (about 160px at 1024).
+- Fix:
+  - `work.tsx`: the card is a flex column and the visual wrapper is `flex-1`, so spare height goes to the visual, not to the bottom.
+  - `app-mocks.tsx` Frame: stretches (`flex-1` chain), and the window bodies (`grid flex-1`) grow with it.
+  - `automation-flow.tsx`: the frame fills the area with the graph centred (`justify-center`), and the graph is capped at `max-w-[50rem]` so it isn't much taller than the mocks.
+- Measured (`scratchpad/panels.mjs`): space under the notes is 33px (the card's own padding) on all three cases at 1500/1024 (was 270/157 on 02/03) and 21px at 375. Desktop card height 901 → 757.
+- `worktabs.mjs`: tabs, keys, heights, 0 overflow and 0 label clashes unchanged. Screenshots of all three panels reviewed.
+- biome/tsc clean; build OK. Not committed.
+
+## 2026-09-29 — Automation canvas: flickering scrollbar fixed
+- Cause: the frame was `overflow-x-auto`, which computes to `auto/auto`, so vertical overflow was scrollable too. A reversed packet on the bottom fan-in leg slid its track to y≈542 of the 540-unit canvas once per pass. Stepping the 23 animations through 0–13s measured transient vertical overflow of 1–2px at 1500/1024, first at 1.0s.
+- Fix (`automation-flow.tsx`): the graph canvas gets `overflow-hidden` (unrounded, per the animation rule), and the frame becomes `overflow-x-auto overflow-y-hidden`.
+- Verified: the same time-stepped probe gives max overflow 0/0 at 1500 and 1024 with no transient. At 375 the intended sideways scroll (341px) is unchanged and constant. `worktabs.mjs`: 0 label clashes; tabs, keys and heights unchanged. Screenshot shows nothing clipped.
+- biome/tsc clean; build OK. Not committed.
+
+## 2026-09-29 — How we work: card shadows removed
+- `flow-canvas.tsx`: removed the base card shadow and the "In progress" card's glow/ring (it keeps its `border-brand-200`). `workflow.tsx`: removed the step panel's drop shadow. The moving packet dot's glow is kept (not a card).
+- Verified: biome/tsc clean; build OK. CDP: 0 visible elements with a box-shadow in the Workflow panel on all 5 tabs (Discover…Improve). Screenshot reviewed.
+- Not committed.
+
+## 2026-09-29 — Services card hover removed; Technology stars removed, AI icon swapped
+- "What we do" = home Services (`services.tsx`). Removed the card hover (blue→indigo gradient fill, `group-hover` colour/ring changes, transitions) and the hover-only white duplicate icons and checks, leaving one gradient-stroke icon per slot (no longer absolutely stacked). The marquee's pause-on-hover (track, not cards) is kept.
+- Technology (`integrations.tsx`): removed the two `Sparkles` flanking the footnote "Our technology choices are driven by the problem…"; the AI stack card icon `Sparkles` → `BrainCircuit`; unused `Sparkles` import removed.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP: a real-mouse hover leaves the Services card's computed background identical to rest.
+  - The footnote has 0 svgs; the home HTML has `lucide-brain-circuit` and no `lucide-sparkles`.
+  - Screenshot of the Technology cards and footnote reviewed.
+- Not committed.
+
+## 2026-09-29 — Featured project: stacked card, diagram touch-up
+- `featured-project.tsx`:
+  - the card's outer `grid lg:grid-cols-[22rem_1fr]` → `flex flex-col`: facts on top, diagram below at full width;
+  - facts become `md:grid-cols-3` with dividers (stacking three full-width rows would leave dead space), CTA row beneath.
+- Diagram (slight, brand-fitting):
+  - dashed shared-data connectors grey → brand blue (`rgb(4 126 253 / 0.55)`, legend follows);
+  - hub pill → ink with white text; outcome pill → brand-50/brand-200/brand-700;
+  - 01–06 mono numbers in the step cards;
+  - step arrows stay ink (no-blue-icons rule).
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP at 1500/1024/768/375: info above diagram everywhere; facts in 3 columns from 768 (1 at 375).
+  - The diagram fits without sideways scroll at 1500/1024 (scroll kept at ≤768 by design, since it needs 46rem); 0 page overflow.
+  - Screenshots at 1500 and 375 reviewed.
+- Not committed.
+
+## 2026-09-29 — Seven page fixes (services, case studies, challenges, about, careers)
+1. /services hero bottom: `PageHero` gained `padBottom`; services passes `pb-10 sm:pb-14` (stats → hero end 24 → 56px at desktop). Other pages unchanged.
+2. Service lines → Engagement: ServiceDetails `py-16 sm:py-28` → `pt-16 pb-12 sm:pt-28 sm:pb-20` (gap 275 → 243px). The shared SplitSection is untouched.
+3. /case-studies step numbers: the digits sat 3px low (the 11px mono inherited the list's 24px line-height inside a 20px circle). Added `leading-none tabular-nums`; measured offset now −0.5px.
+4. /challenges hero record "Order #1042" → kicker "Live workspace", "Operations status", lines Approvals routed / Report sent Monday / 1 risk flagged; aria label updated.
+5. /challenges gap table: "No." removed (empty column kept); header is a tinted row (`bg-zinc-50/80`, 12px semibold tracked labels, `rounded-t-2xl`); row icons sit in `size-10` tiles.
+6. /about "At a glance": `Stats` now renders `HeroStats` with the new `tone="dark"` (white figures, zinc-400 labels, white/10 hairlines, count-up) and 4-up layout; the ink background stays. Found and fixed a figure misalignment when labels wrap to different line counts (`justify-end` with `flex-col-reverse`); this also protects the hero stats.
+7. /careers hero: staircase → growth loop (Learn the stack → Pair with a lead → Build real systems → Ship to clients, "You at Infrantic" hub in the middle). Vertical runs sit at x = 10/90 so labels stay clear of lines.
+- The first attempt at the edit script failed in a bash heredoc (unexpected EOF, nothing applied); it was re-run from a scratchpad .py file.
+- Verified:
+  - biome/tsc clean; build OK.
+  - CDP (`seven.mjs`, `numbers.mjs`, `glance.mjs`): spacing/offset numbers above. About stats 0|0|0|0 before scroll → 5|5|6|1 in view, figures aligned per row at 1500/768/375, 0 overflow.
+  - Screenshots of the numbers, gap table, glance, challenges and careers heroes reviewed.
+- Not committed.

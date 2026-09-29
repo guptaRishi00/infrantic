@@ -16,7 +16,7 @@ const workContent = {
       summary: "Low stock, approvals, and purchasing",
       visual: "automation",
       visualLabel:
-        "Automation flow: a stock form triggers an AI agent that uses a chat model, Supabase, memory, and Jira as tools, then routes approvals to Slack and supplier requests to email.",
+        "Automation flow: Shopify orders, warehouse barcode scans, and returns merge into one stream; a code step updates stock levels in Supabase, an AI reorder check reads them, and anything running short raises a reorder alert in Slack.",
       problem:
         "Low-stock alerts, approvals, supplier selection, and purchasing were handled by hand across several people and tools.",
       built:

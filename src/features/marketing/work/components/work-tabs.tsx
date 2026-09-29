@@ -19,9 +19,10 @@ type WorkTabsProps = {
 };
 
 /**
- * Case-study switcher: WAI-ARIA tabs with roving focus. A vertical list beside
- * the panel on large screens, a horizontal scroller above it on small ones.
- * Panels are server-rendered and all stay in the HTML; only visibility is state.
+ * Case-study switcher: WAI-ARIA tabs with roving focus. The tabs sit in a row
+ * above the panel (a bordered, divided row on large screens, a horizontal
+ * scroller on small ones). Panels are server-rendered and all stay in the
+ * HTML; only visibility is state.
  */
 export function WorkTabs({ tabs, panels }: WorkTabsProps) {
   const [active, setActive] = useState(0);
@@ -35,7 +36,6 @@ export function WorkTabs({ tabs, panels }: WorkTabsProps) {
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
-    // Both axes: the list is vertical on desktop and horizontal on mobile.
     const moves: Record<string, number> = {
       ArrowDown: index + 1,
       ArrowRight: index + 1,
@@ -51,11 +51,11 @@ export function WorkTabs({ tabs, panels }: WorkTabsProps) {
   }
 
   return (
-    <div className="mt-12 grid gap-4 lg:grid-cols-[18rem_1fr]">
+    <div className="mt-12 flex flex-col gap-4">
       <div
         role="tablist"
         aria-label="Case studies"
-        className="flex snap-x gap-2 overflow-x-auto [scrollbar-width:none] lg:flex-col lg:gap-0 lg:divide-y lg:divide-white/10 lg:overflow-hidden lg:rounded-2xl lg:border lg:border-white/10"
+        className="flex snap-x gap-2 overflow-x-auto [scrollbar-width:none] lg:gap-0 lg:divide-x lg:divide-white/10 lg:overflow-hidden lg:rounded-2xl lg:border lg:border-white/10"
       >
         {tabs.map((tab, index) => {
           const selected = index === active;

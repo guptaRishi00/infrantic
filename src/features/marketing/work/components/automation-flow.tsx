@@ -1,14 +1,9 @@
-import {
-  BrainCircuit,
-  type LucideIcon,
-  MemoryStick,
-  Split,
-} from "lucide-react";
+import { Braces, type LucideIcon, Merge, ScanBarcode } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { IconType } from "react-icons";
 import { FaSlack } from "react-icons/fa";
 import { RiOpenaiFill } from "react-icons/ri";
-import { SiGmail, SiGoogleforms, SiJira, SiSupabase } from "react-icons/si";
+import { SiGoogleforms, SiShopify, SiSupabase } from "react-icons/si";
 import { FlowLine, FlowPacket } from "@/shared/ui/flow-line";
 
 // The canvas is a 1000 × 540 design grid. `--u` is one design unit
@@ -33,13 +28,13 @@ type Route = {
   delay: number;
 };
 
-/** Straight connector. */
+/** Straight connector (horizontal, or vertical with a downward arrow). */
 function straight(a: Pt, b: Pt, delay: number): Route {
   return {
     legs: [{ from: a, to: b }],
     arcs: [],
     end: b,
-    arrow: "right",
+    arrow: a[0] === b[0] ? "down" : "right",
     delay,
   };
 }
@@ -73,73 +68,37 @@ function hvh(a: Pt, b: Pt, mid: number, r: number, delay: number): Route {
   };
 }
 
-/** Vertical → horizontal → vertical, turning at y = `mid`. */
-function vhv(a: Pt, b: Pt, mid: number, r: number, delay: number): Route {
-  const sy1 = Math.sign(mid - a[1]);
-  const sy2 = Math.sign(b[1] - mid);
-  const sx = Math.sign(b[0] - a[0]);
-  return {
-    legs: [
-      { from: a, to: [a[0], mid - r * sy1] },
-      { from: [a[0] + r * sx, mid], to: [b[0] - r * sx, mid] },
-      { from: [b[0], mid + r * sy2], to: b },
-    ],
-    arcs: [
-      {
-        p: [a[0], mid - r * sy1],
-        q: [a[0] + r * sx, mid],
-        corner: [a[0], mid],
-      },
-      {
-        p: [b[0] - r * sx, mid],
-        q: [b[0], mid + r * sy2],
-        corner: [b[0], mid],
-      },
-    ],
-    end: b,
-    arrow: "down",
-    delay,
-  };
-}
-
 // Node centres (design units). Tiles are TILE × TILE.
-const FORM: Pt = [170, 245];
-const ROUTER: Pt = [675, 245];
-const SLACK: Pt = [860, 128];
-const EMAIL: Pt = [860, 313];
-const SUB_Y = 417;
-const AGENT = { left: 295, right: 550, top: 202, bottom: 290 };
-// Ports under the agent, and where their wires start (below the port labels).
-const PORTS = [
-  { label: "Chat Model", x: 337 },
-  { label: "Memory", x: 418 },
-  { label: "Tool", x: 494 },
-] as const;
-const PORT_Y = 312;
-const SUB_TOP = SUB_Y - TILE / 2;
-const SUB_MID = (PORT_Y + SUB_TOP) / 2;
+// Live stock sync: three event sources (online orders, warehouse scans,
+// returns) merge into one stream; a code step updates stock in Supabase, an AI
+// reorder check reads the new levels, and anything short raises a Slack alert.
+const MID_Y = 270;
+const SOURCE_X = 100;
+const SOURCE_YS = [110, 270, 430] as const;
+const MERGE: Pt = [270, MID_Y];
+const FAN_X = 185;
+const CODE: Pt = [420, MID_Y];
+const STOCK: Pt = [570, MID_Y];
+const AI: Pt = [720, MID_Y];
+const SLACK: Pt = [880, MID_Y];
+const half = TILE / 2;
 
 const ROUTES: readonly Route[] = [
-  straight([FORM[0] + TILE / 2, 245], [AGENT.left, 245], 0),
-  straight([AGENT.right, 245], [ROUTER[0] - TILE / 2, 245], 0.9),
+  // Fan-in: each source joins the merge node.
+  hvh([SOURCE_X + half, SOURCE_YS[0]], [MERGE[0] - half, MID_Y], FAN_X, 16, 0),
+  straight([SOURCE_X + half, MID_Y], [MERGE[0] - half, MID_Y], 0.3),
   hvh(
-    [ROUTER[0] + TILE / 2, 245],
-    [SLACK[0] - TILE / 2, SLACK[1]],
-    760,
-    18,
-    1.8,
+    [SOURCE_X + half, SOURCE_YS[2]],
+    [MERGE[0] - half, MID_Y],
+    FAN_X,
+    16,
+    0.6,
   ),
-  hvh(
-    [ROUTER[0] + TILE / 2, 245],
-    [EMAIL[0] - TILE / 2, EMAIL[1]],
-    760,
-    18,
-    1.8,
-  ),
-  vhv([PORTS[0].x, PORT_Y], [202, SUB_TOP], SUB_MID, 14, 0.4),
-  vhv([PORTS[1].x, PORT_Y], [355, SUB_TOP], SUB_MID, 14, 0.6),
-  vhv([PORTS[1].x, PORT_Y], [513, SUB_TOP], SUB_MID, 14, 0.6),
-  vhv([PORTS[2].x, PORT_Y], [675, SUB_TOP], SUB_MID, 14, 0.8),
+  // Then one pipeline, left to right.
+  straight([MERGE[0] + half, MID_Y], [CODE[0] - half, MID_Y], 1.2),
+  straight([CODE[0] + half, MID_Y], [STOCK[0] - half, MID_Y], 1.6),
+  straight([STOCK[0] + half, MID_Y], [AI[0] - half, MID_Y], 2.0),
+  straight([AI[0] + half, MID_Y], [SLACK[0] - half, MID_Y], 2.4),
 ];
 
 type FlowNode = {
@@ -149,64 +108,83 @@ type FlowNode = {
   at: Pt;
   Icon: IconType | LucideIcon;
   color: string;
-  /** Round badge instead of a logo (the router step). */
+  /** Round badge instead of a logo (a routing step). */
   badge?: boolean;
+  /** Icon rotation in degrees, e.g. to point a merge icon downstream. */
+  rotate?: number;
+  /** Soft pulsing glow (the AI step). */
+  glow?: boolean;
 };
 
 // Logos keep their brand colours (lightened where the original would vanish on
 // the dark tile: OpenAI → white, Slack → its red).
 const NODES: readonly FlowNode[] = [
   {
-    id: "form",
-    label: "Stock form",
-    at: FORM,
+    id: "shopify",
+    label: "Shopify",
+    sublabel: "New order",
+    at: [SOURCE_X, SOURCE_YS[0]],
+    Icon: SiShopify,
+    color: "#95BF47",
+  },
+  {
+    id: "warehouse",
+    label: "Warehouse",
+    sublabel: "Barcode scan",
+    at: [SOURCE_X, SOURCE_YS[1]],
+    Icon: ScanBarcode,
+    color: "#ffffff",
+  },
+  {
+    id: "returns",
+    label: "Returns",
+    sublabel: "Form",
+    at: [SOURCE_X, SOURCE_YS[2]],
     Icon: SiGoogleforms,
     color: "#7248B9",
   },
   {
-    id: "router",
-    label: "Route",
-    at: ROUTER,
-    Icon: Split,
+    id: "merge",
+    label: "Merge",
+    sublabel: "One stream",
+    at: MERGE,
+    Icon: Merge,
     color: "#ffffff",
     badge: true,
+    rotate: 90,
   },
   {
-    id: "slack",
-    label: "Slack",
-    sublabel: "Approval request",
-    at: SLACK,
-    Icon: FaSlack,
-    color: "#E01E5A",
-  },
-  { id: "email", label: "Email", at: EMAIL, Icon: SiGmail, color: "#EA4335" },
-  {
-    id: "model",
-    label: "Chat Model",
-    at: [202, SUB_Y],
-    Icon: RiOpenaiFill,
+    id: "code",
+    label: "Update stock",
+    sublabel: "Code",
+    at: CODE,
+    Icon: Braces,
     color: "#ffffff",
   },
   {
-    id: "supabase",
+    id: "stock",
     label: "Supabase",
-    at: [355, SUB_Y],
+    sublabel: "Stock levels",
+    at: STOCK,
     Icon: SiSupabase,
     color: "#3ECF8E",
   },
   {
-    id: "memory",
-    label: "Memory",
-    at: [513, SUB_Y],
-    Icon: MemoryStick,
-    color: "#4A8FE7",
+    id: "ai",
+    label: "Reorder check",
+    sublabel: "AI",
+    at: AI,
+    Icon: RiOpenaiFill,
+    color: "#ffffff",
+    glow: true,
   },
   {
-    id: "jira",
-    label: "Jira",
-    at: [675, SUB_Y],
-    Icon: SiJira,
-    color: "#2684FF",
+    id: "slack",
+    label: "Slack",
+    sublabel: "Reorder alert",
+    at: SLACK,
+    Icon: FaSlack,
+    color: "#E01E5A",
   },
 ];
 
@@ -303,9 +281,13 @@ function NodeTile({ node }: { node: FlowNode }) {
       style={{ left: u(node.at[0]), top: u(node.at[1]) }}
     >
       <span
-        className="grid place-items-center border border-white/25 bg-[#07131d] shadow-[0_12px_30px_-12px_rgb(0_0_0/0.8)]"
+        className="relative grid place-items-center border border-white/25 bg-[#07131d] shadow-[0_12px_30px_-12px_rgb(0_0_0/0.8)]"
         style={{ width: u(TILE), height: u(TILE), borderRadius: u(14) }}
       >
+        {node.glow ? (
+          // Pulse: a stronger glow on an overlay that only fades in and out.
+          <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 shadow-[0_0_0_6px_rgb(7_150_254/0.14),0_12px_40px_-10px_rgb(7_161_253/0.7)] motion-safe:animate-agent-glow" />
+        ) : null}
         {node.badge ? (
           <span
             className="grid place-items-center rounded-full border border-white/40 bg-ink-800"
@@ -314,8 +296,13 @@ function NodeTile({ node }: { node: FlowNode }) {
             <Icon
               aria-hidden="true"
               color={node.color}
-              style={{ width: u(20), height: u(20) }}
-              className="rotate-90"
+              style={{
+                width: u(20),
+                height: u(20),
+                transform: node.rotate
+                  ? `rotate(${node.rotate}deg)`
+                  : undefined,
+              }}
             />
           </span>
         ) : (
@@ -344,73 +331,26 @@ function NodeTile({ node }: { node: FlowNode }) {
   );
 }
 
-function AgentCard() {
-  return (
-    <>
-      <div
-        className="absolute flex items-center border border-white/25 bg-[#07131d] shadow-[0_0_0_4px_rgb(7_150_254/0.08),0_14px_36px_-12px_rgb(7_161_253/0.45)]"
-        style={{
-          left: u(AGENT.left),
-          top: u(AGENT.top),
-          width: u(AGENT.right - AGENT.left),
-          height: u(AGENT.bottom - AGENT.top),
-          borderRadius: u(14),
-          gap: u(28),
-          paddingLeft: u(30),
-        }}
-      >
-        {/* Pulse: a stronger glow on an overlay that only fades in and out. */}
-        <span className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-0 shadow-[0_0_0_6px_rgb(7_150_254/0.14),0_12px_40px_-10px_rgb(7_161_253/0.7)] motion-safe:animate-agent-glow" />
-        <BrainCircuit
-          aria-hidden="true"
-          className="text-white"
-          strokeWidth={1.25}
-          style={{ width: u(46), height: u(46) }}
-        />
-        <span className="font-bold tracking-tight text-white">
-          <span className="block" style={{ fontSize: `max(12px, ${u(20)})` }}>
-            AI AGENT
-          </span>
-          <span
-            className="mt-0.5 block text-center font-medium text-zinc-300"
-            style={{ fontSize: `max(8px, ${u(9)})` }}
-          >
-            Tools agent
-          </span>
-        </span>
-      </div>
-      {PORTS.map((port) => (
-        <span
-          key={port.label}
-          className="absolute -translate-x-1/2 font-semibold whitespace-nowrap text-white"
-          style={{
-            left: u(port.x),
-            top: u(AGENT.bottom + 4),
-            fontSize: `max(9px, ${u(11)})`,
-          }}
-        >
-          {port.label}
-        </span>
-      ))}
-    </>
-  );
-}
-
 /**
- * Procurement agent flow: a stock form triggers an AI agent (chat model,
- * Supabase, memory and Jira as its tools), whose decision is routed to a Slack
- * approval or a supplier email.
+ * Live stock sync: Shopify orders, warehouse scans and returns merge into one
+ * stream that updates stock in Supabase; an AI reorder check raises a Slack
+ * alert for anything running short.
  */
 export function AutomationFlow({ label }: { label: string }) {
   return (
-    <div role="img" aria-label={label}>
-      <div className="overflow-x-auto rounded-xl border border-white/10 bg-ink-800/40 bg-[radial-gradient(rgb(255_255_255/0.1)_1px,transparent_1px)] bg-size-[22px_22px] [scrollbar-width:thin]">
-        {/* The graph renders at 88% of the frame, centred, for breathing room. */}
+    <div role="img" aria-label={label} className="flex flex-1 flex-col">
+      {/* The frame fills the panel's visual area; the graph is centred in it. */}
+      <div className="flex flex-1 flex-col justify-center overflow-x-auto overflow-y-hidden rounded-xl border border-white/10 bg-ink-800/40 bg-[radial-gradient(rgb(255_255_255/0.1)_1px,transparent_1px)] bg-size-[22px_22px] [scrollbar-width:thin]">
+        {/* The graph renders at 88% of the frame (capped at 50rem so it isn't
+            much taller than the app mocks), centred, for breathing room. */}
         <div className="min-w-[40rem]">
-          <div className="@container mx-auto w-[88%]">
+          <div className="@container mx-auto w-[88%] max-w-[50rem]">
             <div
               aria-hidden="true"
-              className="relative aspect-[1000/540] [--u:calc(100cqw/1000)]"
+              // Clip here (unrounded) so packets riding past a leg's end never
+              // count as overflow of the scroller, which made its scrollbar
+              // flicker in and out.
+              className="relative aspect-[1000/540] overflow-hidden [--u:calc(100cqw/1000)]"
             >
               {ROUTES.map((route) => (
                 <div key={`${route.legs[0]?.from.join()}-${route.end.join()}`}>
@@ -428,7 +368,6 @@ export function AutomationFlow({ label }: { label: string }) {
                 </div>
               ))}
 
-              <AgentCard />
               {NODES.map((node) => (
                 <NodeTile key={node.id} node={node} />
               ))}

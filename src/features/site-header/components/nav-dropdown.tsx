@@ -76,9 +76,11 @@ export function NavDropdown({ group }: { group: NavGroup }) {
           }
           setOpen((value) => !value);
         }}
-        className="flex items-center gap-1 rounded-md px-2 py-2 text-sm font-semibold text-zinc-700 xl:px-3 transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+        className="group flex items-center gap-1 rounded-md px-2 py-2 text-sm font-semibold text-zinc-700 xl:px-3 focus-visible:outline-2 focus-visible:outline-ink"
       >
-        {group.label}
+        <span className="bg-brand-gradient bg-clip-text transition-colors group-hover:text-transparent group-aria-expanded:text-transparent">
+          {group.label}
+        </span>
         <ChevronDown
           aria-hidden="true"
           className={`size-3.5 text-zinc-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
@@ -99,9 +101,9 @@ export function NavDropdown({ group }: { group: NavGroup }) {
               <Link
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 focus-visible:bg-zinc-50 focus-visible:outline-none"
+                className="group/item block rounded-lg px-3 py-2.5 transition-colors hover:bg-zinc-50 focus-visible:bg-zinc-50 focus-visible:outline-none"
               >
-                <span className="block text-sm font-medium text-ink">
+                <span className="block w-fit bg-brand-gradient bg-clip-text text-sm font-medium text-ink group-hover/item:text-transparent group-focus-visible/item:text-transparent">
                   {item.label}
                 </span>
                 {item.description ? (

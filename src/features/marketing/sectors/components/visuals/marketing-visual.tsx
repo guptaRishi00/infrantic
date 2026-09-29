@@ -1,103 +1,108 @@
-import { Packet, StrokeGradient, VisualFrame, X, Y } from "./visual-frame";
+import { AtSign, Mail, MousePointerClick, Users } from "lucide-react";
+import { Packet, VisualFrame, X, Y } from "./visual-frame";
 
-// A funnel pouring leads into a rising chart.
-const FUNNEL = "M40 70 H260 L180 200 V250 H120 V200 Z";
-const BANDS = "M72 118 H228 M104 166 H196";
-const OUTLET = "M150 250 V320 H282";
-const BASELINE = 340;
-const BARS = [
-  { x: 300, h: 70 },
-  { x: 345, h: 115 },
-  { x: 390, h: 165 },
-  { x: 435, h: 225 },
+// On target: every channel's traces merge into one line that lands in the
+// centre of a bullseye, the customer. Arcs sweep the rings like the home hero.
+const CENTER = { x: 320, y: 200 } as const;
+const RINGS = [
+  { r: 150, duration: 18, reverse: false },
+  { r: 105, duration: 13, reverse: true },
+  { r: 62, duration: 9, reverse: false },
 ] as const;
-const BAR_W = 32;
-const TREND = "M290 250 L345 205 L392 160 L452 92";
+const CORE = 34;
+
+const TRACES = [
+  "M70 110 H120 V200",
+  "M70 200 H286",
+  "M70 290 H120 V200",
+] as const;
+
+const CHANNELS = [
+  { y: 110, label: "Ads", Icon: MousePointerClick },
+  { y: 200, label: "Email", Icon: Mail },
+  { y: 290, label: "Social", Icon: AtSign },
+] as const;
+const PAD_X = 48;
+// Design units; the 5:4 frame matches the viewBox, so X(n) and Y(n) are the
+// same length and circles stay circular.
+const PAD = 44;
 
 const PACKETS = [
-  { from: [150, 50], to: [150, 250], delay: 0 },
-  { from: [150, 50], to: [150, 250], delay: 1.1 },
-  { from: [150, 50], to: [150, 250], delay: 2.2 },
-  { from: [150, 250], to: [150, 320], delay: 0.8 },
-  { from: [150, 320], to: [282, 320], delay: 1.4 },
+  { from: [70, 110], to: [120, 110], delay: 0 },
+  { from: [120, 110], to: [120, 200], delay: 0.5 },
+  { from: [70, 290], to: [120, 290], delay: 1.2 },
+  { from: [120, 290], to: [120, 200], delay: 1.7 },
+  { from: [70, 200], to: [286, 200], delay: 0.8 },
+  { from: [120, 200], to: [286, 200], delay: 2.3 },
 ] as const;
 
 export function MarketingVisual() {
   return (
-    <VisualFrame label="A marketing funnel pouring leads into a rising bar chart, with growth of 18 percent.">
+    <VisualFrame label="Ads, email, and social campaigns converging on a bullseye, with every lead landing on the right customer.">
       <svg
         aria-hidden="true"
         viewBox="0 0 500 400"
         className="absolute inset-0 size-full overflow-visible"
       >
-        <StrokeGradient id="mk-stroke" />
         <defs>
-          <linearGradient id="mk-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#eef8ff" />
-            <stop offset="1" stopColor="#b0dcff" />
-          </linearGradient>
+          <radialGradient id="mk-target" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0" stopColor="#d9efff" />
+            <stop offset="1" stopColor="#eef8ff" stopOpacity="0" />
+          </radialGradient>
         </defs>
-        <path
-          d={FUNNEL}
-          fill="url(#mk-fill)"
-          stroke="url(#mk-stroke)"
-          strokeWidth="3"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
+        <circle
+          cx={CENTER.x}
+          cy={CENTER.y}
+          r={RINGS[0].r}
+          fill="url(#mk-target)"
         />
-        <path
-          d={BANDS}
-          fill="none"
-          stroke="rgb(4 126 253 / 0.25)"
-          strokeWidth="1.5"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d={OUTLET}
-          fill="none"
-          stroke="rgb(4 126 253 / 0.35)"
-          strokeWidth="2"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d={`M282 ${BASELINE} H480`}
-          stroke="rgb(2 28 55 / 0.15)"
-          strokeWidth="1.5"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d={TREND}
-          fill="none"
-          stroke="#021c37"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
-        <path
-          d="M436 92 H452 V108"
-          fill="none"
-          stroke="#021c37"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          vectorEffect="non-scaling-stroke"
-        />
+        {RINGS.map(({ r }) => (
+          <circle
+            key={r}
+            cx={CENTER.x}
+            cy={CENTER.y}
+            r={r}
+            fill="none"
+            stroke="rgb(4 126 253 / 0.28)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
+        {TRACES.map((d) => (
+          <path
+            key={d}
+            d={d}
+            fill="none"
+            stroke="rgb(4 126 253 / 0.4)"
+            strokeWidth="2"
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        ))}
       </svg>
 
-      {BARS.map((bar, index) => (
+      {/* Sweeping arcs: a transparent ring with one coloured side, rotated.
+          Transform only, no mask; hidden under reduced motion. */}
+      {RINGS.map(({ r, duration, reverse }) => (
         <span
-          key={bar.x}
-          className="absolute origin-bottom rounded-t-lg bg-[linear-gradient(to_top,#047efd,#07a1fd)] shadow-[0_12px_30px_-14px_rgb(4_126_253/0.7)] motion-safe:animate-bar-rise"
+          key={r}
+          className="absolute hidden -translate-x-1/2 -translate-y-1/2 motion-safe:block"
           style={{
-            left: X(bar.x - BAR_W / 2),
-            width: X(BAR_W),
-            top: Y(BASELINE - bar.h),
-            height: Y(bar.h),
-            animationDelay: `${index * 0.15}s`,
+            left: X(CENTER.x),
+            top: Y(CENTER.y),
+            width: X(r * 2),
+            height: Y(r * 2),
           }}
-        />
+        >
+          <span
+            className={
+              reverse
+                ? "block size-full rounded-full border-[2.5px] border-transparent border-t-brand-to motion-safe:animate-orbit-back"
+                : "block size-full rounded-full border-[2.5px] border-transparent border-t-brand-to motion-safe:animate-orbit"
+            }
+            style={{ animationDuration: `${duration}s` }}
+          />
+        </span>
       ))}
 
       {PACKETS.map((packet) => (
@@ -107,18 +112,41 @@ export function MarketingVisual() {
         />
       ))}
 
+      {/* The bullseye: the customer every channel is aimed at. */}
       <span
-        className="absolute -translate-x-1/2 text-[13px] font-semibold text-ink"
-        style={{ left: X(150), top: Y(22) }}
+        className="absolute grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[linear-gradient(145deg,#07a1fd,#047efd_35%,#021c37)] shadow-[0_0_0_8px_rgb(7_150_254/0.1),0_18px_40px_-12px_rgb(7_150_254/0.6)]"
+        style={{
+          left: X(CENTER.x),
+          top: Y(CENTER.y),
+          width: X(CORE * 2),
+          height: Y(CORE * 2),
+        }}
       >
-        Leads
+        <span className="absolute inset-0 rounded-full opacity-0 shadow-[0_0_0_7px_rgb(7_150_254/0.22),0_0_36px_-2px_rgb(7_161_253/0.8)] motion-safe:animate-agent-glow" />
+        <Users className="size-[42%] text-white" strokeWidth={1.75} />
       </span>
-      <span
-        className="absolute -translate-y-1/2 rounded-full bg-ink px-2.5 py-1 text-[13px] font-semibold text-white"
-        style={{ left: X(372), top: Y(92) }}
-      >
-        +18%
-      </span>
+
+      {CHANNELS.map(({ y, label, Icon }) => (
+        <div key={label}>
+          <span
+            className="absolute grid -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-brand bg-white shadow-[0_0_0_5px_rgb(7_150_254/0.1)]"
+            style={{
+              left: X(PAD_X),
+              top: Y(y),
+              width: X(PAD),
+              height: Y(PAD),
+            }}
+          >
+            <Icon className="size-[45%] text-ink" strokeWidth={1.75} />
+          </span>
+          <span
+            className="absolute mt-8 -translate-x-1/2 font-mono text-[12px] text-zinc-600"
+            style={{ left: X(PAD_X), top: Y(y) }}
+          >
+            {label}
+          </span>
+        </div>
+      ))}
     </VisualFrame>
   );
 }

@@ -16,7 +16,7 @@ const hero = {
   stats: [
     { value: "1", label: "Team from discovery to support" },
     { value: "5", label: "Disciplines under one roof" },
-    { value: "10", label: "Industries we build for" },
+    { value: "3", label: "Sectors we specialise in" },
   ],
   visual: {
     kind: "orbit",
@@ -94,7 +94,7 @@ const story = {
   description:
     "Every company we meet already has software: a CRM, an ERP, accounting, spreadsheets, messaging. The work still stalls between them. Infrantic exists to connect that machinery so people can spend their time on the business, not on moving information around it.",
   points: [
-    "Operations first: we start from how the work runs, not from a product",
+    "Operations first: we map how the work runs before choosing what to build",
     "AI as a controlled assistant, with people keeping the decisions",
     "Systems built in your accounts, documented, and yours to keep",
   ],
@@ -104,11 +104,12 @@ const story = {
       {
         term: "What we do",
         detail:
-          "AI automation, business process automation, custom software, integrations, and operational intelligence.",
+          "AI automation, business process automation, custom software, integrations, and operational intelligence, plus six products to start from.",
       },
       {
         term: "Who it's for",
-        detail: "Businesses where operational complexity is slowing growth.",
+        detail:
+          "Healthcare, tech product companies, and marketing teams, and any business where operational complexity is slowing growth.",
       },
       {
         term: "How we work",
@@ -269,7 +270,7 @@ const numbers = {
   stats: [
     { value: "5", label: "Service lines, combined per project" },
     { value: "5", label: "Delivery stages with defined outputs" },
-    { value: "10", label: "Industries we build for" },
+    { value: "6", label: "Products to start from" },
     { value: "1", label: "Shared operating structure per client" },
   ],
 } as const satisfies StatsContent;

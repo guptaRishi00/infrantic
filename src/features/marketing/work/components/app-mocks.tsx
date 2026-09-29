@@ -23,12 +23,13 @@ import { cn } from "@/shared/lib/cn";
 
 function Frame({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div role="img" aria-label={label}>
+    <div role="img" aria-label={label} className="flex flex-1 flex-col">
+      {/* Stretches to the panel's visual area; the window body grows with it. */}
       <div
         aria-hidden="true"
-        className="overflow-x-auto rounded-xl border border-white/10 bg-[#04182f] [scrollbar-width:thin]"
+        className="flex flex-1 flex-col overflow-x-auto rounded-xl border border-white/10 bg-[#04182f] [scrollbar-width:thin]"
       >
-        <div className="min-w-[40rem]">{children}</div>
+        <div className="flex min-w-[40rem] flex-1 flex-col">{children}</div>
       </div>
     </div>
   );
@@ -112,7 +113,7 @@ export function ProofreaderMock({ label }: { label: string }) {
         </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 bg-[radial-gradient(80%_100%_at_50%_0%,rgb(7_150_254/0.1),transparent)] p-6">
+      <div className="grid flex-1 grid-cols-2 gap-4 bg-[radial-gradient(80%_100%_at_50%_0%,rgb(7_150_254/0.1),transparent)] p-6">
         <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
           <p className="font-mono text-[10px] tracking-wide text-brand-300 uppercase">
             New review
@@ -242,7 +243,7 @@ const TASKS: readonly {
 export function TaskBoardMock({ label }: { label: string }) {
   return (
     <Frame label={label}>
-      <div className="grid grid-cols-[10rem_1fr]">
+      <div className="grid flex-1 grid-cols-[10rem_1fr]">
         <div className="border-r border-white/10 p-3">
           <span className="flex items-center gap-2 px-2 py-1.5">
             <span className="grid size-6 place-items-center rounded-md bg-brand-gradient text-white">

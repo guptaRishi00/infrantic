@@ -1,7 +1,8 @@
 import type { StatsContent } from "../page-blocks.types";
 import { BlockHeading } from "./block-heading";
+import { HeroStats } from "./hero-stats";
 
-/** A row of large figures on ink. */
+/** A row of large figures on ink (hero-stats design, dark variant). */
 export function Stats({ content }: { content: StatsContent }) {
   const headingId = `${content.id}-title`;
   return (
@@ -18,18 +19,8 @@ export function Stats({ content }: { content: StatsContent }) {
           tone="dark"
           align="center"
         />
-        <dl className="reveal mt-12 grid gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
-          {content.stats.map((stat) => (
-            <div key={stat.label} className="bg-ink px-7 py-8">
-              <dd className="w-fit bg-brand-gradient bg-clip-text text-4xl font-semibold tracking-tight text-transparent">
-                {stat.value}
-              </dd>
-              <dt className="mt-2 text-[15px] leading-6 text-zinc-300">
-                {stat.label}
-              </dt>
-            </div>
-          ))}
-        </dl>
+        {/* Same design as the inner-page hero stats, dark variant. */}
+        <HeroStats stats={content.stats} tone="dark" className="mt-14" />
         {content.footnote ? (
           <p className="mt-6 text-center text-[13px] text-zinc-500">
             {content.footnote}
