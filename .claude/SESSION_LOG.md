@@ -902,3 +902,20 @@
 - `src/app/favicon.ico` regenerated from that SVG: rendered in headless Edge at 256px on a transparent background, then Pillow-packed at 16/32/48/256.
 - Verified: biome clean; build lists `/icon.svg`; home and /services `<head>` carry `rel="icon"` links for `/favicon.ico` (256x256) and `/icon.svg` (sizes any) with content hashes; both serve 200 (`image/x-icon` 19,270 B, `image/svg+xml` 880 B). Preview at 16/32/48/256 reviewed: legible at 16px, transparent corners.
 - Not committed.
+
+## 2026-09-29 — Pushed to main
+- Before: local = origin/main at `437e698` (0/0); the earlier work was already committed upstream. Uncommitted were only the favicon (`favicon.ico` modified, `icon.svg` new) and this log.
+- Gate: `bun run lint` (biome check, 136 files) clean; `tsc --noEmit` exit 0; `next build` OK.
+- Committed `f910872` "Replace default favicon with the Infrantic mark" and pushed `437e698..f910872` to origin/main. Tree clean and 0/0 with origin afterwards. (This entry is local; it will ride with the next commit.)
+
+## 2026-09-29 — Framer Motion page entry on every page
+- Dependency (user-requested): `bun add framer-motion` → 13.4.5 (+ motion-dom, motion-utils). `package-lock.json` synced with `npm install --package-lock-only`; nothing removed, but it also filled in 6 optional Tailwind wasm entries the old lock lacked.
+- `src/app/(marketing)/template.tsx` (client): `MotionConfig reducedMotion="user"` + `motion.div data-page-enter`, opacity 0→1 and y 14→0, 0.55s ease [0.22,1,0.36,1]. It remounts per navigation, so first load and client navigation both animate; the header and footer (layout) don't.
+- Root layout: a `<noscript>` style forces `[data-page-enter]` visible without JS. `globals.css`: under reduced motion, `[data-page-enter]{transform:none!important}` (scoped biome-ignore), so there's no movement even on the SSR first frame.
+- Verified:
+  - `bun run lint` clean (137 files); tsc exit 0; build OK, all routes static.
+  - CDP (`scratchpad/entry.mjs`), all 11 routes (home, services, products, 3 sectors, case-studies, challenges, about, careers, contact): one wrapper inside `<main>`, header outside, first frame `0|matrix(…,14)`, settled `1|none`, 0 overflow.
+  - Client nav home→/products replays (opacity 0→…→1).
+  - Reduced motion: fade only, no translate on any frame. JS disabled: opacity 1, transform none. Console: no errors or warnings.
+  - `sticky.mjs`: the FAQ heading holds at 112px and releases at its column's end (unchanged).
+  - `idle.mjs`: settled idle 9–12 ms/s (contact 0), 0 layouts: unchanged.

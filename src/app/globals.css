@@ -356,3 +356,13 @@
     }
   }
 }
+
+/* Page entry (marketing template.tsx): no movement at all for visitors who
+   prefer reduced motion, including the server-rendered first frame (Framer
+   only drops the transform once it hydrates). The fade still plays. */
+@media (prefers-reduced-motion: reduce) {
+  [data-page-enter] {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat Framer's inline transform style */
+    transform: none !important;
+  }
+}

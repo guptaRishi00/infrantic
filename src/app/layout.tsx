@@ -29,6 +29,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${brandSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col overflow-x-clip bg-white font-sans text-ink">
+        {/* The page entry animation (marketing template) starts at opacity 0;
+            without JavaScript it would never finish, so show pages as-is. */}
+        <noscript>
+          <style>
+            {"[data-page-enter]{opacity:1!important;transform:none!important}"}
+          </style>
+        </noscript>
         {children}
       </body>
     </html>
