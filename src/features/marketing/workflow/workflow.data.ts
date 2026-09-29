@@ -1,6 +1,6 @@
 import type { WorkflowContent } from "./workflow.types";
 
-const cta = { label: "Book a discovery call", href: "/contact" } as const;
+const cta = { label: "Book a call", href: "/contact" } as const;
 
 const workflowContent = {
   title: "How we work",

@@ -11,7 +11,7 @@ const hero = {
   title: "We simplify the machinery behind modern businesses",
   description:
     "Infrantic builds AI-powered automation, custom software, and connected business systems. One team, from the first conversation to the support that follows launch.",
-  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  primaryCta: { label: "Book a call", href: "/contact" },
   secondaryCta: { label: "Work with us", href: "/careers" },
   stats: [
     { value: "1", label: "Team from discovery to support" },

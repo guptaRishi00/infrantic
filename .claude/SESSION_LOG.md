@@ -919,3 +919,31 @@
   - Reduced motion: fade only, no translate on any frame. JS disabled: opacity 1, transform none. Console: no errors or warnings.
   - `sticky.mjs`: the FAQ heading holds at 112px and releases at its column's end (unchanged).
   - `idle.mjs`: settled idle 9–12 ms/s (contact 0), 0 layouts: unchanged.
+
+## 2026-09-29 — "Book a call" CTAs unified, links fixed, framer entry animations on every component
+- **CTAs:**
+  - every "Book a discovery call" label → "Book a call" (9 data files, including the FAQ prompt copy);
+  - all booking CTAs at ButtonLink `md` (home hero, How we work, mobile nav; SplitSection/FeatureGrid section CTAs `sm` → `md`);
+  - navbar at the new `lg` size (h-12, 16px);
+  - in-card buttons stay `sm`.
+- **Links:**
+  - 6 Problem-card "Learn more" `/#services` → the matching product anchors (shared-record, approval-flow, operations-dashboard ×2, system-connector, document-review);
+  - 4 What-we-build cards → `/services#systems-integrations|data-intelligence|ai-automation|custom-software`;
+  - "View all services" and "Explore our services" → `/services`.
+- **Animations:**
+  - new `shared/ui/entry-animations.tsx` mounted in `(marketing)/template.tsx`: section containers rise and fade in, and inner elements stagger in batches as they enter (framer `animate`, WAAPI, one-shot, inline styles cleared);
+  - skips CSS-animated subtrees and closed `<details>`; no-op under reduced motion; nothing hidden without JS;
+  - removed the `.reveal` class (11 components) and its CSS rule/keyframes, since CSS animations would override framer's inline styles.
+- **Bugs found and fixed:**
+  - collapsed FAQ answers stayed hidden (they can't intersect while closed) → skip `details:not([open])`;
+  - the footer copyright never revealed with a −8% bottom rootMargin → rootMargin 0.
+- **Verified:**
+  - biome clean; tsc 0; build OK.
+  - CDP `ctaanim.mjs` on all 11 routes:
+    - 0 elements left hidden after a full scroll;
+    - below-fold elements hidden before scroll → opacity 1 with no inline style after;
+    - 0 overflow; no console errors.
+  - "Book a call": navbar 48px/16px ×11, page 44px/15px ×22, mobile menu 44px.
+  - Links: 12 hash targets all exist; 13 internal paths all 200 except `/privacy` and `/terms` (pre-existing 404s, no legal pages).
+  - Reduced motion: 0 hidden. JS off: only the pre-existing RingComet spans at opacity 0. Idle 15 ms/s, 0 layouts.
+  - Reveal sequence screenshots (120/450/1400ms) show the stagger. The first capture was blank from my clip not adding scrollY, not the site.

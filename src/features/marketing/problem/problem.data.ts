@@ -17,7 +17,7 @@ const problemContent = {
         "Key information is spread across calls, messages, email, and spreadsheets.",
       impact:
         "Managers spend their time gathering updates instead of acting on them.",
-      href: "/#services",
+      href: "/products#shared-record",
     },
     {
       id: "approvals",
@@ -26,7 +26,7 @@ const problemContent = {
       symptom:
         "Requests sit idle when the owner, the context, or the next step isn't clear.",
       impact: "Work stalls, and it gets hard to see who is accountable.",
-      href: "/#services",
+      href: "/products#approval-flow",
     },
     {
       id: "reports",
@@ -35,7 +35,7 @@ const problemContent = {
       symptom: "Teams gather and format the same information again and again.",
       impact:
         "By the time a decision is made, the data is already out of date.",
-      href: "/#services",
+      href: "/products#operations-dashboard",
     },
     {
       id: "data",
@@ -44,7 +44,7 @@ const problemContent = {
       symptom: "Each department keeps its own version of the same status.",
       impact:
         "Teams spend their time reconciling data instead of moving work forward.",
-      href: "/#services",
+      href: "/products#system-connector",
     },
     {
       id: "risks",
@@ -53,7 +53,7 @@ const problemContent = {
       symptom:
         "Shortages, delays, and overdue tasks only show up once delivery is already hit.",
       impact: "The team is left making reactive decisions.",
-      href: "/#services",
+      href: "/products#operations-dashboard",
     },
     {
       id: "documents",
@@ -62,7 +62,7 @@ const problemContent = {
       symptom:
         "Senior staff check for the same issues across reports, PDFs, and scanned files.",
       impact: "Expert time goes into predictable first-pass checks.",
-      href: "/#services",
+      href: "/products#document-review",
     },
   ],
 } as const satisfies ProblemContent;

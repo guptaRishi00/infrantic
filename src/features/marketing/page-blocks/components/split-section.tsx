@@ -52,7 +52,6 @@ export function SplitSection({ content }: { content: SplitSectionContent }) {
             <ButtonLink
               href={content.cta.href}
               variant={dark ? "onDark" : "primary"}
-              size="sm"
               className="mt-8"
             >
               {content.cta.label}
@@ -62,7 +61,7 @@ export function SplitSection({ content }: { content: SplitSectionContent }) {
 
         <div
           className={cn(
-            "reveal rounded-2xl border p-2",
+            "rounded-2xl border p-2",
             dark
               ? "border-white/10 bg-white/[0.03]"
               : "border-zinc-200/80 bg-zinc-50/60",

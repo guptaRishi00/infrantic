@@ -40,7 +40,7 @@ export function Steps({ content }: { content: StepsContent }) {
           {content.steps.map((step) => (
             <li
               key={step.number}
-              className="reveal relative flex gap-6 pb-10 last:pb-0"
+              className="relative flex gap-6 pb-10 last:pb-0"
             >
               <span
                 className={cn(

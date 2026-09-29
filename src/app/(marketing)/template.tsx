@@ -2,6 +2,7 @@
 
 import { MotionConfig, motion } from "framer-motion";
 import type { ReactNode } from "react";
+import { EntryAnimations } from "@/shared/ui/entry-animations";
 
 /**
  * Page entry animation for every marketing route. A template (unlike the
@@ -30,6 +31,7 @@ export default function MarketingTemplate({
       >
         {children}
       </motion.div>
+      <EntryAnimations />
     </MotionConfig>
   );
 }

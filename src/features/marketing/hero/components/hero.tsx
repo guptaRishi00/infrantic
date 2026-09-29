@@ -27,14 +27,10 @@ export function Hero({ content }: { content: HeroContent }) {
           {content.subtitle}
         </p>
         <div className="mt-9 flex flex-wrap justify-center gap-3 motion-safe:animate-rise motion-safe:[animation-delay:240ms]">
-          <ButtonLink href={content.primaryCta.href} size="sm">
+          <ButtonLink href={content.primaryCta.href}>
             {content.primaryCta.label}
           </ButtonLink>
-          <ButtonLink
-            href={content.secondaryCta.href}
-            variant="secondary"
-            size="sm"
-          >
+          <ButtonLink href={content.secondaryCta.href} variant="secondary">
             {content.secondaryCta.label}
           </ButtonLink>
         </div>

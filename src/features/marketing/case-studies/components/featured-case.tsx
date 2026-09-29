@@ -68,7 +68,7 @@ export function FeaturedCase({ content }: { content: FeaturedCaseContent }) {
               const Icon = blockIcons[stage.icon];
               const last = index === content.stages.length - 1;
               return (
-                <li key={stage.id} className="reveal relative">
+                <li key={stage.id} className="relative">
                   <div className="flex h-full flex-col gap-3 rounded-xl border border-white/10 bg-ink p-4">
                     <span className="flex items-center justify-between">
                       <span className="font-mono text-[13px] text-brand-300">

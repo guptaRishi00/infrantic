@@ -11,7 +11,7 @@ const hero = {
   title: "Technology built around the way your business operates",
   description:
     "Five service lines, one team. We connect and automate the systems you already run, and build software only where a workflow genuinely needs it.",
-  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  primaryCta: { label: "Book a call", href: "/contact" },
   secondaryCta: { label: "See case studies", href: "/case-studies" },
   stats: [
     { value: "5", label: "Service lines, combined per project" },
@@ -317,8 +317,7 @@ const stack = {
 const faq = {
   eyebrow: "Questions",
   title: "About working with us",
-  description:
-    "Don't see yours here? Book a discovery call and ask us directly.",
+  description: "Don't see yours here? Book a call and ask us directly.",
   items: [
     {
       id: "q1",

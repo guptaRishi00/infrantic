@@ -46,7 +46,7 @@ function StepPanel({ step }: { step: WorkflowStep }) {
             <p className="max-w-xs text-[15px] leading-6 text-zinc-600">
               {step.description}
             </p>
-            <ButtonLink href={step.cta.href} size="sm" className="mt-5">
+            <ButtonLink href={step.cta.href} className="mt-5">
               {step.cta.label}
             </ButtonLink>
           </div>

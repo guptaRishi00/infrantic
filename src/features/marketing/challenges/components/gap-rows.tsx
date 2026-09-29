@@ -37,7 +37,7 @@ export function GapRows({ content }: { content: GapRowsContent }) {
               return (
                 <li
                   key={gap.id}
-                  className="reveal grid gap-5 px-7 py-7 lg:grid-cols-[4rem_1.1fr_1fr] lg:items-start lg:gap-8"
+                  className="grid gap-5 px-7 py-7 lg:grid-cols-[4rem_1.1fr_1fr] lg:items-start lg:gap-8"
                 >
                   <span className="grid size-10 place-items-center rounded-xl border border-zinc-200 bg-zinc-50">
                     <Icon aria-hidden="true" className="size-5 text-zinc-800" />

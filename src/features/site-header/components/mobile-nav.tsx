@@ -77,7 +77,6 @@ export function MobileNav({ items, actions }: MobileNavProps) {
               key={action.href}
               href={action.href}
               onClick={close}
-              size="sm"
               variant={index === actions.length - 1 ? "primary" : "muted"}
             >
               {action.label}

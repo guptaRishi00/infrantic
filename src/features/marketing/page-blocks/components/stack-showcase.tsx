@@ -29,7 +29,7 @@ export function StackShowcase({ content }: { content: StackShowcaseContent }) {
         />
         <div
           className={cn(
-            "reveal mt-12 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 lg:grid-cols-4",
+            "mt-12 grid gap-px overflow-hidden rounded-2xl border sm:grid-cols-2 lg:grid-cols-4",
             dark
               ? "border-white/10 bg-white/10"
               : "border-zinc-200/80 bg-zinc-200/80",

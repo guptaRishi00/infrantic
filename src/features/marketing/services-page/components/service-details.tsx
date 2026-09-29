@@ -39,7 +39,7 @@ export function ServiceDetails({
             <li
               key={service.id}
               id={service.id}
-              className="reveal group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
+              className="group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
             >
               <div>
                 <p className="font-mono text-[13px] text-brand-700">

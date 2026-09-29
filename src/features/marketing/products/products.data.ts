@@ -38,7 +38,7 @@ const hero = {
   title: "Proven systems, ready to fit your workflow",
   description:
     "Six packaged starting points built from the work we do most often. Each one is adapted to your rules, roles, and tools, not the other way round.",
-  primaryCta: { label: "Book a discovery call", href: "/contact" },
+  primaryCta: { label: "Book a call", href: "/contact" },
   secondaryCta: { label: "See case studies", href: "/case-studies" },
   stats: [
     { value: "6", label: "Products, each adapted to you" },
@@ -230,8 +230,7 @@ const howItWorks = {
 const faq = {
   eyebrow: "Questions",
   title: "About the products",
-  description:
-    "Don't see yours here? Book a discovery call and ask us directly.",
+  description: "Don't see yours here? Book a call and ask us directly.",
   items: [
     {
       id: "q1",

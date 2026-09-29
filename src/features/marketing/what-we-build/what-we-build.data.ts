@@ -14,7 +14,7 @@ const whatWeBuildContent = {
       description:
         "Connect the repeated steps between your tools, without losing control of the process.",
       icon: "workflow",
-      href: "/#services",
+      href: "/services#systems-integrations",
     },
     {
       id: "operations-dashboards",
@@ -22,7 +22,7 @@ const whatWeBuildContent = {
       description:
         "One place for teams to update work, act on it, and see what needs attention.",
       icon: "dashboard",
-      href: "/#services",
+      href: "/services#data-intelligence",
     },
     {
       id: "ai-workflows",
@@ -30,7 +30,7 @@ const whatWeBuildContent = {
       description:
         "AI as a controlled assistant for documents, emails, and other unstructured information.",
       icon: "ai",
-      href: "/#services",
+      href: "/services#ai-automation",
     },
     {
       id: "custom-software",
@@ -38,10 +38,10 @@ const whatWeBuildContent = {
       description:
         "Focused applications when a workflow needs one, maintained as the business grows.",
       icon: "software",
-      href: "/#services",
+      href: "/services#custom-software",
     },
   ],
-  allServices: { label: "View all services", href: "/#services" },
+  allServices: { label: "View all services", href: "/services" },
 } as const satisfies WhatWeBuildContent;
 
 export function getWhatWeBuildContent(): WhatWeBuildContent {

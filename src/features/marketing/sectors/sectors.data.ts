@@ -17,7 +17,7 @@ export type SectorContent = {
 
 const productsCta = { label: "See our products", href: "/products" } as const;
 const contactCta = {
-  label: "Book a discovery call",
+  label: "Book a call",
   href: "/contact",
 } as const;
 
@@ -160,8 +160,7 @@ const healthcare = {
   faq: {
     eyebrow: "Questions",
     title: "Healthcare, specifically",
-    description:
-      "Don't see yours here? Book a discovery call and ask us directly.",
+    description: "Don't see yours here? Book a call and ask us directly.",
     items: [
       {
         id: "q1",
@@ -330,8 +329,7 @@ const techProducts = {
   faq: {
     eyebrow: "Questions",
     title: "For product companies",
-    description:
-      "Don't see yours here? Book a discovery call and ask us directly.",
+    description: "Don't see yours here? Book a call and ask us directly.",
     items: [
       {
         id: "q1",
@@ -500,8 +498,7 @@ const marketing = {
   faq: {
     eyebrow: "Questions",
     title: "For marketing teams",
-    description:
-      "Don't see yours here? Book a discovery call and ask us directly.",
+    description: "Don't see yours here? Book a call and ask us directly.",
     items: [
       {
         id: "q1",

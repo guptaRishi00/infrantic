@@ -26,7 +26,7 @@ export function CaseList({ content }: { content: CaseListContent }) {
             <li key={study.id}>
               <article
                 aria-labelledby={`${study.id}-title`}
-                className="reveal grid overflow-hidden rounded-2xl border border-zinc-200/80 lg:grid-cols-[22rem_1fr]"
+                className="grid overflow-hidden rounded-2xl border border-zinc-200/80 lg:grid-cols-[22rem_1fr]"
               >
                 <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/70 p-7 lg:border-r lg:border-b-0">
                   <div className="flex items-center gap-3">

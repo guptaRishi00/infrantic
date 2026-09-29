@@ -3,8 +3,7 @@ import type { FaqContent } from "./faq.types";
 const faqContent = {
   eyebrow: "FAQ",
   title: "Questions we hear often",
-  description:
-    "Don't see yours here? Book a discovery call and ask us directly.",
+  description: "Don't see yours here? Book a call and ask us directly.",
   items: [
     {
       id: "who",

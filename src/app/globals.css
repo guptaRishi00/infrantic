@@ -310,17 +310,11 @@
   );
 }
 
-/* Scroll-driven reveals for inner pages: cards rise in as they enter the
+/* Scroll-driven accents for inner pages (element entry animations are framer,
+   see shared/ui/entry-animations.tsx): step timelines fill as they enter the
    viewport and step timelines fill as you read. Driven by the scroll timeline
    (no JS, compositor-only opacity/transform). Browsers without scroll timelines,
    and reduced-motion users, simply see everything in place. */
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(28px);
-  }
-}
-
 @keyframes grow-y {
   from {
     transform: scaleY(0);
@@ -335,12 +329,6 @@
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .reveal {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 55%;
-    }
-
     .reveal-grow-y {
       transform-origin: top;
       animation: grow-y linear both;

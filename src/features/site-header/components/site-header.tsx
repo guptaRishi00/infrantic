@@ -50,7 +50,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <ButtonLink href={headerActions.primary.href} size="sm">
+          <ButtonLink href={headerActions.primary.href} size="lg">
             {headerActions.primary.label}
           </ButtonLink>
         </div>

@@ -33,6 +33,8 @@ const stretchedClass = "after:absolute after:inset-0 after:content-['']";
 const sizes = {
   sm: "h-9 px-3.5 text-sm",
   md: "h-11 px-4.5 text-[15px]",
+  // The navbar's "Book a call": one step larger than every other CTA.
+  lg: "h-12 px-6 text-base",
 } as const;
 
 type ButtonLinkProps = ComponentProps<typeof Link> & {

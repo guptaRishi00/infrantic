@@ -12,8 +12,8 @@ const ctaContent = {
     "We build the software",
     "We connect everything",
   ],
-  primaryCta: { label: "Book a discovery call", href: "/contact" },
-  secondaryCta: { label: "Explore our services", href: "/#services" },
+  primaryCta: { label: "Book a call", href: "/contact" },
+  secondaryCta: { label: "Explore our services", href: "/services" },
 } as const satisfies CtaContent;
 
 export function getCtaContent(): CtaContent {

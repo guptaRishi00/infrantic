@@ -51,7 +51,7 @@ export function OpenRoles({
           {roles.map((role) => (
             <li
               key={role.id}
-              className="reveal overflow-hidden first:rounded-t-[15px] last:rounded-b-[15px]"
+              className="overflow-hidden first:rounded-t-[15px] last:rounded-b-[15px]"
             >
               <Link
                 href={introduceCta.href}

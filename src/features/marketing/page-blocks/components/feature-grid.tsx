@@ -30,7 +30,6 @@ export function FeatureGrid({ content }: { content: FeatureGridContent }) {
             <ButtonLink
               href={content.cta.href}
               variant={dark ? "onDark" : "secondary"}
-              size="sm"
               className="self-start lg:self-auto"
             >
               {content.cta.label}
@@ -52,7 +51,7 @@ export function FeatureGrid({ content }: { content: FeatureGridContent }) {
               <li
                 key={item.id}
                 className={cn(
-                  "reveal flex flex-col rounded-2xl border p-7 transition-transform duration-300 hover:-translate-y-1",
+                  "flex flex-col rounded-2xl border p-7 transition-transform duration-300 hover:-translate-y-1",
                   dark
                     ? "border-white/10 bg-white/[0.03]"
                     : "border-zinc-200/80 bg-white",

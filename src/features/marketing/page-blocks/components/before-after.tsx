@@ -20,7 +20,7 @@ export function BeforeAfter({ content }: { content: BeforeAfterContent }) {
           align="center"
         />
         <div className="mt-12 grid gap-4 lg:grid-cols-2">
-          <div className="reveal rounded-2xl border border-zinc-200/80 bg-zinc-50/60 p-7">
+          <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/60 p-7">
             <p className="font-mono text-xs tracking-wide text-zinc-500 uppercase">
               {content.before.label}
             </p>
@@ -38,7 +38,7 @@ export function BeforeAfter({ content }: { content: BeforeAfterContent }) {
               ))}
             </ul>
           </div>
-          <div className="reveal rounded-2xl border border-brand-200 bg-white p-7 shadow-[0_0_0_4px_rgb(7_150_254/0.06)]">
+          <div className="rounded-2xl border border-brand-200 bg-white p-7 shadow-[0_0_0_4px_rgb(7_150_254/0.06)]">
             <p className="font-mono text-xs tracking-wide text-brand-700 uppercase">
               {content.after.label}
             </p>
