@@ -13,7 +13,7 @@ export function GapRows({ content }: { content: GapRowsContent }) {
     <section
       id="gaps"
       aria-labelledby="gaps-title"
-      className="scroll-mt-24 bg-zinc-50/70 px-4 py-16 sm:py-28"
+      className="scroll-mt-24 bg-white px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
         <BlockHeading

@@ -1146,3 +1146,22 @@
 ## 2026-09-30 — Glow cursor removed
 - User: remove the effect. Deleted `src/shared/ui/glow-cursor.tsx`, removed `BrandGlow` from the home hero, Our technology, `PageHero` and `CtaBand`, dropped the `isolate` classes added only for it (integrations, PageHero), and removed the `ogl` dependency (package.json, bun.lock, package-lock.json). The map entry was removed. Kept: full-screen inner heroes and the footer "Made with ❤️" edit.
 - Verified: `git diff 3e3dbf5` (pre-glow) over src + package files differs only in the PageHero full-screen change and the footer line. Lint clean; tsc 0; build OK. 0 `<canvas>` in prerendered HTML and 0 shader strings in `.next/static`.
+
+## 2026-09-30 — Steps block: balanced left/right gutters
+- User wanted the Steps section (heading + numbered list) to sit so its left and right space look equal, content left-aligned. A first attempt that centred the heading and list (from a clarifying question) reached the file before the user rejected it; it was reverted with `git checkout` before the real fix.
+- Cause (measured on text line boxes and chips): `lg:grid-cols-[1fr_1.5fr]` made the list column wider than the list (text capped at `max-w-xl`), so the right gutter was 84–123px larger than the left at ≥1280px.
+- Fix (`page-blocks/components/steps.tsx`): `lg:grid-cols-[minmax(0,1fr)_auto]` and the `ol` gets `lg:max-w-[40rem]` (circle + gap + 36rem text), so the list column is exactly the list and ends at the container edge. All 4 Steps pages (/case-studies, /products, /challenges, /careers).
+- Verified: lint clean; tsc 0; build OK. Gutter difference (right − left) before → after: 1887px 103–123 → 4–24; 1440 same; 1280 84–104 → 4–24; 1024 0–10 → 4–24. The remainder is ragged-right paragraph wrap. Screenshot of /case-studies "How these systems came together" at 1887 reviewed.
+- Not committed.
+
+## 2026-09-30 — SplitSection (reversed): balanced gutters
+- User: the /about "The team" section (reversed SplitSection, panel left, copy right) should look equally spaced left and right, content left-aligned.
+- Measured with text line boxes plus the panel/button edges: in the default order ("story") the panel fills its column to the edge, 0px difference. Reversed ("team"), the copy stops short of its 50% column, so the right gutter was 97px larger (81 at 1280, 32 at 1024).
+- Fix (`split-section.tsx`, reversed only): `lg:grid-cols-[minmax(0,1fr)_auto]` and the copy column `lg:max-w-lg`. A first try capped it at 40rem, which made it worse (129px), because the 24ch title box sets max-content while its balanced lines are much narrower; the description's 32rem measure is the real ink width.
+- Verified: lint clean; tsc 0; build OK. Gutter difference: team 97 / 97 / 81 / 32 → 1 / 1 / 1 / 1 at 1887 / 1440 / 1280 / 1024; story unchanged at 0. Screenshot at 1887 reviewed (the panel is wider, so most rows fit on one line).
+- Not committed.
+
+## 2026-09-30 — /products catalogue and /challenges gaps: white background
+- User: remove the grey band after the hero stats. `product-catalog.tsx` and `challenges/components/gap-rows.tsx` section `bg-zinc-50/70` → `bg-white`. Inner grey icon tiles and the gap-table header strip are unchanged (literal scope).
+- Verified: lint clean; tsc 0; build OK. CDP: #catalogue and #gaps compute `rgb(255, 255, 255)`; /challenges screenshot shows the stats → section flow with no grey band.
+- Committed and pushed together with the Steps and SplitSection gutter fixes.

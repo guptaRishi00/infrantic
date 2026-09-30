@@ -4,7 +4,12 @@ import { ButtonLink } from "@/shared/ui/button-link";
 import type { SplitSectionContent } from "../page-blocks.types";
 import { BlockHeading } from "./block-heading";
 
-/** Copy with check-points on one side, a labelled facts panel on the other. */
+/**
+ * Copy with check-points on one side, a labelled facts panel on the other.
+ * Reversed (panel first), the copy column is sized to the copy (`auto`) so it
+ * ends at the container edge like the panel does on the left, and the two
+ * gutters match visually; the default order is already balanced.
+ */
 export function SplitSection({ content }: { content: SplitSectionContent }) {
   const dark = content.tone === "dark";
   const headingId = `${content.id}-title`;
@@ -17,8 +22,15 @@ export function SplitSection({ content }: { content: SplitSectionContent }) {
         dark ? "bg-ink" : "bg-white",
       )}
     >
-      <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-        <div className={cn(content.reverse && "lg:order-2")}>
+      <div
+        className={cn(
+          "mx-auto grid max-w-[80rem] gap-12 lg:items-center lg:gap-16",
+          content.reverse
+            ? "lg:grid-cols-[minmax(0,1fr)_auto]"
+            : "lg:grid-cols-2",
+        )}
+      >
+        <div className={cn(content.reverse && "lg:order-2 lg:max-w-lg")}>
           <BlockHeading
             id={headingId}
             eyebrow={content.eyebrow}

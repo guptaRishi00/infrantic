@@ -2,7 +2,11 @@ import { cn } from "@/shared/lib/cn";
 import type { StepsContent } from "../page-blocks.types";
 import { BlockHeading } from "./block-heading";
 
-/** Numbered steps down a connecting line, with what each one produces. */
+/**
+ * Numbered steps down a connecting line, with what each one produces. From lg
+ * the list column is sized to the list itself (`auto`), so it ends at the
+ * container edge and the section's left and right gutters match visually.
+ */
 export function Steps({ content }: { content: StepsContent }) {
   const dark = content.tone === "dark";
   const headingId = `${content.id}-title`;
@@ -15,7 +19,7 @@ export function Steps({ content }: { content: StepsContent }) {
         dark ? "bg-ink" : "bg-white",
       )}
     >
-      <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
+      <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
         <BlockHeading
           id={headingId}
           eyebrow={content.eyebrow}
@@ -24,7 +28,7 @@ export function Steps({ content }: { content: StepsContent }) {
           tone={content.tone}
           className="lg:sticky lg:top-28"
         />
-        <ol className="relative">
+        <ol className="relative lg:max-w-[40rem]">
           <span
             aria-hidden="true"
             className={cn(
