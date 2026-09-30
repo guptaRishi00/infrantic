@@ -50,7 +50,7 @@ export type ContactFormContent = {
 };
 
 const intro = {
-  eyebrow: "Contact",
+  eyebrow: "Rough notes are fine",
   title: "Tell us where the work gets stuck",
   description:
     "Describe the workflow that takes too much chasing, checking, or re-typing. Rough notes are fine: we will ask the right questions on the call.",

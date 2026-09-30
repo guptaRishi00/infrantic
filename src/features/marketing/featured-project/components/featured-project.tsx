@@ -48,7 +48,7 @@ export function FeaturedProject({
       className="scroll-mt-24 bg-white px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
-        <p className="text-[15px] font-medium text-brand-700">
+        <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
           {content.eyebrow}
         </p>
         <SectionHeading
@@ -64,10 +64,7 @@ export function FeaturedProject({
           <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/60">
             <dl className="divide-y divide-zinc-200/80 md:grid md:grid-cols-3 md:divide-x md:divide-y-0">
               {content.facts.map((fact) => (
-                <div key={fact.number} className="flex gap-4 p-6 sm:p-7">
-                  <span className="grid size-8 shrink-0 place-items-center rounded-full border border-zinc-300 bg-white font-mono text-xs text-zinc-600">
-                    {fact.number}
-                  </span>
+                <div key={fact.label} className="flex gap-4 p-6 sm:p-7">
                   <div>
                     <dt className="font-mono text-xs tracking-wide text-brand-700 uppercase">
                       {fact.label}

@@ -35,7 +35,7 @@ const workContent = {
       summary: "Repeated technical document checks",
       visual: "proofreader",
       visualLabel:
-        "Proofreading app: a new review panel with model, dictionary, and status, next to a drop zone for a technical PDF.",
+        "Proofreading app mid-review: a technical specification page with four highlighted passages, next to a findings list (mixed units, an unapproved term, a missing figure reference, a tolerance format) ranked by severity, awaiting the reviewer's sign-off.",
       problem:
         "Reviewers checked the same issues again and again across PDFs and scanned files.",
       built:
@@ -54,7 +54,7 @@ const workContent = {
       summary: "Executor, checker, and approver workflows",
       visual: "tasks",
       visualLabel:
-        "Task management app: a task list with priority, due date, review status, and the assigned checker for each task.",
+        "Task board with four columns, to do, in progress, in review, and approved; each task card shows the role that owns it (executor, checker, or approver), its due date, and overdue or rework flags.",
       problem:
         "No one clearly owned each step between the people doing, checking, and approving the work.",
       built:

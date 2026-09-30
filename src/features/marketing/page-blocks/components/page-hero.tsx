@@ -41,7 +41,7 @@ export function PageHero({
             </p>
             <h1
               id="page-title"
-              className="mt-6 max-w-[16ch] text-[2.5rem] leading-[1.02] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-[3.25rem] lg:text-[3.75rem]"
+              className="mt-6 max-w-[16ch] text-[2.5rem] leading-[1.02] font-medium tracking-[-0.03em] text-balance text-ink sm:text-[3.25rem] lg:text-[3.75rem]"
             >
               {content.title}
             </h1>

@@ -27,7 +27,7 @@ export function ProductCatalog({
           description={content.description}
         />
         <ul className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {content.products.map((product, index) => {
+          {content.products.map((product) => {
             const Icon = blockIcons[product.icon];
             return (
               <li
@@ -39,11 +39,8 @@ export function ProductCatalog({
                   <span className="grid size-11 place-items-center rounded-xl border border-zinc-200 bg-zinc-50">
                     <Icon aria-hidden="true" className="size-5 text-zinc-800" />
                   </span>
-                  <span className="font-mono text-xs text-zinc-400">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
                 </div>
-                <h3 className="mt-5 text-xl font-semibold tracking-tight text-ink">
+                <h3 className="mt-5 text-xl font-medium tracking-tight text-ink">
                   {product.name}
                 </h3>
                 <p className="mt-2 text-[15px] leading-6 text-zinc-600">

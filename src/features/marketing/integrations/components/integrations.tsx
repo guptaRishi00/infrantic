@@ -1,25 +1,9 @@
-import {
-  BrainCircuit,
-  CodeXml,
-  type LucideIcon,
-  Plug,
-  Server,
-  Workflow,
-} from "lucide-react";
 import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
 import { BrandMark } from "@/shared/ui/brand-mark";
 import { IntegrationLogo } from "@/shared/ui/integration-logo";
 import { SectionHeading } from "@/shared/ui/section-heading";
-import type { IntegrationsContent, TechStackIcon } from "../integrations.types";
-
-const stackIcons: Record<TechStackIcon, LucideIcon> = {
-  ai: BrainCircuit,
-  automation: Workflow,
-  software: CodeXml,
-  infrastructure: Server,
-  integrations: Plug,
-};
+import type { IntegrationsContent } from "../integrations.types";
 
 // Orbit rings as % of the square diagram, and how long each takes to turn
 // once (alternating direction).
@@ -38,7 +22,7 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
     >
       <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col items-center text-center">
-          <p className="text-[15px] font-medium text-brand-700">
+          <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
             {content.eyebrow}
           </p>
           <SectionHeading
@@ -123,49 +107,40 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
           <span className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,#fff_10%,rgb(255_255_255/0))]" />
         </div>
 
-        <dl className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {content.stack.map((group) => {
-            const Icon = stackIcons[group.icon];
-            return (
-              <div
-                key={group.category}
-                className="group relative flex flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-zinc-50/50 p-6 shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-blue-300/60 hover:shadow-[0_12px_40px_rgb(59,130,246,0.15)]"
-              >
-                <div className="absolute -right-20 -top-20 size-40 rounded-full bg-blue-500/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100" />
-
-                <dt className="relative flex items-center gap-3 text-[16px] font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950">
-                  <span className="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-white to-zinc-100 text-zinc-600 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-500 group-hover:scale-110 group-hover:from-blue-500 group-hover:to-blue-600 group-hover:text-white group-hover:shadow-[0_4px_20px_rgba(59,130,246,0.3)] group-hover:ring-blue-600">
-                    <Icon
-                      aria-hidden="true"
-                      className="size-5"
-                      strokeWidth={2.5}
-                    />
-                  </span>
-                  {group.category}
-                </dt>
-                <dd className="relative mt-6 flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-lg border border-zinc-200/60 bg-white/80 px-2.5 py-1.5 text-[13px] font-medium text-zinc-600 shadow-sm backdrop-blur-sm transition-all duration-500 group-hover:border-blue-200/80 group-hover:bg-blue-50 group-hover:text-blue-700"
-                    >
-                      {item}
+        {/* Stack grid: one bordered panel split by hairlines, a column per
+            category, each tool with its logo in a small tile (a dot when
+            there is no brand logo). */}
+        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-200/80 sm:grid-cols-2 lg:grid-cols-4">
+          {content.stack.map((group) => (
+            <div key={group.category} className="bg-white p-6 sm:p-7">
+              <h3 className="font-mono text-xs tracking-wide text-brand-700 uppercase">
+                {group.category}
+              </h3>
+              <ul className="mt-5 space-y-2.5">
+                {group.items.map((item) => (
+                  <li
+                    key={item.name}
+                    className="flex items-center gap-3 text-[15px] text-zinc-700"
+                  >
+                    <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white ring-1 ring-zinc-200">
+                      {item.logo ? (
+                        <IntegrationLogo
+                          id={item.logo}
+                          className="block size-4 [&>svg]:size-full"
+                        />
+                      ) : (
+                        <span
+                          aria-hidden="true"
+                          className="size-1.5 rounded-full bg-brand-gradient"
+                        />
+                      )}
                     </span>
-                  ))}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
-
-        <div className="mx-auto mt-16 max-w-3xl">
-          <div className="relative overflow-hidden rounded-3xl border border-blue-200/50 bg-gradient-to-br from-blue-50 via-white to-blue-50/30 p-8 text-center shadow-sm">
-            <div className="absolute -left-10 -top-10 size-40 rounded-full bg-blue-400/20 blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 size-40 rounded-full bg-indigo-400/20 blur-3xl" />
-            <p className="relative inline-flex flex-col items-center justify-center gap-3 text-lg font-medium text-blue-950 sm:flex-row sm:text-xl">
-              {content.footnote}
-            </p>
-          </div>
+                    {item.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -29,7 +29,7 @@ export function ContactPage() {
             </p>
             <h1
               id="page-title"
-              className="mt-6 max-w-[16ch] text-[2.5rem] leading-[1.02] font-semibold tracking-[-0.035em] text-balance text-ink sm:text-[3.25rem] lg:text-[3.75rem]"
+              className="mt-6 max-w-[16ch] text-[2.5rem] leading-[1.02] font-medium tracking-[-0.03em] text-balance text-ink sm:text-[3.25rem] lg:text-[3.75rem]"
             >
               {intro.title}
             </h1>
@@ -38,13 +38,13 @@ export function ContactPage() {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 shadow-[0_24px_60px_-40px_rgb(2_28_55/0.45)] sm:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
+          <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 sm:p-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-start">
             <ContactForm content={form} />
           </div>
 
           <div className="grid gap-10">
             <div>
-              <h2 className="text-sm font-medium text-brand-700">
+              <h2 className="font-mono text-[13px] tracking-[0.08em] text-brand-700 uppercase">
                 {intro.nextTitle}
               </h2>
               <ol className="relative mt-5 grid gap-6">
@@ -71,7 +71,7 @@ export function ContactPage() {
             </div>
 
             <div>
-              <h2 className="text-sm font-medium text-brand-700">
+              <h2 className="font-mono text-[13px] tracking-[0.08em] text-brand-700 uppercase">
                 {intro.detailsTitle}
               </h2>
               <ul className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-2">

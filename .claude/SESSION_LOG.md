@@ -947,3 +947,155 @@
   - Links: 12 hash targets all exist; 13 internal paths all 200 except `/privacy` and `/terms` (pre-existing 404s, no legal pages).
   - Reduced motion: 0 hidden. JS off: only the pre-existing RingComet spans at opacity 0. Idle 15 ms/s, 0 layouts.
   - Reveal sequence screenshots (120/450/1400ms) show the stagger. The first capture was blank from my clip not adding scrollY, not the site.
+
+## 2026-09-30 — Navbar "Book a call" reduced
+- `site-header.tsx`: the navbar CTA `size="lg"` → default `md` (48px/16px → 44px/15px, the same as every other Book a call). The now-unused `lg` size was removed from `shared/ui/button-link.tsx`; the other `size="lg"` props in the repo are SectionHeading sizes, not buttons.
+- Verified: lint (138 files) clean; tsc 0; build OK. CDP at 1024/1280/1500: CTA 113×44px, 15px; bar still 72px; nav one row. Screenshot reviewed.
+- Not committed (the user didn't ask this time).
+
+## 2026-09-30 — Navbar "Book a call" reduced again
+- The user found 44px still too big for the navbar. `site-header.tsx`: navbar CTA → `size="sm"` (36px tall, 14px text, the original navbar size). Page-level Book a call CTAs stay `md` (44px).
+- Verified: lint clean; tsc 0; build OK. CDP at 1024/1280/1500: CTA 100×36px, 14px; bar 72px; nav one row. Screenshot reviewed.
+- Not committed.
+
+## 2026-09-30 — Button labels trimmed to three words max
+- The user wants every button label to be 2–3 words ("Book a call" and "Learn more" were already fine). Eight labels were over 3 words:
+  - "See the products that fix these" → "View products"
+  - "Talk through your workflow" → "Discuss your workflow"
+  - "Discuss a similar project" ×2 → "Start a project"
+  - "Talk about your outcomes" → "Discuss outcomes"
+  - "See how we work" → "How we work"
+  - "Discuss where to start" → "Get started"
+  - "See what we build" → "See our work"
+  - Links are unchanged.
+- Verified:
+  - lint clean; tsc 0; build OK.
+  - CDP scan of every visible button-styled link and `<button>` (excluding tabs, the nav and the menu toggle) on all 11 pages: 19 distinct labels, none over 3 words. The first scan run garbled labels (a `\s` regex lost its backslash in the heredoc); rerun with a backslash-free split.
+- Not committed.
+
+## 2026-09-30 — Home hero: GSAP intro + parallax, Framer card spring
+- Dependency (user asked for GSAP): `bun add gsap` → 3.15.0; package-lock synced (+7 lines). No `@gsap/react`: a scoped `gsap.matchMedia()` in `useLayoutEffect` with `mm.revert()` cleanup instead.
+- `hero/components/hero-motion.tsx`: a GSAP timeline (eyebrow → headline word-by-word clip reveal, `expo.out`, 0.06 stagger → subtitle → CTAs, with clearProps after), plus a pointer parallax on the orbit badge list (`quickTo` x/y), under `(pointer: fine) and (prefers-reduced-motion: no-preference)`.
+- `hero/components/hero-cards.tsx`: Framer Motion spring entrance (y 36, scale .96 → 1, delay .75s) + hover lift for the activity stack.
+- `hero.tsx`: headline rendered as line/word spans (`HeadlineWords`) with a real space between lines; `data-hero`/`data-entry-skip`/`data-hero-*` hooks; the CSS `animate-rise` on eyebrow/h1/subtitle/CTA/cards removed (replaced).
+- `orbit-backdrop.tsx`: `data-orbit-badges` on the badge list.
+- `entry-animations.tsx`: skips sections with `data-entry-skip`.
+- Verified (`scratchpad/heromotion.mjs` on `next start`):
+  - intro frames go from words offset/cta 0/cards 0 to settled `none`/1/1; headline 2 lines, 0 clipped descenders; h1 text "Business is complex. Your systems shouldn't be." (the first run read "complex.Your"; fixed).
+  - Parallax −10/−1px at the top-left and +10/+5px at the bottom-right, back to 0 on leave. The first run showed "none" because my pointer points were over the fixed header or below the viewport, not a code bug.
+  - Reduced motion: no word translate, no parallax. JS off: all visible. No console errors. Idle after intro 39–49 ms/s, 0 layouts (home baseline was ~110). Settled screenshot identical to before.
+- lint clean; tsc 0; build OK. Not committed.
+
+## 2026-09-30 — Selected work: index numbers removed, two mock dashboards redesigned
+- Removed the 01/02/03 index from the case tab cards (`work-tabs.tsx`; the spacing that only separated it from the title went too) and the badge in the case panel (`work.tsx`). The unused `number` was dropped from the tab type and mapping; the case data keeps it.
+- `app-mocks.tsx` (Frame/Chip/ToolbarButton kept; still stretch-to-fill):
+  - **ProofreaderMock:** an active review. A spec page ("4.2 Flange assembly") with numbered amber highlights matching a findings list: Mixed units (high), Unapproved term (medium), Missing reference (medium), Tolerance format (low), with page refs, "4 flagged · 18 passed", a reviewer progress bar "Awaiting sign-off", and a Sign off button.
+  - **TaskBoardMock:** a Kanban with 4 columns × 2 cards; each card has a TSK id, title, role chip (Executor/Checker/Approver), due date, owner initials, and Overdue/Rework flags; Board/List/Timeline views and a "2 overdue" counter in the header.
+  - Both `visualLabel`s in `work.data.ts` were rewritten to match.
+- Verified:
+  - lint clean; tsc 0; build OK.
+  - Settled measurement at 1500/1024/375: tabs 16px above the panel, no tab starts with a number, and no number badge beside the case headings. (A first reading of "tabs not above" was the entry reveal still offsetting the tablist 18px; the "02"/"03" text hits were the new due dates.)
+  - `worktabs.mjs`: keys, equal heights, 0 overflow, 0 label clashes. `panels.mjs`: 33/21px under the notes on all cases.
+  - Screenshots of both dashboards at 1500 and the board at 375 reviewed. Due dates wrapped on phones; fixed with `whitespace-nowrap`. The old screenshot script predated the entry animations, so a new one scrolls first.
+- Not committed.
+
+## 2026-09-30 — Home Technology cards restyled to the stack-grid look
+- Per the user's screenshot, the home Technology section's 5 chip cards (hover gradients, group icons) became one bordered panel split by hairlines: `grid gap-px` over `bg-zinc-200/80`, `sm:grid-cols-2 lg:grid-cols-4`, mono uppercase brand-700 labels, rows of a `size-8` ringed logo tile + name (a brand dot when there's no logo). Same markup pattern as the page-blocks StackShowcase, light variant.
+- Data: 4 groups from the screenshot: Intelligence (OpenAI, Claude, Gemini, Agents and retrieval), Automation (n8n, Make, Zapier), Engineering (Next.js, Python, GitHub, Vercel), Data (Supabase, PostgreSQL, Google Sheets, Business APIs). Types are now `TechStackItem { name, logo? }`; `TechStackIcon`, the `stackIcons` map and 5 lucide imports removed. Orbit, heading and footnote untouched.
+- Verified: lint clean; tsc 0; build OK. CDP: 4/2/1 columns at 1500/768/375, 0 overflow; tools and dots as in the screenshot. Screenshot at 1500 matches.
+- Not committed.
+
+## 2026-09-30 — Technology footnote removed
+- Removed "Our technology choices are driven by the problem, not by a fixed stack." from the home Technology section: the whole callout box (gradient card with blurred blobs) in `integrations.tsx`, plus the `footnote` field in `integrations.data.ts` and `IntegrationsContent`.
+- Verified: lint (140 files) clean; tsc 0; build OK. The home HTML contains the line 0 times. The stack grid is now the section's last child, ending 112px above the section edge (the section's own `sm:pb-28`). Screenshot shows the grid → next section with no empty box.
+- Not committed.
+
+## 2026-09-30 — "Learn more" hover: light stripe on the left edge fixed
+- Cause (measured): the white onDark "Learn more" (home What we build) has `border border-transparent`; on hover `bg-brand-gradient` painted with the default `background-origin: padding-box` (clip border-box, repeat), so the 1px border strip showed the gradient's END colour rgb(7,161,253) before it started at rgb(4,126,253). That was the light, jagged line. The Problem-card "Learn more" has no border and was clean.
+- Fix: `background-origin: border-box` inside `@utility bg-brand-gradient` (globals.css), which covers every gradient-on-bordered-element case site-wide, including the `group-hover/card` variants.
+- Verified: lint clean; build OK. CDP at DPR 2 with a real hover, sampling the left-edge device pixels: before (7,161,253)×2 then (4,126,253); after (4,126,253) from the first pixel. Problem button unchanged. Enlarged before/after crop reviewed.
+- Not committed.
+
+## 2026-09-30 — Index numbers removed from cards (timelines keep theirs)
+- Removed the 01/02… index from item cards: home services marquee cards (`services.tsx`), /services service rows (`service-details.tsx`, heading `mt-3` dropped with it), /products cards (`product-catalog.tsx`, unused `index` param removed), /case-studies write-up cards (`case-list.tsx`, the sector chip stays), and the home featured-project facts (`featured-project.tsx`, number circles removed, key → `fact.label`).
+- Kept, as timelines / ordered step flows: `Steps` block, contact "What happens next", workflow "Step 01" pills, featured-case 6-stage flow, featured-project 6-step diagram, case-list "What we built" step circles.
+- The now-unused `number` fields in services / case-studies / featured-project data and types were left in place (minimal diff).
+- Verified: lint (140 files) clean; tsc 0; build OK. Prerendered HTML: `/services` and `/about` have 0 standalone `>0N<` nodes; every remaining hit is a Steps circle, the featured-case stage or the featured-project diagram (checked by class). Screenshots at 1440 of a home service card, the facts row, a /services row, a product card and a case card: none show a number and the layout is unchanged.
+- Not committed.
+
+## 2026-09-30 — Stat rows: numbers only, refined
+- Rule (user): the big-figure stat design (`HeroStats`, used by `PageHero` stats and the `Stats` block) shows numerals only, never words. Now enforced by the type: `Stat.value` is `` `${number}${string}` `` (a tsc probe with "Yours" fails with TS2322).
+- Word values replaced by honest figures, labels reworded to match:
+  - /products: Yours → **0** "Existing tools you have to replace".
+  - /services: Yours → **0** "Tools you have to replace".
+  - Healthcare: Yours → **0** "Existing systems you have to replace"; Human → **100%** "Clinical decisions signed off by a person".
+  - Tech product companies: Your stack → **0** "New platforms your team has to adopt"; Handover → **100%** "Documented so your team can own it".
+  - Marketing: Instant → **24/7** "Lead routing from form to owner"; Yours → **0** "Existing tools you have to replace".
+- Refinement (awesome-design-md, `stripe` spec: light display weights, negative tracking, `tnum` on numerics, restrained accent): figures 600 → 400, tracking -0.045em → -0.02em (-0.05 and -0.03 made the zeros in "100" touch), `lg:text-[4.25rem]`, a 32px brand-gradient hairline under each figure, and an invisible final-value sizer so the count-up doesn't shift width. Weight 300 was tried first and looked too thin next to the labels, so it was dropped.
+- Verified: lint (140 files) clean; tsc 0; build OK. CDP across all 10 stat rows (8 pages) at 1500 and 375: every value starts with a digit, the counted value equals the final value, weight 400, 68px / 48px, 0 horizontal overflow. Screenshots of /services, healthcare, marketing and About (dark) reviewed.
+- Not committed.
+
+## 2026-09-30 — Site-wide Cohere polish pass (awesome-design-md)
+- User chose the `cohere` spec and a **polish pass** (system level; layouts, content and animations untouched). Brand blue, gradient and ink kept (project identity wins over the spec).
+- Changes:
+  - Headings: 600 → 500 on `SectionHeading`, page-hero / contact / home-hero h1s, the CTA band h2, the FAQ summaries, and 14 card/panel headings. Display tracking eased to -0.03em / -0.035em to suit the lighter weight.
+  - Eyebrows: mono uppercase labels (`font-mono text-[13px] tracking-[0.08em] uppercase`) in `BlockHeading`, 7 home sections, and the 2 contact sub-labels.
+  - CTAs: `rounded-full` pills (ButtonLink, with sm px-4 / md px-5, plus the contact submit and reset buttons).
+  - Flat cards: Problem cards lost `shadow-sm`, the blue hover glow and the white→blue tint (hover lift and border kept); icon tile flattened; contact form card shadow removed.
+- Specialists: awesome-design-md (`cohere.md`); inline, no subagents.
+- Verified: lint clean; tsc 0; build OK. CDP across 9 pages at 1500 and 375: every CTA radius is a pill (one computed value), every h1/h2 is 500, section eyebrows are mono (only the intended hero/CTA pill chips are sans), 0 horizontal overflow. Screenshots reviewed: home hero, Problem, Selected work, /services hero, /products catalogue, /contact.
+- Not committed.
+
+## 2026-09-30 — Buttons: pills → Vercel 6px radius
+- User: buttons must not be `rounded-full`; use Vercel's button radius. Applied the Vercel spec's base `--geist-radius` 6px (`rounded-md`) to `ButtonLink` and the contact submit and reset buttons, and restored the pre-pill padding (sm px-3.5, md px-4.5; reset px-4.5). The awesome-design-md vercel.md lists 100px pills for marketing CTAs and 6px for in-app buttons; the user explicitly ruled out pills, so 6px it is.
+- Verified: lint clean; tsc 0; build OK. CDP on /, /services, /products, /about and /contact at 1500 and 375: every button's computed radius is `6px` (one value), 0 overflow. Screenshots of the home hero and /contact reviewed.
+- Not committed.
+
+## 2026-09-30 — "Discuss …" button labels reworded
+- User: replace the button labels containing "Discuss".
+  - /products cards: "Discuss this product" → **"Enquire now"**.
+  - /services rows: "Discuss this" → **"Enquire now"**.
+  - /case-studies CTA: "Discuss outcomes" → **"Enquire now"**. "Get in touch" was tried first but is already the footer column title.
+  - /challenges CTA: "Discuss your workflow" → **"Share your workflow"**.
+- Data-only change (4 `*.data.ts` files); the `discussLabel` prop name in service-details was left as is (minimal diff). The per-card buttons keep their name-bearing aria-labels ("Enquire now: AI Automation").
+- Verified: lint clean; tsc 0; build OK. Prerendered HTML of all 11 pages: 0 "Discuss…" button texts; "Enquire now" ×5 on /services, ×6 on /products (includes the page's other occurrences), ×1 on /case-studies; "Share your workflow" ×1 on /challenges.
+- Not committed.
+
+## 2026-09-30 — Hero stat symbols (+ / %)
+- User asked for symbols in the stats below the page heroes. After being asked, they chose "+ on the counts too" (accepting that "5+ service lines" overstates exact counts).
+- Changes (data only):
+  - Counts above 1 gained "+": /services 5+, /about 5+ and 3+, /case-studies 3+ and 6+, /challenges 6+, /products 6+.
+  - The "0 … to replace" stats were reworded as "100% … kept / stay in use" (services, challenges, products, healthcare, marketing).
+  - Tech product companies: "0 sprints" → "100% of your sprints stay on the product roadmap"; "0 new platforms" → "100% built on the tools you already run". The row now reads 100 / 100 / 100%.
+  - "1 …" stats stay plain ("1+ team" would contradict "one team"). The About "At a glance" dark row (not a hero) still shows "5 service lines", which the /services hero now shows as "5+".
+- Suffixes render through the existing HeroStats suffix path (brand-gradient text, count-up on the number).
+- Verified: lint clean; tsc 0; build OK. CDP on all 10 stat rows at 1500 and 375: shown values equal the finals (e.g. "6+ | 100% | 1"), 0 overflow. Screenshots of /products and the tech sector reviewed.
+- Not committed.
+
+## 2026-09-30 — Inner-page hero buttons: "Book a call" + "View products"
+- User chose "all inner pages". The hero second button is now "View products" → /products on /about (was "Work with us"), /case-studies ("See our products"), /services ("See case studies"), /careers ("See our work") and the 3 sector pages ("See our products"). /challenges already had it.
+- Exceptions (stated when asking): /products keeps "See case studies" (it can't link to itself); /careers keeps "Introduce yourself" as its primary. Home hero unchanged ("Book a call" + "How we work").
+- Sectors: added `heroProductsCta` for the 3 heroes; the shared `productsCta` ("See our products") still drives the "What we build" section buttons, which were not in scope.
+- Verified: lint clean; tsc 0; build OK. Built HTML: the first two links after each h1 read "Book a call → /contact | View products → /products" on all 8 inner pages in scope; /products and home as above; "See our products" still once on each sector page (section CTA). Data-only change inside the existing PageHero, so no layout re-check.
+- Not committed.
+
+## 2026-09-30 — Careers Open roles: "Send an introduction" button removed
+- Removed the `onDark` sm ButtonLink beside the Open roles heading (`careers/components/open-roles.tsx`) along with its flex wrapper and the ButtonLink import; the heading now stands alone. `introduceCta` stays: its `href` is still every role row's Apply target (documented on the prop). Its "Send an introduction" label in `careers.data.ts` is now unused but left in place (minimal diff). The hero's "Introduce yourself" is unaffected.
+- Verified: lint clean; tsc 0; build OK. Built /careers: "Send an introduction" appears 0 times; role rows still link to /contact with "Apply: <role>" aria-labels.
+- Not committed.
+
+## 2026-09-30 — Pointer cursor everywhere + footer credit
+- Cursor: Tailwind v4's preflight sets buttons to `cursor: default`. Added one `@layer base` rule in `globals.css` (enabled `button`, `[role=button]`, `[role=tab]`, `summary`, `select`, checkbox/radio labels → `pointer`). It covers the work and workflow tabs, the nav dropdown and mobile-menu toggles, and the contact submit and reset, and future buttons automatically. The pending submit keeps its `cursor-wait` utility (utilities beat base).
+- Footer: the bottom bar is now a flex row: "© {year} Infrantic. All rights reserved." left, "Made with love by Softexedge" right (stacked on phones). "Softexedge" links to https://softexedge.com (the domain SoftexEdge's own site code uses for its email) with `target=_blank rel="noopener noreferrer"`; the spelling follows that codebase.
+- Verified: lint clean; tsc 0; build OK. CDP on 9 pages at 1500 and 375: every `a[href]`, button, tab, summary and chip label (58–88 per page) computes `cursor: pointer`, 0 exceptions; the credit is on every page and links to softexedge.com in a new tab; 0 overflow. Footer screenshots at 1500 and 375 reviewed.
+- Not committed.
+
+## 2026-09-30 — Hero pills rewritten (no more page names)
+- The pill above each inner-page h1 (`PageHero` eyebrow, and the contact intro) said only the page name. Each now carries a short line drawn from that page's own copy:
+  - /about "One team, first call to support"; /careers "Small team, real client problems".
+  - /case-studies "Proof from client work"; /challenges "The work between the tools".
+  - /contact "Rough notes are fine"; /products "Six ready starting points"; /services "Five service lines, one team".
+  - Healthcare "For clinics, labs, and pharmacies"; Tech "For product and engineering teams"; Marketing "For agencies and marketing teams".
+- Unchanged: the home hero pill ("AI. Automation. Software.", already descriptive) and the "Case studies" section eyebrow lower on that page (not a hero). Eyebrows are display-only (no metadata or breadcrumb use).
+- Verified: lint clean; tsc 0; build OK. CDP on all 10 pages at 1500 and 375: the pill before each h1 shows the new text, one line, 159–254px wide, 0 overflow. Healthcare hero screenshot reviewed.
+- Not committed.

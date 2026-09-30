@@ -42,10 +42,7 @@ export function ServiceDetails({
               className="group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
             >
               <div>
-                <p className="font-mono text-[13px] text-brand-700">
-                  {service.number}
-                </p>
-                <h3 className="mt-3 text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+                <h3 className="text-2xl font-medium tracking-tight text-ink sm:text-3xl">
                   {service.title}
                 </h3>
                 <p className="mt-3 max-w-md text-[15px] leading-6 text-zinc-600">

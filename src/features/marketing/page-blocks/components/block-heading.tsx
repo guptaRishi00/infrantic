@@ -32,7 +32,7 @@ export function BlockHeading({
     >
       <p
         className={cn(
-          "text-[15px] font-medium",
+          "font-mono text-[13px] tracking-[0.08em] uppercase",
           tone === "dark" ? "text-brand-300" : "text-brand-700",
         )}
       >

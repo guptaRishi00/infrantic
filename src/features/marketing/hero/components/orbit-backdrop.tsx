@@ -109,7 +109,8 @@ export function OrbitBackdrop({
         )}
       </div>
 
-      <ul className="hidden sm:block">
+      {/* data-orbit-badges: the GSAP pointer parallax moves this list. */}
+      <ul data-orbit-badges="" className="hidden sm:block">
         {integrations.map((integration) => {
           const point = pointOnRing(integration.ring, integration.angle);
           return (

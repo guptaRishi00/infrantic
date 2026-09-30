@@ -1,19 +1,15 @@
 import {
   BookOpen,
-  ChartColumn,
-  Cpu,
+  CalendarDays,
   Download,
   FileText,
   FolderKanban,
-  History,
-  Hourglass,
-  LayoutDashboard,
+  List,
   ListChecks,
   type LucideIcon,
   Plus,
-  Settings,
-  Upload,
-  Users,
+  RotateCcw,
+  ShieldCheck,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
@@ -80,13 +76,72 @@ function ToolbarButton({
   );
 }
 
-const REVIEW_ROWS = [
-  { icon: Cpu, label: "Model", value: "Gemini Pro" },
-  { icon: BookOpen, label: "Dictionary", value: "128 approved terms" },
-  { icon: Hourglass, label: "Status", value: "Waiting for a file" },
-] as const;
+// ---------------------------------------------------------------------------
+// AI technical document proofreader: an active review. The document page on
+// the left carries numbered highlights that match the findings on the right.
 
-/** First-pass PDF review tool: review setup on the left, drop zone on the right. */
+type Severity = "high" | "medium" | "low";
+
+const SEVERITY_TONE: Record<Severity, string> = {
+  high: "border-red-400/30 bg-red-400/10 text-red-300",
+  medium: "border-amber-400/30 bg-amber-400/10 text-amber-300",
+  low: "border-white/10 bg-white/[0.04] text-zinc-400",
+};
+
+const FINDINGS: readonly {
+  id: number;
+  title: string;
+  detail: string;
+  page: string;
+  severity: Severity;
+}[] = [
+  {
+    id: 1,
+    title: "Mixed units",
+    detail: "Flange spacing given in mm and cm",
+    page: "p. 4",
+    severity: "high",
+  },
+  {
+    id: 2,
+    title: "Unapproved term",
+    detail: "“flowrate” → “flow rate”",
+    page: "p. 4",
+    severity: "medium",
+  },
+  {
+    id: 3,
+    title: "Missing reference",
+    detail: "Figure 7 is cited but not included",
+    page: "p. 5",
+    severity: "medium",
+  },
+  {
+    id: 4,
+    title: "Tolerance format",
+    detail: "Use ±0.5 mm, not +/- 0.5",
+    page: "p. 6",
+    severity: "low",
+  },
+];
+
+// One row per text line on the page: bar widths (%), and an optional finding
+// highlighted on that line.
+const PAGE_LINES: readonly { widths: readonly number[]; finding?: number }[] = [
+  { widths: [34] },
+  { widths: [92] },
+  { widths: [58, 26], finding: 1 },
+  { widths: [88] },
+  { widths: [40, 22, 20], finding: 2 },
+  { widths: [76] },
+  { widths: [90] },
+  { widths: [30, 44], finding: 3 },
+  { widths: [84] },
+  { widths: [62] },
+  { widths: [48, 28], finding: 4 },
+  { widths: [70] },
+];
+
 export function ProofreaderMock({ label }: { label: string }) {
   return (
     <Frame label={label}>
@@ -98,56 +153,114 @@ export function ProofreaderMock({ label }: { label: string }) {
           <span className="text-xs leading-tight font-semibold text-white">
             ProofDesk
             <span className="block text-[10px] font-normal text-zinc-400">
-              Engineering document review
+              SPEC-2211 · Rev C · 42 pages
             </span>
           </span>
         </span>
-        <Chip>No document open</Chip>
-        <Chip tone="brand">Workspace ready</Chip>
+        <Chip tone="brand">AI first pass done</Chip>
         <span className="ml-auto flex gap-1.5">
           <ToolbarButton icon={BookOpen}>Dictionary</ToolbarButton>
           <ToolbarButton icon={Download}>Export</ToolbarButton>
-          <ToolbarButton icon={Settings} active>
-            Admin
+          <ToolbarButton icon={ShieldCheck} active>
+            Sign off
           </ToolbarButton>
         </span>
       </div>
 
-      <div className="grid flex-1 grid-cols-2 gap-4 bg-[radial-gradient(80%_100%_at_50%_0%,rgb(7_150_254/0.1),transparent)] p-6">
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-          <p className="font-mono text-[10px] tracking-wide text-brand-300 uppercase">
-            New review
+      <div className="grid flex-1 grid-cols-[1.1fr_1fr]">
+        {/* Document page with numbered highlights. */}
+        <div className="flex flex-col border-r border-white/10 bg-[radial-gradient(80%_100%_at_50%_0%,rgb(7_150_254/0.08),transparent)] p-5">
+          <div className="flex flex-1 flex-col rounded-lg bg-[#f4f7fb] px-5 py-4 shadow-[0_20px_40px_-24px_rgb(0_0_0/0.8)]">
+            <p className="font-mono text-[9px] tracking-wide text-zinc-500 uppercase">
+              4.2 Flange assembly
+            </p>
+            <div className="mt-3 flex flex-1 flex-col justify-between gap-2">
+              {PAGE_LINES.map((line, index) => (
+                <div
+                  // biome-ignore lint/suspicious/noArrayIndexKey: fixed decorative lines
+                  key={index}
+                  className="flex items-center gap-1.5"
+                >
+                  {line.widths.map((width, part) => (
+                    <span
+                      // biome-ignore lint/suspicious/noArrayIndexKey: fixed decorative bars
+                      key={part}
+                      className={cn(
+                        "h-1.5 rounded-full",
+                        line.finding && part === line.widths.length - 1
+                          ? "bg-amber-400/70 ring-2 ring-amber-400/30"
+                          : "bg-zinc-300",
+                      )}
+                      style={{ width: `${width}%` }}
+                    />
+                  ))}
+                  {line.finding ? (
+                    <span className="ml-auto grid size-4 shrink-0 place-items-center rounded-full bg-ink font-mono text-[9px] leading-none text-white">
+                      {line.finding}
+                    </span>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="mt-2.5 flex justify-between text-[10px] text-zinc-500">
+            <span>Page 4 of 42</span>
+            <span>100%</span>
           </p>
-          <p className="mt-2 text-base font-semibold text-white">
-            Open a technical PDF
-          </p>
-          <ul className="mt-4 space-y-2">
-            {REVIEW_ROWS.map(({ icon: Icon, label: rowLabel, value }) => (
+        </div>
+
+        {/* Findings for the reviewer. */}
+        <div className="flex flex-col p-4">
+          <div className="flex items-center justify-between">
+            <p className="font-mono text-[10px] tracking-wide text-brand-300 uppercase">
+              Findings
+            </p>
+            <span className="flex gap-1.5">
+              <Chip>4 flagged</Chip>
+              <Chip>18 passed</Chip>
+            </span>
+          </div>
+          <ul className="mt-3 flex-1 space-y-2">
+            {FINDINGS.map((finding) => (
               <li
-                key={rowLabel}
-                className="flex items-center gap-2.5 rounded-lg border border-white/10 px-3 py-2 text-[11px]"
+                key={finding.id}
+                className="flex items-start gap-2.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5"
               >
-                <Icon className="size-3.5 text-brand-300" />
-                <span className="font-mono tracking-wide text-zinc-400 uppercase">
-                  {rowLabel}
+                <span className="mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-white/10 font-mono text-[9px] leading-none text-white">
+                  {finding.id}
                 </span>
-                <span className="ml-auto text-zinc-200">{value}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-semibold text-white">
+                      {finding.title}
+                    </span>
+                    <span
+                      className={cn(
+                        "rounded border px-1.5 py-px font-mono text-[9px] uppercase",
+                        SEVERITY_TONE[finding.severity],
+                      )}
+                    >
+                      {finding.severity}
+                    </span>
+                  </span>
+                  <span className="mt-0.5 flex justify-between gap-2 text-[10px] text-zinc-400">
+                    <span className="truncate">{finding.detail}</span>
+                    <span className="shrink-0 text-zinc-500">
+                      {finding.page}
+                    </span>
+                  </span>
+                </span>
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="grid place-items-center rounded-xl border border-dashed border-brand-300/30 bg-brand/[0.04] p-6 text-center">
-          <div>
-            <span className="mx-auto grid size-11 place-items-center rounded-xl border border-white/15 bg-white/5 text-white">
-              <Upload className="size-5" />
-            </span>
-            <p className="mt-3 text-sm font-semibold text-white">
-              Drop a PDF here
-            </p>
-            <p className="mx-auto mt-1 max-w-[16rem] text-[11px] leading-4 text-zinc-400">
-              Or browse to choose a file. Scanned pages are supported.
-            </p>
+          <div className="mt-3 border-t border-white/10 pt-3">
+            <div className="flex justify-between text-[10px] text-zinc-400">
+              <span>Reviewer: Checker A</span>
+              <span className="text-amber-300">Awaiting sign-off</span>
+            </div>
+            <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
+              <div className="h-full w-[82%] rounded-full bg-brand-gradient" />
+            </div>
           </div>
         </div>
       </div>
@@ -155,191 +268,220 @@ export function ProofreaderMock({ label }: { label: string }) {
   );
 }
 
-const NAV = [
-  { icon: LayoutDashboard, label: "Dashboard" },
-  { icon: FolderKanban, label: "Projects" },
-  { icon: ListChecks, label: "Tasks", active: true },
-  { icon: ChartColumn, label: "Reports" },
-  { icon: History, label: "History" },
-  { icon: Users, label: "Team" },
-] as const;
+// ---------------------------------------------------------------------------
+// Role-based task management: a Kanban board. Each card carries the role that
+// owns its current stage, the due date, and overdue / rework flags.
 
-type Priority = "High" | "Medium" | "Low";
-type Status = "Overdue" | "In review" | "Pending" | "Approved";
+type Role = "Executor" | "Checker" | "Approver";
 
-// Status colours per the mockup rule: amber and emerald only, plus brand.
-const PRIORITY_TONE: Record<Priority, string> = {
-  High: "bg-amber-400/15 text-amber-300",
-  Medium: "bg-brand/15 text-brand-300",
-  Low: "bg-white/10 text-zinc-300",
+const ROLE_TONE: Record<Role, string> = {
+  Executor: "border-white/10 text-zinc-300",
+  Checker: "border-amber-400/30 text-amber-300",
+  Approver: "border-emerald-400/30 text-emerald-300",
 };
 
-const STATUS_TONE: Record<Status, string> = {
-  Overdue: "border-amber-400/40 text-amber-300",
-  "In review": "border-brand-300/40 text-brand-300",
-  Pending: "border-white/15 text-zinc-400",
-  Approved: "border-emerald-400/40 text-emerald-300",
-};
-
-const TASKS: readonly {
+const COLUMNS: readonly {
   id: string;
-  task: string;
-  priority: Priority;
-  due: string;
-  status: Status;
-  checker: string;
+  title: string;
+  dot: string;
+  cards: readonly {
+    id: string;
+    title: string;
+    role: Role;
+    owner: string;
+    due: string;
+    overdue?: boolean;
+    rework?: boolean;
+  }[];
 }[] = [
   {
-    id: "TSK-101",
-    task: "Material review",
-    priority: "High",
-    due: "02 Jun",
-    status: "Overdue",
-    checker: "Checker A",
+    id: "todo",
+    title: "To do",
+    dot: "bg-zinc-500",
+    cards: [
+      {
+        id: "TSK-107",
+        title: "Supplier audit checklist",
+        role: "Executor",
+        owner: "AK",
+        due: "14 Jun",
+      },
+      {
+        id: "TSK-108",
+        title: "Drawing revision log",
+        role: "Executor",
+        owner: "MP",
+        due: "15 Jun",
+      },
+    ],
   },
   {
-    id: "TSK-102",
-    task: "Engineering analysis",
-    priority: "Medium",
-    due: "04 Jun",
-    status: "In review",
-    checker: "Checker B",
+    id: "doing",
+    title: "In progress",
+    dot: "bg-brand",
+    cards: [
+      {
+        id: "TSK-102",
+        title: "Engineering analysis",
+        role: "Executor",
+        owner: "RS",
+        due: "04 Jun",
+        overdue: true,
+      },
+      {
+        id: "TSK-105",
+        title: "Documentation update",
+        role: "Executor",
+        owner: "AK",
+        due: "09 Jun",
+      },
+    ],
   },
   {
-    id: "TSK-103",
-    task: "Vendor coordination",
-    priority: "Low",
-    due: "05 Jun",
-    status: "Approved",
-    checker: "Checker A",
+    id: "review",
+    title: "In review",
+    dot: "bg-amber-400",
+    cards: [
+      {
+        id: "TSK-101",
+        title: "Material review",
+        role: "Checker",
+        owner: "JD",
+        due: "02 Jun",
+        overdue: true,
+      },
+      {
+        id: "TSK-104",
+        title: "Quality inspection",
+        role: "Checker",
+        owner: "JD",
+        due: "06 Jun",
+        rework: true,
+      },
+    ],
   },
   {
-    id: "TSK-104",
-    task: "Quality inspection",
-    priority: "Medium",
-    due: "06 Jun",
-    status: "In review",
-    checker: "Checker C",
-  },
-  {
-    id: "TSK-105",
-    task: "Documentation update",
-    priority: "Low",
-    due: "09 Jun",
-    status: "Pending",
-    checker: "Checker B",
-  },
-  {
-    id: "TSK-106",
-    task: "Risk assessment",
-    priority: "High",
-    due: "10 Jun",
-    status: "Pending",
-    checker: "Checker C",
+    id: "done",
+    title: "Approved",
+    dot: "bg-emerald-400",
+    cards: [
+      {
+        id: "TSK-103",
+        title: "Vendor coordination",
+        role: "Approver",
+        owner: "LN",
+        due: "03 Jun",
+      },
+      {
+        id: "TSK-106",
+        title: "Risk assessment",
+        role: "Approver",
+        owner: "LN",
+        due: "10 Jun",
+      },
+    ],
   },
 ];
 
-/** Executor → checker → approver task list with priorities and review status. */
+const VIEWS = [
+  { icon: FolderKanban, label: "Board", active: true },
+  { icon: List, label: "List", active: false },
+  { icon: CalendarDays, label: "Timeline", active: false },
+] as const;
+
 export function TaskBoardMock({ label }: { label: string }) {
   return (
     <Frame label={label}>
-      <div className="grid flex-1 grid-cols-[10rem_1fr]">
-        <div className="border-r border-white/10 p-3">
-          <span className="flex items-center gap-2 px-2 py-1.5">
-            <span className="grid size-6 place-items-center rounded-md bg-brand-gradient text-white">
-              <ListChecks className="size-3.5" />
-            </span>
-            <span className="text-[11px] leading-tight font-semibold text-white">
-              Operations
-              <span className="block font-normal text-zinc-400">workspace</span>
+      <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+        <span className="flex items-center gap-2 pr-1">
+          <span className="grid size-6 place-items-center rounded-md bg-brand-gradient text-white">
+            <ListChecks className="size-3.5" />
+          </span>
+          <span className="text-xs leading-tight font-semibold text-white">
+            Operations
+            <span className="block text-[10px] font-normal text-zinc-400">
+              Review workflow
             </span>
           </span>
-          <ul className="mt-3 space-y-0.5">
-            {NAV.map(({ icon: Icon, label: navLabel, ...rest }) => (
-              <li
-                key={navLabel}
-                className={cn(
-                  "flex items-center gap-2 rounded-md px-2 py-1.5 text-[11px]",
-                  "active" in rest
-                    ? "bg-white/[0.08] text-white"
-                    : "text-zinc-400",
-                )}
-              >
-                <Icon className="size-3.5" />
-                {navLabel}
-              </li>
-            ))}
-          </ul>
-        </div>
+        </span>
+        <span className="flex gap-1.5">
+          {VIEWS.map((view) => (
+            <ToolbarButton
+              key={view.label}
+              icon={view.icon}
+              active={view.active}
+            >
+              {view.label}
+            </ToolbarButton>
+          ))}
+        </span>
+        <span className="ml-auto flex items-center gap-1.5">
+          <span className="rounded-md border border-red-400/30 bg-red-400/10 px-2 py-1 font-mono text-[10px] text-red-300 uppercase">
+            2 overdue
+          </span>
+          <ToolbarButton icon={Plus}>New task</ToolbarButton>
+        </span>
+      </div>
 
-        <div className="p-4">
-          <div className="flex items-center justify-between">
-            <p className="text-base font-semibold text-white">Tasks</p>
-            <span className="flex items-center gap-1 rounded-md bg-brand-gradient px-2.5 py-1.5 text-[11px] font-medium text-white">
-              <Plus className="size-3.5" />
-              New task
-            </span>
-          </div>
-          <div className="mt-3 flex gap-4 border-b border-white/10 text-[11px]">
-            {["My tasks", "All tasks", "Unassigned"].map((tab) => (
-              <span
-                key={tab}
-                className={cn(
-                  "-mb-px pb-2",
-                  tab === "All tasks"
-                    ? "border-b border-brand-300 text-white"
-                    : "text-zinc-400",
-                )}
-              >
-                {tab}
+      <div className="grid flex-1 grid-cols-4 gap-3 bg-[radial-gradient(80%_100%_at_50%_0%,rgb(7_150_254/0.08),transparent)] p-4">
+        {COLUMNS.map((column) => (
+          <div
+            key={column.id}
+            className="flex flex-col rounded-xl border border-white/10 bg-white/[0.02] p-2.5"
+          >
+            <p className="flex items-center gap-2 px-1 text-[11px] font-semibold text-white">
+              <span className={cn("size-1.5 rounded-full", column.dot)} />
+              {column.title}
+              <span className="ml-auto font-mono text-[10px] font-normal text-zinc-500">
+                {column.cards.length}
               </span>
-            ))}
-          </div>
-
-          <table className="mt-2 w-full text-left text-[11px]">
-            <thead className="font-mono text-[9px] tracking-wide text-zinc-500 uppercase">
-              <tr>
-                <th className="py-2 font-normal">Task</th>
-                <th className="py-2 font-normal">Priority</th>
-                <th className="py-2 font-normal">Due</th>
-                <th className="py-2 font-normal">Review</th>
-                <th className="py-2 font-normal">Checker</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-white/[0.06]">
-              {TASKS.map((row) => (
-                <tr key={row.id}>
-                  <td className="py-2">
-                    <span className="font-mono text-zinc-500">{row.id}</span>
-                    <span className="ml-2 text-zinc-200">{row.task}</span>
-                  </td>
-                  <td className="py-2">
+            </p>
+            <ul className="mt-2.5 flex-1 space-y-2">
+              {column.cards.map((card) => (
+                <li
+                  key={card.id}
+                  className="rounded-lg border border-white/10 bg-[#082443] p-2.5"
+                >
+                  <span className="flex items-center justify-between">
+                    <span className="font-mono text-[9px] text-zinc-500">
+                      {card.id}
+                    </span>
+                    {card.overdue ? (
+                      <span className="flex items-center gap-1 text-[9px] font-medium text-red-300">
+                        <span className="size-1 rounded-full bg-red-400" />
+                        Overdue
+                      </span>
+                    ) : card.rework ? (
+                      <span className="flex items-center gap-1 text-[9px] font-medium text-amber-300">
+                        <RotateCcw className="size-2.5" />
+                        Rework
+                      </span>
+                    ) : null}
+                  </span>
+                  <p className="mt-1 text-[11px] leading-snug font-medium text-white">
+                    {card.title}
+                  </p>
+                  <span className="mt-2 flex items-center gap-1.5">
                     <span
                       className={cn(
-                        "rounded px-1.5 py-0.5 text-[10px]",
-                        PRIORITY_TONE[row.priority],
+                        "rounded border px-1.5 py-px text-[9px]",
+                        ROLE_TONE[card.role],
                       )}
                     >
-                      {row.priority}
+                      {card.role}
                     </span>
-                  </td>
-                  <td className="py-2 text-zinc-400">{row.due}</td>
-                  <td className="py-2">
-                    <span
-                      className={cn(
-                        "rounded border px-1.5 py-0.5 text-[10px]",
-                        STATUS_TONE[row.status],
-                      )}
-                    >
-                      {row.status}
+                    <span className="ml-auto text-[9px] whitespace-nowrap text-zinc-500">
+                      {card.due}
                     </span>
-                  </td>
-                  <td className="py-2 text-zinc-400">{row.checker}</td>
-                </tr>
+                    <span className="grid size-4 place-items-center rounded-full bg-white/10 text-[7px] font-semibold text-zinc-200">
+                      {card.owner}
+                    </span>
+                  </span>
+                </li>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </ul>
+          </div>
+        ))}
       </div>
     </Frame>
   );

@@ -71,7 +71,7 @@ function FormBody({
         <h2
           ref={successRef}
           tabIndex={-1}
-          className="mt-5 text-2xl font-semibold tracking-tight text-ink focus:outline-none"
+          className="mt-5 text-2xl font-medium tracking-tight text-ink focus:outline-none"
         >
           {content.successTitle}
         </h2>
@@ -81,7 +81,7 @@ function FormBody({
         <button
           type="button"
           onClick={onReset}
-          className="mt-6 inline-flex h-11 items-center rounded-lg border border-zinc-200 bg-white px-4.5 text-[15px] font-medium text-zinc-800 transition-colors hover:border-brand-200 hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="mt-6 inline-flex h-11 items-center rounded-md border border-zinc-200 bg-white px-4.5 text-[15px] font-medium text-zinc-800 transition-colors hover:border-brand-200 hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
         >
           {content.resetLabel}
         </button>
@@ -102,7 +102,7 @@ function FormBody({
   return (
     <form ref={formRef} action={action} className="grid gap-5">
       <div>
-        <h2 className="text-xl font-semibold tracking-tight text-ink">
+        <h2 className="text-xl font-medium tracking-tight text-ink">
           {content.title}
         </h2>
         <p className="mt-1 text-[14px] text-zinc-500">{content.description}</p>
@@ -251,7 +251,7 @@ function FormBody({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-brand-gradient focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-wait disabled:opacity-70"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-brand-gradient focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-wait disabled:opacity-70"
         >
           {pending ? (
             <>

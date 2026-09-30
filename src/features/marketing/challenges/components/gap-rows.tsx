@@ -43,7 +43,7 @@ export function GapRows({ content }: { content: GapRowsContent }) {
                     <Icon aria-hidden="true" className="size-5 text-zinc-800" />
                   </span>
                   <div>
-                    <h3 className="text-xl font-semibold tracking-tight text-ink">
+                    <h3 className="text-xl font-medium tracking-tight text-ink">
                       {gap.title}
                     </h3>
                     <p className="mt-2 text-[15px] leading-6 text-zinc-600">

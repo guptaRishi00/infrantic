@@ -39,7 +39,7 @@ function StepPanel({ step }: { step: WorkflowStep }) {
           <span className="w-fit rounded-full border border-zinc-200 px-2.5 py-0.5 text-[13px] text-zinc-600">
             {step.stepLabel}
           </span>
-          <h3 className="mt-4 text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-3xl">
+          <h3 className="mt-4 text-2xl font-medium tracking-[-0.03em] text-ink sm:text-3xl">
             {step.title}
           </h3>
           <div className="mt-10 lg:mt-auto">

@@ -45,16 +45,16 @@ export type FeaturedCaseContent = {
 };
 
 const hero = {
-  eyebrow: "Case studies",
+  eyebrow: "Proof from client work",
   title: "Real operational problems, working systems",
   description:
     "The problems clients brought us, the structure we put around them, and what changed for the team. Details are simplified to protect client specifics.",
-  primaryCta: { label: "Discuss a similar project", href: "/contact" },
-  secondaryCta: { label: "See our products", href: "/products" },
+  primaryCta: { label: "Book a call", href: "/contact" },
+  secondaryCta: { label: "View products", href: "/products" },
   stats: [
-    { value: "3", label: "Detailed case studies" },
+    { value: "3+", label: "Detailed case studies" },
     { value: "1", label: "Featured end-to-end project" },
-    { value: "6", label: "Operational gaps they close" },
+    { value: "6+", label: "Operational gaps they close" },
   ],
   visual: {
     kind: "flow",
@@ -264,7 +264,7 @@ const outcomes = {
     "Errors caught before they reached a customer or supplier",
     "Hours the team gets back each week",
   ],
-  cta: { label: "Talk about your outcomes", href: "/contact" },
+  cta: { label: "Book a call", href: "/contact" },
   panel: {
     label: "Signals we track",
     items: [

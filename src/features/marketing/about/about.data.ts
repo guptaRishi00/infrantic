@@ -7,16 +7,16 @@ import type {
 } from "@/features/marketing/page-blocks";
 
 const hero = {
-  eyebrow: "About Infrantic",
+  eyebrow: "One team, first call to support",
   title: "We simplify the machinery behind modern businesses",
   description:
     "Infrantic builds AI-powered automation, custom software, and connected business systems. One team, from the first conversation to the support that follows launch.",
   primaryCta: { label: "Book a call", href: "/contact" },
-  secondaryCta: { label: "Work with us", href: "/careers" },
+  secondaryCta: { label: "View products", href: "/products" },
   stats: [
     { value: "1", label: "Team from discovery to support" },
-    { value: "5", label: "Disciplines under one roof" },
-    { value: "3", label: "Sectors we specialise in" },
+    { value: "5+", label: "Disciplines under one roof" },
+    { value: "3+", label: "Sectors we specialise in" },
   ],
   visual: {
     kind: "orbit",

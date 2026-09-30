@@ -27,7 +27,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
       <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-[15px] font-medium text-brand-300">
+            <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-300">
               {content.eyebrow}
             </p>
             <SectionHeading
@@ -72,7 +72,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
                   <div className="flex flex-1 flex-col">
                     <h3
                       id={headingId}
-                      className="max-w-[22ch] text-2xl font-semibold tracking-tight text-balance text-white"
+                      className="max-w-[22ch] text-2xl font-medium tracking-tight text-balance text-white"
                     >
                       {item.title}
                     </h3>

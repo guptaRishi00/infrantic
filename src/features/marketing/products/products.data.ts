@@ -34,15 +34,15 @@ export type ProductCatalogContent = {
 // No prices or delivery times are promised here.
 
 const hero = {
-  eyebrow: "Products",
+  eyebrow: "Six ready starting points",
   title: "Proven systems, ready to fit your workflow",
   description:
     "Six packaged starting points built from the work we do most often. Each one is adapted to your rules, roles, and tools, not the other way round.",
   primaryCta: { label: "Book a call", href: "/contact" },
   secondaryCta: { label: "See case studies", href: "/case-studies" },
   stats: [
-    { value: "6", label: "Products, each adapted to you" },
-    { value: "Yours", label: "Existing tools stay in place" },
+    { value: "6+", label: "Products, each adapted to you" },
+    { value: "100%", label: "Of your existing tools kept" },
     { value: "1", label: "Connected system as they combine" },
   ],
   visual: {
@@ -93,7 +93,7 @@ const catalog = {
   replacesLabel: "Replaces",
   includedLabel: "Included",
   worksWithLabel: "Works with",
-  cta: { label: "Discuss this product", href: "/contact" },
+  cta: { label: "Enquire now", href: "/contact" },
   products: [
     {
       id: "approval-flow",

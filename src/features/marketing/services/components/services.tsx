@@ -56,7 +56,7 @@ export function Services({ content }: { content: ServicesContent }) {
       <BrandIconGradient />
       {/* Same container as the Problem section. */}
       <div className="mx-auto max-w-[80rem]">
-        <p className="text-center text-[15px] font-medium text-brand-300">
+        <p className="text-center font-mono text-[13px] tracking-[0.08em] uppercase text-brand-300">
           {content.eyebrow}
         </p>
         <SectionHeading
@@ -124,13 +124,10 @@ function ServiceList({
                     stroke={GRADIENT_STROKE}
                   />
                 </div>
-                <span className="text-[13px] font-semibold tracking-widest text-zinc-500">
-                  {service.number}
-                </span>
               </div>
               <h3
                 id={headingId}
-                className="mt-8 text-2xl font-semibold tracking-tight text-white"
+                className="mt-8 text-2xl font-medium tracking-tight text-white"
               >
                 {service.title}
               </h3>

@@ -14,12 +14,12 @@ export type Role = {
 };
 
 const hero = {
-  eyebrow: "Careers",
+  eyebrow: "Small team, real client problems",
   title: "Build the systems businesses actually run on",
   description:
     "Small team, real client problems, modern tools. If you like turning messy operations into clear, working systems, we would like to hear from you.",
-  primaryCta: { label: "Introduce yourself", href: "/contact" },
-  secondaryCta: { label: "See what we build", href: "/case-studies" },
+  primaryCta: { label: "Connect with us", href: "/contact" },
+  secondaryCta: { label: "View products", href: "/products" },
   // A loop, not a ladder: each pass adds ownership. Labels sit below the
   // nodes, clear of the loop's vertical runs at x = 10 and 90.
   visual: {

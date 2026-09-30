@@ -18,7 +18,7 @@ export function Faq({ content }: { content: FaqContent }) {
     >
       <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[1fr_1.5fr] lg:items-start">
         <div className="lg:sticky lg:top-28">
-          <p className="text-[15px] font-medium text-brand-700">
+          <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
             {content.eyebrow}
           </p>
           <SectionHeading
@@ -39,7 +39,7 @@ export function Faq({ content }: { content: FaqContent }) {
               open={index === 0}
               className="group"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-left text-[17px] font-semibold tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:text-xl [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 rounded-md py-5 text-left text-[17px] font-medium tracking-tight text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink sm:text-xl [&::-webkit-details-marker]:hidden">
                 {item.question}
                 <Plus
                   aria-hidden="true"

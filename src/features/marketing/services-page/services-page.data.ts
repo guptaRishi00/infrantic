@@ -7,16 +7,16 @@ import type {
 } from "@/features/marketing/page-blocks";
 
 const hero = {
-  eyebrow: "Services",
+  eyebrow: "Five service lines, one team",
   title: "Technology built around the way your business operates",
   description:
     "Five service lines, one team. We connect and automate the systems you already run, and build software only where a workflow genuinely needs it.",
   primaryCta: { label: "Book a call", href: "/contact" },
-  secondaryCta: { label: "See case studies", href: "/case-studies" },
+  secondaryCta: { label: "View products", href: "/products" },
   stats: [
-    { value: "5", label: "Service lines, combined per project" },
+    { value: "5+", label: "Service lines, combined per project" },
     { value: "1", label: "Team from discovery to support" },
-    { value: "Yours", label: "The tools we build around" },
+    { value: "100%", label: "Of your existing tools kept" },
   ],
   visual: {
     kind: "flow",
@@ -138,7 +138,7 @@ const engage = {
     "Clear ownership of code, data, and accounts: they stay yours",
     "Support and refinement after launch, as the business changes",
   ],
-  cta: { label: "Discuss where to start", href: "/contact" },
+  cta: { label: "Book a call", href: "/contact" },
   panel: {
     label: "Ways to work with us",
     items: [
@@ -361,7 +361,7 @@ const servicesPageContent = {
   detailsTitle: "What each service line covers",
   detailsDescription:
     "Projects usually combine two or three of these. Pick a starting point and we will scope around it.",
-  discussLabel: "Discuss this",
+  discussLabel: "Enquire now",
   engage,
   included,
 } as const;

@@ -26,16 +26,16 @@ export type GapRowsContent = {
 };
 
 const hero = {
-  eyebrow: "Challenges",
+  eyebrow: "The work between the tools",
   title: "Where growing businesses lose time",
   description:
     "Operational drag is rarely one broken tool. It is the work between people, files, and systems: chasing updates, rebuilding reports, approving by email. Here is where we see it, and what it costs.",
   primaryCta: { label: "Book a call", href: "/contact" },
-  secondaryCta: { label: "See the products that fix these", href: "/products" },
+  secondaryCta: { label: "View products", href: "/products" },
   stats: [
-    { value: "6", label: "Recurring operational gaps we fix" },
+    { value: "6+", label: "Recurring operational gaps we fix" },
     { value: "1", label: "Shared source of truth per workflow" },
-    { value: "0", label: "Tools you have to throw away first" },
+    { value: "100%", label: "Of your current tools stay in use" },
   ],
   visual: {
     kind: "flow",
@@ -236,7 +236,7 @@ const signs = {
     "Month-end means a week of consolidation",
     "Nobody can say where a request is without asking around",
   ],
-  cta: { label: "Talk through your workflow", href: "/contact" },
+  cta: { label: "Share your workflow", href: "/contact" },
   panel: {
     label: "Typical starting points",
     items: [

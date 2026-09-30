@@ -30,16 +30,13 @@ export function CaseList({ content }: { content: CaseListContent }) {
               >
                 <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/70 p-7 lg:border-r lg:border-b-0">
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-[13px] text-brand-700">
-                      {study.number}
-                    </span>
                     <span className="rounded-full border border-zinc-200 bg-white px-2.5 py-0.5 text-[13px] text-zinc-600">
                       {study.sector}
                     </span>
                   </div>
                   <h3
                     id={`${study.id}-title`}
-                    className="mt-5 text-2xl font-semibold tracking-tight text-balance text-ink"
+                    className="mt-5 text-2xl font-medium tracking-tight text-balance text-ink"
                   >
                     {study.title}
                   </h3>

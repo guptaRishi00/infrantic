@@ -69,7 +69,7 @@ export function FeatureGrid({ content }: { content: FeatureGridContent }) {
                 </span>
                 <h3
                   className={cn(
-                    "mt-5 text-xl font-semibold tracking-tight",
+                    "mt-5 text-xl font-medium tracking-tight",
                     dark ? "text-white" : "text-ink",
                   )}
                 >

@@ -74,7 +74,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
 
         <h2
           id="cta-title"
-          className="mt-6 max-w-[18ch] text-4xl leading-[1.08] font-semibold tracking-[-0.04em] text-ink sm:text-5xl"
+          className="mt-6 max-w-[18ch] text-4xl leading-[1.08] font-medium tracking-[-0.035em] text-ink sm:text-5xl"
         >
           {content.title}
         </h2>

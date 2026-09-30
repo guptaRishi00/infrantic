@@ -16,6 +16,7 @@ export type SectorContent = {
 };
 
 const productsCta = { label: "See our products", href: "/products" } as const;
+const heroProductsCta = { label: "View products", href: "/products" } as const;
 const contactCta = {
   label: "Book a call",
   href: "/contact",
@@ -28,16 +29,16 @@ const healthcare = {
       "Automation and connected systems for clinics, labs, and health businesses: intake, referrals, scheduling, billing paperwork, and reporting.",
   },
   hero: {
-    eyebrow: "Sectors · Healthcare",
+    eyebrow: "For clinics, labs, and pharmacies",
     title: "Less paperwork between patients, staff, and systems",
     description:
       "Clinics, diagnostic labs, pharmacies, and health businesses run on forms, referrals, and follow-ups spread across phones, inboxes, and spreadsheets. We connect them, so staff spend their time on patients instead of chasing paperwork.",
     primaryCta: contactCta,
-    secondaryCta: productsCta,
+    secondaryCta: heroProductsCta,
     stats: [
       { value: "1", label: "Record per referral or case, shared by the team" },
-      { value: "Yours", label: "Existing systems stay in place" },
-      { value: "Human", label: "Sign-off on every clinical decision" },
+      { value: "100%", label: "Of your existing systems kept" },
+      { value: "100%", label: "Clinical decisions signed off by a person" },
     ],
   },
   friction: {
@@ -197,16 +198,16 @@ const techProducts = {
       "Internal tools and automation for SaaS and product companies: onboarding, support triage, admin panels, billing operations, and reporting.",
   },
   hero: {
-    eyebrow: "Sectors · Tech product companies",
+    eyebrow: "For product and engineering teams",
     title: "Internal tools and automation around your product",
     description:
       "Your engineers should build the product, not the admin panel, the onboarding checklist, or the weekly metrics sheet. We build and connect the operational systems around it.",
     primaryCta: contactCta,
-    secondaryCta: productsCta,
+    secondaryCta: heroProductsCta,
     stats: [
-      { value: "0", label: "Sprints taken from your product roadmap" },
-      { value: "Your stack", label: "Built on the tools you already run" },
-      { value: "Handover", label: "Documented so your team can own it" },
+      { value: "100%", label: "Of your sprints stay on the product roadmap" },
+      { value: "100%", label: "Built on the tools you already run" },
+      { value: "100%", label: "Documented so your team can own it" },
     ],
   },
   friction: {
@@ -366,16 +367,16 @@ const marketing = {
       "Automation for agencies and marketing teams: client reporting, lead routing, content approvals, and campaign operations.",
   },
   hero: {
-    eyebrow: "Sectors · Marketing",
+    eyebrow: "For agencies and marketing teams",
     title: "Reporting, leads, and approvals without the busywork",
     description:
       "Agencies and marketing teams lose hours every week to pulling numbers, chasing approvals, and moving leads between tools. We automate the operations, so your people can work on the campaigns.",
     primaryCta: contactCta,
-    secondaryCta: productsCta,
+    secondaryCta: heroProductsCta,
     stats: [
       { value: "1", label: "Report assembled from every channel" },
-      { value: "Instant", label: "Lead routing from form to owner" },
-      { value: "Yours", label: "Existing tools stay in place" },
+      { value: "24/7", label: "Lead routing from form to owner" },
+      { value: "100%", label: "Of your existing tools kept" },
     ],
   },
   friction: {

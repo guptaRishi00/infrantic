@@ -74,9 +74,22 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        <p className="mt-14 text-[13px] text-zinc-400">
-          © {year} {siteConfig.name}. All rights reserved.
-        </p>
+        <div className="mt-14 flex flex-col gap-2 text-[13px] text-zinc-400 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            © {year} {siteConfig.name}. All rights reserved.
+          </p>
+          <p>
+            Made with love by{" "}
+            <a
+              href="https://softexedge.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-zinc-500 underline-offset-2 transition-colors hover:text-ink hover:underline"
+            >
+              Softexedge
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -30,7 +30,7 @@ export function Problem({ content }: { content: ProblemContent }) {
       className="scroll-mt-24 px-4 pb-16 sm:pb-28"
     >
       <div className="mx-auto max-w-[80rem] pl-6 pr-[1.125rem]">
-        <p className="text-[15px] font-medium text-brand-700">
+        <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
           {content.eyebrow}
         </p>
         <SectionHeading
@@ -50,11 +50,11 @@ export function Problem({ content }: { content: ProblemContent }) {
               <li key={gap.id}>
                 <article
                   aria-labelledby={headingId}
-                  className="group group/card relative flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-b from-white to-blue-50/20 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200/80 hover:shadow-[0_8px_30px_rgb(59,130,246,0.12)]"
+                  className="group group/card relative flex h-full flex-col overflow-hidden rounded-3xl border border-zinc-200/80 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200/80"
                 >
                   <div className="flex h-full flex-col">
                     <div className="mb-2">
-                      <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-b from-zinc-50 to-zinc-100/50 text-zinc-800 shadow-[0_2px_10px_rgba(0,0,0,0.04)] ring-1 ring-zinc-200/50 transition-all duration-300">
+                      <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-zinc-50 text-zinc-800 ring-1 ring-zinc-200/50 transition-all duration-300">
                         <Icon
                           aria-hidden="true"
                           className="size-6"
@@ -64,7 +64,7 @@ export function Problem({ content }: { content: ProblemContent }) {
                     </div>
                     <h3
                       id={headingId}
-                      className="mt-6 text-xl font-semibold tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950"
+                      className="mt-6 text-xl font-medium tracking-tight text-ink transition-colors duration-500 group-hover:text-blue-950"
                     >
                       {gap.title}
                     </h3>

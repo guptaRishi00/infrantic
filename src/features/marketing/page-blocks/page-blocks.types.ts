@@ -4,7 +4,9 @@ import type { BlockIcon } from "./block-icons";
 
 export type Tone = "light" | "dark";
 
-export type Stat = { value: string; label: string };
+/** Stat figures are numeric only ("6", "100%", "24/7"), never words:
+ * the design is a big number over a small label (user rule). */
+export type Stat = { value: `${number}${string}`; label: string };
 
 export type HeroFlowNode = {
   id: string;

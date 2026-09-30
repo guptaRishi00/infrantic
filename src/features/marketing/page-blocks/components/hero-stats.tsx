@@ -6,7 +6,7 @@ import type { Stat } from "../page-blocks.types";
 
 const DURATION = 1600;
 
-/** "18%" → prefix "", number 18, suffix "%". Words ("Yours") have no number. */
+/** "18%" → number 18, suffix "%"; "24/7" → 24, "/7". Values are numeric only. */
 function parse(value: string) {
   const match = value.match(/^(\D*?)(\d+)(.*)$/);
   if (!match) return null;
@@ -57,17 +57,27 @@ function StatValue({ value }: { value: string }) {
   }, [target]);
 
   if (!parsed) return <span>{value}</span>;
+  const figure = (n: number) => (
+    <>
+      {parsed.prefix}
+      {n}
+      {parsed.suffix ? (
+        <span className="ml-0.5 bg-brand-gradient bg-clip-text text-transparent">
+          {parsed.suffix}
+        </span>
+      ) : null}
+    </>
+  );
   return (
     <>
       <span className="sr-only">{value}</span>
-      <span ref={ref} aria-hidden="true" className="tabular-nums">
-        {parsed.prefix}
-        {count}
-        {parsed.suffix ? (
-          <span className="ml-0.5 bg-brand-gradient bg-clip-text text-transparent">
-            {parsed.suffix}
-          </span>
-        ) : null}
+      {/* The invisible final value holds the width, so the row doesn't
+          shift as the count gains digits (0 → 100). */}
+      <span ref={ref} aria-hidden="true" className="inline-grid tabular-nums">
+        <span className="invisible [grid-area:1/1]">
+          {figure(parsed.target)}
+        </span>
+        <span className="[grid-area:1/1]">{figure(count)}</span>
       </span>
     </>
   );
@@ -76,6 +86,9 @@ function StatValue({ value }: { value: string }) {
 /**
  * Hero stat row in the SoftexEdge "agency stats" style: no box, large figures
  * centred in columns split by hairlines, small uppercase tracked labels.
+ * Figures are numbers only; refined after the Stripe spec (awesome-design-md):
+ * a lighter display weight (400, not 600) with negative tracking, tabular
+ * figures, and a short brand hairline tying each figure to its label.
  */
 // Hairlines for four stats: stacked on phones, 2x2 from sm, one row from lg.
 const FOUR_UP_BORDERS = [
@@ -128,11 +141,15 @@ export function HeroStats({
           </dt>
           <dd
             className={cn(
-              "text-5xl leading-none font-semibold tracking-[-0.045em] text-balance sm:text-4xl lg:text-[4rem]",
+              "flex flex-col items-center text-5xl leading-none font-normal tracking-[-0.02em] sm:text-[2.75rem] lg:text-[4.25rem]",
               dark ? "text-white" : "text-ink",
             )}
           >
             <StatValue value={stat.value} />
+            <span
+              aria-hidden="true"
+              className="mt-5 h-px w-8 bg-brand-gradient opacity-80"
+            />
           </dd>
         </div>
       ))}

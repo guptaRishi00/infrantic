@@ -10,7 +10,7 @@ import {
 } from "react";
 import { cn } from "@/shared/lib/cn";
 
-type WorkTab = { id: string; number: string; title: string; summary: string };
+type WorkTab = { id: string; title: string; summary: string };
 
 type WorkTabsProps = {
   tabs: readonly WorkTab[];
@@ -86,15 +86,7 @@ export function WorkTabs({ tabs, panels }: WorkTabsProps) {
                   selected ? "opacity-100" : "opacity-0",
                 )}
               />
-              <span
-                className={cn(
-                  "font-mono text-[13px]",
-                  selected ? "text-brand-300" : "text-zinc-500",
-                )}
-              >
-                {tab.number}
-              </span>
-              <span className="mt-4 flex items-end justify-between gap-3 lg:mt-auto lg:pt-10">
+              <span className="flex items-end justify-between gap-3">
                 <span>
                   <span
                     className={cn(

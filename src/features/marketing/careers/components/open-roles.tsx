@@ -2,7 +2,6 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { BlockHeading } from "@/features/marketing/page-blocks";
 import type { Cta } from "@/shared/types";
-import { ButtonLink } from "@/shared/ui/button-link";
 import type { Role } from "../careers.data";
 
 type OpenRolesProps = {
@@ -10,6 +9,7 @@ type OpenRolesProps = {
   title: string;
   description: string;
   applyLabel: string;
+  /** Where every role row applies (the contact section for now). */
   introduceCta: Cta;
   roles: readonly Role[];
 };
@@ -30,23 +30,13 @@ export function OpenRoles({
       className="scroll-mt-24 bg-ink px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <BlockHeading
-            id="roles-title"
-            eyebrow={eyebrow}
-            title={title}
-            description={description}
-            tone="dark"
-          />
-          <ButtonLink
-            href={introduceCta.href}
-            variant="onDark"
-            size="sm"
-            className="self-start lg:self-auto"
-          >
-            {introduceCta.label}
-          </ButtonLink>
-        </div>
+        <BlockHeading
+          id="roles-title"
+          eyebrow={eyebrow}
+          title={title}
+          description={description}
+          tone="dark"
+        />
         <ul className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03]">
           {roles.map((role) => (
             <li
@@ -59,7 +49,7 @@ export function OpenRoles({
                 className="group grid gap-4 p-6 transition-colors hover:bg-white/[0.04] focus-visible:bg-white/[0.04] focus-visible:outline-none sm:grid-cols-[1.2fr_2fr_auto] sm:items-center sm:gap-8 sm:p-7"
               >
                 <div>
-                  <h3 className="text-xl font-semibold tracking-tight text-white">
+                  <h3 className="text-xl font-medium tracking-tight text-white">
                     {role.title}
                   </h3>
                   <p className="mt-1.5 flex flex-wrap gap-x-2 text-[13px] text-zinc-400">

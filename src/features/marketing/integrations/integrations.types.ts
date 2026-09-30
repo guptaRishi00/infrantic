@@ -11,17 +11,12 @@ export type ConstellationItem = {
   desktopOnly?: boolean;
 };
 
-export type TechStackIcon =
-  | "ai"
-  | "automation"
-  | "software"
-  | "infrastructure"
-  | "integrations";
+/** One tool in the stack grid; tools without a brand logo show a dot. */
+export type TechStackItem = { name: string; logo?: IntegrationId };
 
 export type TechStackGroup = {
   category: string;
-  icon: TechStackIcon;
-  items: readonly string[];
+  items: readonly TechStackItem[];
 };
 
 export type IntegrationsContent = {
@@ -30,5 +25,4 @@ export type IntegrationsContent = {
   description: string;
   items: readonly ConstellationItem[];
   stack: readonly TechStackGroup[];
-  footnote: string;
 };

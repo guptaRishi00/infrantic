@@ -55,7 +55,7 @@ export function Steps({ content }: { content: StepsContent }) {
               <div className="pt-1.5">
                 <h3
                   className={cn(
-                    "text-xl font-semibold tracking-tight",
+                    "text-xl font-medium tracking-tight",
                     dark ? "text-white" : "text-ink",
                   )}
                 >

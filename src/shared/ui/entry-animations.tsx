@@ -52,7 +52,11 @@ export function EntryAnimations() {
 
     const sections = [
       ...[...root.querySelectorAll("section")].filter(
-        (s) => !s.parentElement?.closest("section"),
+        // Top-level sections only, and not ones with their own choreography
+        // (the home hero runs a GSAP intro: data-entry-skip).
+        (s) =>
+          !s.parentElement?.closest("section") &&
+          !s.hasAttribute("data-entry-skip"),
       ),
       ...document.querySelectorAll("body > footer, main ~ footer"),
     ];

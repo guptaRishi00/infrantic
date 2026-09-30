@@ -7,7 +7,7 @@ const heroContent = {
   subtitle:
     "Infrantic builds AI-powered automation, custom software, and connected business systems that simplify complex operations and help companies scale.",
   primaryCta: { label: "Book a call", href: "/contact" },
-  secondaryCta: { label: "See how we work", href: "/#workflow" },
+  secondaryCta: { label: "How we work", href: "/#workflow" },
   // Mirrored left/right pairs: two pairs on ring 0, two on ring 1, one on ring 2.
   // Upper pairs stay at least ~75px clear of the header. Wider rings need wider
   // viewports (see revealClass in orbit-backdrop.tsx).

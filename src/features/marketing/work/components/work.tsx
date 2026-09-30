@@ -28,17 +28,12 @@ function CasePanel({
       aria-labelledby={`case-${study.id}`}
       className="flex h-full flex-col rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgb(255_255_255/0.055),rgb(255_255_255/0.015))] p-5 shadow-[inset_0_1px_0_rgb(255_255_255/0.08)] sm:p-8"
     >
-      <div className="flex items-baseline gap-3">
-        <span className="shrink-0 rounded-full border border-brand-300/30 bg-brand-300/10 px-2.5 py-0.5 font-mono text-[12px] text-brand-300">
-          {study.number}
-        </span>
-        <h3
-          id={`case-${study.id}`}
-          className="text-2xl font-semibold tracking-[-0.03em] text-white sm:text-3xl"
-        >
-          {study.title}
-        </h3>
-      </div>
+      <h3
+        id={`case-${study.id}`}
+        className="text-2xl font-medium tracking-[-0.03em] text-white sm:text-3xl"
+      >
+        {study.title}
+      </h3>
 
       {/* Panels share the tallest one's height; the visual takes up any spare
           height so the notes always sit at the bottom (no empty band). */}
@@ -95,7 +90,7 @@ export function Work({ content }: { content: WorkContent }) {
       className="scroll-mt-24 bg-ink px-4 py-16 sm:py-28"
     >
       <div className="mx-auto max-w-[80rem]">
-        <p className="text-[15px] font-medium text-brand-300">
+        <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-300">
           {content.eyebrow}
         </p>
         <SectionHeading
@@ -109,9 +104,8 @@ export function Work({ content }: { content: WorkContent }) {
         />
 
         <WorkTabs
-          tabs={content.cases.map(({ id, number, title, summary }) => ({
+          tabs={content.cases.map(({ id, title, summary }) => ({
             id,
-            number,
             title,
             summary,
           }))}
