@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Fragment } from "react";
 import { ButtonLink } from "@/shared/ui/button-link";
+import { BrandGlow } from "@/shared/ui/glow-cursor";
 import type { HeroContent } from "../hero.types";
 import { ActivityStack } from "./activity-stack";
 import { HeroCards } from "./hero-cards";
@@ -120,6 +121,7 @@ export function Hero({ content }: { content: HeroContent }) {
         />
         <IndustriesMarquee industries={content.industries} />
       </div>
+      <BrandGlow tone="light" />
     </section>
   );
 }

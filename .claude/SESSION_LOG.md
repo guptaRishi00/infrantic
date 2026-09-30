@@ -1110,3 +1110,35 @@
 - Kept: copy (subtext is 18 words, within the limit), pill, orbit, badges, activity cards, marquee, and the GSAP word reveal (per-line spans unchanged).
 - Verified: lint clean; tsc 0; build OK. CDP before/after at 1500×900, 1280×720 and 375×812: h1 56px on 2 lines (1 + 2 on phones, unchanged), CTAs bottom at 493px (inside 720), no CTA wrap, 0 overflow. Before/after screenshots compared.
 - Not committed.
+
+## 2026-09-30 — Inner-page heroes fill the first screen
+- User: inner-page heroes should be full-screen, with nothing from below visible on load (their screenshot showed the /about stat row peeking at the bottom).
+- `PageHero`: the section lost its `pt-32 sm:pt-44`. The copy + visual grid is now `min-h-[100dvh] content-center items-center` with the header clearance inside it (`pt-28 pb-12 sm:pt-32 sm:pb-16`), so the stat row (or the next section on stat-less pages) starts below the fold. `min-h-[100dvh]`, not `h-screen`: it grows rather than clipping on short or stacked layouts, and doesn't jump with the mobile URL bar. `content-center` keeps the stacked tablet rows together. Covers all 9 PageHero pages. Home and /contact (form hero) unchanged.
+- Verified: lint clean; tsc 0; build OK. CDP on 9 pages × 1440×820, 1280×720, 1920×1080, 768×1024 and 375×812 (45/45 OK): content below the hero starts at or after the fold, pill below the header, CTAs inside the viewport, 0 overflow. At 768×1024 the stacked hero is 1024–1085px, so it grows past the fold. Screenshots of /about (1440) and /services (375) reviewed.
+- Not committed.
+
+## 2026-09-30 — Glow cursor (user's GlowCursor, rationed placement)
+- Dependency: `ogl` ^1.0.11 (user approved when asked); package.json, bun.lock and package-lock.json updated.
+- New `src/shared/ui/glow-cursor.tsx` (client): the user's GlowCursor shader, props and trail physics kept, adapted into a section background layer (canvas `absolute inset-0 -z-10`, pointer listeners on the parent) instead of a content wrapper, so sections needed no restructuring. Additions:
+  - no-op on touch-only devices and for reduced motion;
+  - lazy WebGL (created on first hover);
+  - rAF loop sleeps when off-screen (IntersectionObserver) or after the fade;
+  - leaving the section always fades (the user's `idleFade={false}` still keeps the glow while resting inside);
+  - context released on unmount;
+  - shader `break` past the active points (16 of 64, ~4× less per-pixel work, same output).
+  - `BrandGlow` holds the user's exact settings: dark = screen blend; light = normal blend at 0.55 opacity (screen is invisible on white).
+- Placement (taste-skill: a rationed accent): home hero, home What we build, `CtaBand` (every page gets one glow moment), About "At a glance" (`Stats`), Careers "Open roles". Home: 3 of ~10 sections; inner pages: 1–2.
+- Biome: `<canvas>` counts as focusable, so `aria-hidden` carries a justified `biome-ignore`.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP (headless Edge, Intel Iris Xe via ANGLE/D3D11): hero at 1440×1009 canvas holds 60 fps / 17 ms worst frame while the trail moves (baseline 61/18).
+  - Glow rAF lifecycle: 0/s before hover → 62 moving → 44 in the fade second → 0 asleep → wakes on move.
+  - Canvases stay 300px (uninitialised) until hovered; touch and reduced-motion never initialise.
+  - Screenshots of the trail in the hero, What we build and the CTA band reviewed. The swiftshader run showed the hero CTAs mid-fade; that is a software-GL stall on first hover, and they read 1/1 opacity once settled.
+- Not committed.
+
+## 2026-09-30 — Glow cursor moved to white sections only
+- User: the effect belongs on white sections only. Removed `BrandGlow` (and the `relative isolate` it needed) from the three ink sections: home What we build, About At a glance (`Stats`), Careers Open roles.
+- To keep the balance, re-homed on light sections: home "Our technology" (`integrations.tsx`, section gains `relative isolate`) and the inner-page hero (`PageHero`, section gains `isolate`), both `tone="light"`. Hero and `CtaBand` placements kept.
+- Result: home 3 of ~10 sections (hero, Our technology, CTA band); every PageHero page 2 (hero, CTA band); /contact none (no PageHero or CtaBand).
+- Verified: lint clean; tsc 0; build OK. CDP on 9 pages: every glow canvas sits in a light section with `mix-blend-mode: normal`, none in an ink section. Trail screenshots (real GPU, Iris Xe) of home Our technology and the /about hero reviewed.
+- Not committed.

@@ -1,4 +1,5 @@
 import { ButtonLink } from "@/shared/ui/button-link";
+import { BrandGlow } from "@/shared/ui/glow-cursor";
 import { RingComet, ringFadeAlpha } from "@/shared/ui/ring-comet";
 import type { CtaContent } from "../cta.types";
 
@@ -101,6 +102,7 @@ export function CtaBand({ content }: { content: CtaContent }) {
           </ButtonLink>
         </div>
       </div>
+      <BrandGlow tone="light" />
     </section>
   );
 }

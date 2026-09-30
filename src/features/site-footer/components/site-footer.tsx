@@ -79,7 +79,7 @@ export function SiteFooter() {
             © {year} {siteConfig.name}. All rights reserved.
           </p>
           <p>
-            Made with love by{" "}
+            Made with ❤️ by{" "}
             <a
               href="https://softexedge.com"
               target="_blank"

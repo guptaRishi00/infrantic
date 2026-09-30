@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
+import { BrandGlow } from "@/shared/ui/glow-cursor";
 import type { PageHeroContent } from "../page-blocks.types";
 import { HeroStats } from "./hero-stats";
 import { HeroVisual } from "./hero-visual";
@@ -8,7 +9,9 @@ import { HeroVisual } from "./hero-visual";
 /**
  * Inner-page hero: left-aligned eyebrow, title, description, CTAs and an
  * optional stat row. Static background only (a soft brand wash), so it costs
- * nothing at idle. Top padding clears the fixed header.
+ * nothing at idle. The copy + visual block fills the first screen (header
+ * clearance included) with its content centred, so the stat row or the next
+ * section starts below the fold; it grows past the viewport rather than clip.
  */
 export function PageHero({
   content,
@@ -27,14 +30,14 @@ export function PageHero({
     <section
       aria-labelledby="page-title"
       className={cn(
-        "relative overflow-hidden bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4 pt-32 sm:pt-44",
+        "relative isolate overflow-hidden bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4",
         // A stat row brings its own cell padding, so the section closes tighter.
         padBottom ??
           (content.stats?.length ? "pb-4 sm:pb-6" : "pb-16 sm:pb-24"),
       )}
     >
       <div className="mx-auto max-w-[80rem]">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+        <div className="grid min-h-[100dvh] content-center items-center gap-12 pt-28 pb-12 sm:pt-32 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <div>
             <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600">
               {content.eyebrow}
@@ -74,6 +77,7 @@ export function PageHero({
         </div>
         {content.stats?.length ? <HeroStats stats={content.stats} /> : null}
       </div>
+      <BrandGlow tone="light" />
     </section>
   );
 }
