@@ -1165,3 +1165,9 @@
 - User: remove the grey band after the hero stats. `product-catalog.tsx` and `challenges/components/gap-rows.tsx` section `bg-zinc-50/70` → `bg-white`. Inner grey icon tiles and the gap-table header strip are unchanged (literal scope).
 - Verified: lint clean; tsc 0; build OK. CDP: #catalogue and #gaps compute `rgb(255, 255, 255)`; /challenges screenshot shows the stats → section flow with no grey band.
 - Committed and pushed together with the Steps and SplitSection gutter fixes.
+
+## 2026-09-30 — Navbar link spacing
+- `site-header.tsx`: the primary nav `<ul>` gets `lg:gap-2 xl:gap-4`, on top of each link's own padding, so hover/active pills keep their size. Text-to-text gaps: 16 → 24px (lg), 24 → 40px (xl+).
+- Verified: lint clean; tsc 0; clean build OK. CDP at 1024/1100/1280/1440/1887: all 7 items on one line, nav still centred with 35 / 73 / 111 / 127 / 127px clearance to the logo and to Book a call. Screenshot at 1440 reviewed.
+- Incident: the first build died with ENOSPC (C: at 0 MB). Cause: my CDP probe scripts built `--user-data-dir=${TEMP}\edge-…`; in a JS template `\e` is a plain `e`, so every run left a full Edge profile at `AppData\Local\Tempedge-*-profile` (46 folders, ~13 GB), plus 7 older `Temp\edge-*-profile` (~2.4 GB). With the user's OK these 55 throwaway folders were deleted (C: back to 15.4 GB free). The probe script now uses `path.join` and `rmSync`s its profile on exit. Two stray `next start` servers from a backgrounded `&` were stopped. `.next` was rebuilt clean.
+- Committed and pushed.

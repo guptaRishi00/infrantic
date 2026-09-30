@@ -24,7 +24,7 @@ export function SiteHeader() {
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">
-          <ul className="flex items-center">
+          <ul className="flex items-center lg:gap-2 xl:gap-4">
             {primaryNav.map((item) =>
               isNavGroup(item) ? (
                 <li key={item.label}>
