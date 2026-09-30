@@ -1142,3 +1142,7 @@
 - Result: home 3 of ~10 sections (hero, Our technology, CTA band); every PageHero page 2 (hero, CTA band); /contact none (no PageHero or CtaBand).
 - Verified: lint clean; tsc 0; build OK. CDP on 9 pages: every glow canvas sits in a light section with `mix-blend-mode: normal`, none in an ink section. Trail screenshots (real GPU, Iris Xe) of home Our technology and the /about hero reviewed.
 - Not committed.
+
+## 2026-09-30 — Glow cursor removed
+- User: remove the effect. Deleted `src/shared/ui/glow-cursor.tsx`, removed `BrandGlow` from the home hero, Our technology, `PageHero` and `CtaBand`, dropped the `isolate` classes added only for it (integrations, PageHero), and removed the `ogl` dependency (package.json, bun.lock, package-lock.json). The map entry was removed. Kept: full-screen inner heroes and the footer "Made with ❤️" edit.
+- Verified: `git diff 3e3dbf5` (pre-glow) over src + package files differs only in the PageHero full-screen change and the footer line. Lint clean; tsc 0; build OK. 0 `<canvas>` in prerendered HTML and 0 shader strings in `.next/static`.

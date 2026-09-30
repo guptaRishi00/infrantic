@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
-import { BrandGlow } from "@/shared/ui/glow-cursor";
 import type { PageHeroContent } from "../page-blocks.types";
 import { HeroStats } from "./hero-stats";
 import { HeroVisual } from "./hero-visual";
@@ -30,7 +29,7 @@ export function PageHero({
     <section
       aria-labelledby="page-title"
       className={cn(
-        "relative isolate overflow-hidden bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4",
+        "relative overflow-hidden bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4",
         // A stat row brings its own cell padding, so the section closes tighter.
         padBottom ??
           (content.stats?.length ? "pb-4 sm:pb-6" : "pb-16 sm:pb-24"),
@@ -77,7 +76,6 @@ export function PageHero({
         </div>
         {content.stats?.length ? <HeroStats stats={content.stats} /> : null}
       </div>
-      <BrandGlow tone="light" />
     </section>
   );
 }

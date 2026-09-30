@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
 import { cn } from "@/shared/lib/cn";
 import { BrandMark } from "@/shared/ui/brand-mark";
-import { BrandGlow } from "@/shared/ui/glow-cursor";
 import { IntegrationLogo } from "@/shared/ui/integration-logo";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { IntegrationsContent } from "../integrations.types";
@@ -19,9 +18,8 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
     <section
       id="technology"
       aria-labelledby="integrations-title"
-      className="relative isolate scroll-mt-24 overflow-hidden px-4 pt-16 pb-16 sm:pt-20 sm:pb-28"
+      className="scroll-mt-24 overflow-hidden px-4 pt-16 pb-16 sm:pt-20 sm:pb-28"
     >
-      <BrandGlow tone="light" />
       <div className="mx-auto max-w-[80rem]">
         <div className="flex flex-col items-center text-center">
           <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
