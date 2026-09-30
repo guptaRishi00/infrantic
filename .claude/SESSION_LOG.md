@@ -1099,3 +1099,14 @@
 - Unchanged: the home hero pill ("AI. Automation. Software.", already descriptive) and the "Case studies" section eyebrow lower on that page (not a hero). Eyebrows are display-only (no metadata or breadcrumb use).
 - Verified: lint clean; tsc 0; build OK. CDP on all 10 pages at 1500 and 375: the pill before each h1 shows the new text, one line, 159–254px wide, 0 overflow. Healthcare hero screenshot reviewed.
 - Not committed.
+
+## 2026-09-30 — Home hero refinement (taste-skill + awesome-design-md cohere)
+- Design read: preserve-mode refresh of a B2B services hero; dials variance 5 / motion 5 / density 3. Audit against taste-skill hard rules (hero stack ≤4, subtext ≤20 words, 2-line headline, CTA above the fold, no wrap) and the Cohere spec already guiding the site.
+- Changes (`hero/components/hero.tsx` only):
+  - Headline `sm` 2.75 → 3rem and `lg` 3.1 → 3.5rem (49.6 → 56px), leading 1 → 1.02; phones stay 2.2rem, since line 2 already wraps there.
+  - Every line but the last is `text-zinc-500` (4.8:1), so "Your systems shouldn't be." leads in ink (hierarchy by colour, not scale).
+  - Subtext `sm:text-[17px]` / 1.5 in a 34rem measure, mt-6.
+  - Secondary CTA "How we work" gains a lucide ArrowRight that nudges on hover (reduced-motion safe).
+- Kept: copy (subtext is 18 words, within the limit), pill, orbit, badges, activity cards, marquee, and the GSAP word reveal (per-line spans unchanged).
+- Verified: lint clean; tsc 0; build OK. CDP before/after at 1500×900, 1280×720 and 375×812: h1 56px on 2 lines (1 + 2 on phones, unchanged), CTAs bottom at 493px (inside 720), no CTA wrap, 0 overflow. Before/after screenshots compared.
+- Not committed.

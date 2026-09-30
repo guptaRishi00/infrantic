@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Fragment } from "react";
 import { ButtonLink } from "@/shared/ui/button-link";
 import type { HeroContent } from "../hero.types";
@@ -11,11 +12,15 @@ import { OrbitBackdrop } from "./orbit-backdrop";
  * The headline split into lines and words, server-rendered, so GSAP can reveal
  * it word by word while crawlers, screen readers and no-JS visitors get the
  * plain sentence. Each word sits in its own clip (padded so descenders show).
+ * Every line but the last is set in a softer grey, so the payoff line leads.
  */
 function HeadlineWords({ text }: { text: string }) {
   const lines = text.split("\n");
   return lines.map((line, lineIndex) => (
-    <span key={line} className="block">
+    <span
+      key={line}
+      className={lineIndex < lines.length - 1 ? "block text-zinc-500" : "block"}
+    >
       {line.split(" ").map((word, index, words) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: static copy, never reordered
         <Fragment key={index}>
@@ -56,13 +61,13 @@ export function Hero({ content }: { content: HeroContent }) {
         </div>
         <h1
           id="hero-title"
-          className="mt-7 text-[2.2rem] leading-[1] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[2.75rem] lg:text-[3.1rem]"
+          className="mt-7 text-[2.2rem] leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[3rem] lg:text-[3.5rem]"
         >
           <HeadlineWords text={content.title} />
         </h1>
         <p
           data-hero-sub=""
-          className="mt-5 max-w-[32rem] text-[15px] leading-[1.4] text-pretty text-zinc-600 sm:text-base sm:leading-[1.45]"
+          className="mt-6 max-w-[34rem] text-[15px] leading-[1.45] text-pretty text-zinc-600 sm:text-[17px] sm:leading-[1.5]"
         >
           {content.subtitle}
         </p>
@@ -73,8 +78,16 @@ export function Hero({ content }: { content: HeroContent }) {
           <ButtonLink href={content.primaryCta.href}>
             {content.primaryCta.label}
           </ButtonLink>
-          <ButtonLink href={content.secondaryCta.href} variant="secondary">
+          <ButtonLink
+            href={content.secondaryCta.href}
+            variant="secondary"
+            className="group"
+          >
             {content.secondaryCta.label}
+            <ArrowRight
+              aria-hidden="true"
+              className="size-4 text-zinc-500 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+            />
           </ButtonLink>
         </div>
       </div>
