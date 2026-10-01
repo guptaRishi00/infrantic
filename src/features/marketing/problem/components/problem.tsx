@@ -29,7 +29,7 @@ export function Problem({ content }: { content: ProblemContent }) {
       // padding alone sets the gap.
       className="scroll-mt-24 px-4 pb-16 sm:pb-28"
     >
-      <div className="mx-auto max-w-[80rem] pl-6 pr-[1.125rem]">
+      <div className="mx-auto max-w-[80rem]">
         <p className="font-mono text-[13px] tracking-[0.08em] uppercase text-brand-700">
           {content.eyebrow}
         </p>

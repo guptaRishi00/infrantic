@@ -1184,3 +1184,9 @@
 - Verified: lint clean; tsc 0; build OK. Desktop layout dump (every element's box + 23 computed styles, 11 pages × 1024/1280/1500, 22,773 elements) before vs after: 0 differ. Phones at 320/360/375/414 × 11 pages: 0 sideways overflow. Most pages got 160–460px shorter at 375. Zoom/tab fit measured per width. Screenshots of every inner hero, the menu, How we work and About reviewed; before/after of /services and /about made.
 - Found: Tailwind v4 emits `max-sm:` after `max-[Npx]:`; recorded in the map.
 - Committed and pushed.
+
+## 2026-10-01 — "Where work slows down" (home Problem): extra side inset removed
+- User: reduce the section's x-axis padding. Measured: its inner container had `pl-6 pr-[1.125rem]` (from commit 73d13ab) on top of the shared `px-4` + 80rem container, so it sat 24px left / 18px right inside every other section at all widths. User chose all sizes (over mobile-only) when asked.
+- `problem.tsx`: container is now plain `mx-auto max-w-[80rem]`, like Selected work.
+- Verified: lint clean; tsc 0; build OK. CDP: heading/first-card left edge 40→16 (375), 40→16 (768), 104→80 (1440), now equal to Selected work; card right edge 341→359 at 375. Screenshots at 375 and 1440 reviewed.
+- Not committed.
