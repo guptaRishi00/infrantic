@@ -63,7 +63,7 @@ export function GapRows({ content }: { content: GapRowsContent }) {
                     </p>
                     <Link
                       href={gap.product.href}
-                      className="group mt-3 ml-4 inline-flex items-center gap-1.5 rounded-md text-[14px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                      className="group mt-3 ml-4 inline-flex items-center gap-1.5 rounded-md text-[14px] font-medium text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink max-sm:mt-0 max-sm:-mb-3 max-sm:py-3"
                     >
                       <span className="text-zinc-500">Product:</span>{" "}
                       {gap.product.name}

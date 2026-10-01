@@ -48,7 +48,7 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
       <div
         role="tablist"
         aria-label="Workflow steps"
-        className="mx-auto flex max-w-4xl snap-x gap-1 overflow-x-auto border-b border-zinc-200 [scrollbar-width:none]"
+        className="mx-auto flex max-w-4xl snap-x gap-1 overflow-x-auto border-b border-zinc-200 [scrollbar-width:none] max-sm:gap-0"
       >
         {labels.map((label, index) => {
           const selected = index === active;
@@ -67,7 +67,8 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
               onClick={() => setActive(index)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cn(
-                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-[15px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink",
+                // Phones: tighter tabs so all five steps fit without a hidden scroll.
+                "relative flex-1 shrink-0 snap-start px-4 pt-2 pb-3.5 text-[15px] whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink max-sm:text-[14px] max-[368px]:px-1.5 min-[368px]:max-sm:px-2",
                 selected
                   ? "font-medium text-ink"
                   : "text-zinc-600 hover:text-zinc-700",
@@ -77,7 +78,7 @@ export function WorkflowTabs({ labels, panels }: WorkflowTabsProps) {
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-x-4 -bottom-px h-0.5 rounded-full bg-ink transition-opacity duration-200",
+                  "absolute inset-x-4 -bottom-px h-0.5 rounded-full bg-ink transition-opacity duration-200 max-[368px]:inset-x-1.5 min-[368px]:max-sm:inset-x-2",
                   selected ? "opacity-100" : "opacity-0",
                 )}
               />

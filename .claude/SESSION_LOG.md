@@ -1171,3 +1171,16 @@
 - Verified: lint clean; tsc 0; clean build OK. CDP at 1024/1100/1280/1440/1887: all 7 items on one line, nav still centred with 35 / 73 / 111 / 127 / 127px clearance to the logo and to Book a call. Screenshot at 1440 reviewed.
 - Incident: the first build died with ENOSPC (C: at 0 MB). Cause: my CDP probe scripts built `--user-data-dir=${TEMP}\edge-…`; in a JS template `\e` is a plain `e`, so every run left a full Edge profile at `AppData\Local\Tempedge-*-profile` (46 folders, ~13 GB), plus 7 older `Temp\edge-*-profile` (~2.4 GB). With the user's OK these 55 throwaway folders were deleted (C: back to 15.4 GB free). The probe script now uses `path.join` and `rmSync`s its profile on exit. Two stray `next start` servers from a backgrounded `&` were stopped. `.next` was rebuilt clean.
 - Committed and pushed.
+
+## 2026-10-01 — Mobile responsive pass (desktop untouched)
+- User: keep desktop exactly as is; make the mobile view properly responsive using awesome-design-md + taste-skill. Design read: B2B AI/automation agency site, redesign-preserve, mobile only; Cohere spec's mobile rules (stack to one column, compact nav, heroes stack media) applied, no new layout families.
+- Audit first (headless Edge, phone emulation, 11 pages at 375): no page overflowed sideways; the weak spots were design. Inner heroes floated mid-screen with ~200px blank above because their illustrations were hidden below `md`. Hero stats stacked as ~180px blocks each. The How-we-work diagram truncated card labels ("Proce…", "T…"). Its 5 step tabs hid "Improve" off-screen. Two links had 18–21px tap heights.
+- Changes (all `max-*` / base-overridden-at-`sm` classes):
+  - `PageHero`: the visual shows on phones under the copy, scaled with `zoom` (0.75 ≥368px, 0.64 below) so fixed canvases fit. Copy now starts under the header and the illustration fills the first screen.
+  - `HeroStats`: below `sm` each stat is one row (figure left in a 6.75rem column, label right, hairlines); default spacing `mt-6 sm:mt-20`. Applies to the About "At a glance" dark row too.
+  - `flow-canvas`: on phones card labels wrap and the status pill hides (the status icon carries state).
+  - `workflow-tabs`: tighter padding/size on phones so all 5 steps fit from 360px.
+  - Hit areas: header logo link (`max-lg`) and challenges "Product:" links (`max-sm`) get 12px invisible padding cancelled by margin.
+- Verified: lint clean; tsc 0; build OK. Desktop layout dump (every element's box + 23 computed styles, 11 pages × 1024/1280/1500, 22,773 elements) before vs after: 0 differ. Phones at 320/360/375/414 × 11 pages: 0 sideways overflow. Most pages got 160–460px shorter at 375. Zoom/tab fit measured per width. Screenshots of every inner hero, the menu, How we work and About reviewed; before/after of /services and /about made.
+- Found: Tailwind v4 emits `max-sm:` after `max-[Npx]:`; recorded in the map.
+- Committed and pushed.

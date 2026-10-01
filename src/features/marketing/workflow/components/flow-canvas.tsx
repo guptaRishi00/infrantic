@@ -80,12 +80,14 @@ function NodeCard({ node, index }: { node: FlowNode; index: number }) {
       >
         <div className="flex items-center gap-2">
           <StatusIcon status={node.status} />
-          <span className="truncate text-[11px] font-semibold text-zinc-800">
+          {/* Phones: the card is too narrow for label + pill, so the label wraps
+              and the status icon alone carries the state. */}
+          <span className="truncate text-[11px] font-semibold text-zinc-800 max-sm:leading-tight max-sm:whitespace-normal">
             {node.label}
           </span>
           <span
             className={cn(
-              "ml-auto shrink-0 rounded-full px-1.5 py-px text-[9px] font-medium",
+              "ml-auto shrink-0 rounded-full px-1.5 py-px text-[9px] font-medium max-sm:hidden",
               style.pill,
             )}
           >

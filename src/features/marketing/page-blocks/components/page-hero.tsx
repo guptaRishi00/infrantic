@@ -11,6 +11,7 @@ import { HeroVisual } from "./hero-visual";
  * nothing at idle. The copy + visual block fills the first screen (header
  * clearance included) with its content centred, so the stat row or the next
  * section starts below the fold; it grows past the viewport rather than clip.
+ * Below lg the visual stacks under the copy (zoomed down on phones).
  */
 export function PageHero({
   content,
@@ -69,7 +70,9 @@ export function PageHero({
             ) : null}
           </div>
           {visual ? (
-            <div className="hidden md:block md:max-lg:mx-auto md:max-lg:w-full md:max-lg:max-w-lg">
+            // Phones show the visual under the copy, zoomed as a whole (text,
+            // rem-sized comets and all) so the fixed canvases fit the column.
+            <div className="max-lg:mx-auto max-lg:w-full max-lg:max-w-lg max-[368px]:[zoom:0.64] min-[368px]:max-sm:[zoom:0.75]">
               {visual}
             </div>
           ) : null}
