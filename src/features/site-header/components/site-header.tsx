@@ -10,7 +10,10 @@ import { NavDropdown } from "./nav-dropdown";
 export function SiteHeader() {
   return (
     <AutoHideHeader>
-      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-2xl border border-zinc-200/80 bg-white/95 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)]">
+      {/* Phones: a smaller bar with tighter padding. Below lg, while the
+          mobile menu is open the bar squares its bottom corners and drops its
+          bottom border, so it and the menu read as one card. */}
+      <div className="relative mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between rounded-2xl border border-zinc-200/80 bg-white/95 pr-[1.125rem] pl-6 shadow-[0_1px_2px_rgb(0_0_0/0.03),0_10px_30px_-18px_rgb(0_0_0/0.12)] max-lg:transition-[border-radius] max-lg:duration-200 max-lg:has-[[data-mobile-toggle][aria-expanded=true]]:rounded-b-none max-lg:has-[[data-mobile-toggle][aria-expanded=true]]:border-b-transparent max-sm:h-14 max-sm:pr-2 max-sm:pl-4">
         {/* Faint brand hairline along the bottom edge. */}
         <span
           aria-hidden="true"
@@ -20,7 +23,7 @@ export function SiteHeader() {
           href="/"
           className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink max-lg:-my-3 max-lg:py-3"
         >
-          <BrandLogo priority className="h-[18px] w-auto sm:h-5" />
+          <BrandLogo priority className="h-4 w-auto sm:h-5" />
         </Link>
 
         <nav aria-label="Primary" className="hidden lg:block">

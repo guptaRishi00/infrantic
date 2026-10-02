@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { SectionHeading } from "@/shared/ui/section-heading";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { BuildItemIcon, WhatWeBuildContent } from "../what-we-build.types";
 
 const icons: Record<BuildItemIcon, LucideIcon> = {
@@ -51,7 +52,11 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
           </ButtonLink>
         </div>
 
-        <ul className="mt-12 grid overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:grid-cols-2">
+        <SnapRail
+          label={content.title}
+          tone="dark"
+          className="mt-12 grid overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] sm:grid-cols-2 max-sm:gap-4 max-sm:rounded-none max-sm:border-0 max-sm:bg-transparent"
+        >
           {content.items.map((item) => {
             const Icon = icons[item.icon];
             const headingId = `build-${item.id}`;
@@ -60,7 +65,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
               // edge, and the outer frame hides the ones on the rim.
               <li
                 key={item.id}
-                className="-mr-px -mb-px border-r border-b border-white/10"
+                className="-mr-px -mb-px border-r border-b border-white/10 max-sm:m-0 max-sm:rounded-2xl max-sm:border max-sm:bg-white/[0.03]"
               >
                 <article
                   aria-labelledby={headingId}
@@ -94,7 +99,7 @@ export function WhatWeBuild({ content }: { content: WhatWeBuildContent }) {
               </li>
             );
           })}
-        </ul>
+        </SnapRail>
       </div>
     </section>
   );

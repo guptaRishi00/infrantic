@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { BlockHeading } from "@/features/marketing/page-blocks";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { CaseListContent } from "../case-studies.data";
 
 /**
@@ -21,7 +22,13 @@ export function CaseList({ content }: { content: CaseListContent }) {
           title={content.title}
           description={content.description}
         />
-        <ol className="mt-12 space-y-6">
+        {/* Phones: the write-ups sit side by side in a swipe rail (like the
+            home Selected work cases). */}
+        <SnapRail
+          as="ol"
+          label={content.title}
+          className="mt-12 max-sm:gap-4 sm:space-y-6"
+        >
           {content.cases.map((study) => (
             <li key={study.id}>
               <article
@@ -116,7 +123,7 @@ export function CaseList({ content }: { content: CaseListContent }) {
               </article>
             </li>
           ))}
-        </ol>
+        </SnapRail>
       </div>
     </section>
   );

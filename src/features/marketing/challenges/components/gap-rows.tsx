@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { BlockHeading, blockIcons } from "@/features/marketing/page-blocks";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { GapRowsContent } from "../challenges.data";
 
 /**
@@ -22,7 +23,9 @@ export function GapRows({ content }: { content: GapRowsContent }) {
           title={content.title}
           description={content.description}
         />
-        <div className="mt-12 rounded-2xl border border-zinc-200/80 bg-white">
+        {/* Phones: the frame gives way to one bordered card per gap in a swipe
+            rail (like the home Problem cards). */}
+        <div className="mt-12 rounded-2xl border border-zinc-200/80 bg-white max-sm:rounded-none max-sm:border-0 max-sm:bg-transparent">
           <div
             aria-hidden="true"
             className="hidden grid-cols-[4rem_1.1fr_1fr] gap-8 rounded-t-2xl border-b border-zinc-200/80 bg-zinc-50/80 px-7 py-3.5 text-[12px] font-semibold tracking-[0.12em] text-zinc-600 uppercase lg:grid"
@@ -31,13 +34,17 @@ export function GapRows({ content }: { content: GapRowsContent }) {
             <span>{content.todayLabel}</span>
             <span>{content.changeLabel}</span>
           </div>
-          <ol className="divide-y divide-zinc-200/80">
+          <SnapRail
+            as="ol"
+            label={content.title}
+            className="max-sm:gap-4 sm:divide-y sm:divide-zinc-200/80"
+          >
             {content.gaps.map((gap) => {
               const Icon = blockIcons[gap.icon];
               return (
                 <li
                   key={gap.id}
-                  className="grid gap-5 px-7 py-7 lg:grid-cols-[4rem_1.1fr_1fr] lg:items-start lg:gap-8"
+                  className="grid gap-5 px-7 py-7 max-sm:content-start max-sm:rounded-2xl max-sm:border max-sm:border-zinc-200/80 max-sm:bg-white max-sm:p-6 lg:grid-cols-[4rem_1.1fr_1fr] lg:items-start lg:gap-8"
                 >
                   <span className="grid size-10 place-items-center rounded-xl border border-zinc-200 bg-zinc-50">
                     <Icon aria-hidden="true" className="size-5 text-zinc-800" />
@@ -76,7 +83,7 @@ export function GapRows({ content }: { content: GapRowsContent }) {
                 </li>
               );
             })}
-          </ol>
+          </SnapRail>
         </div>
       </div>
     </section>

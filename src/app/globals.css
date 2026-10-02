@@ -305,6 +305,25 @@
    shows the pointer instead (links already do). Utilities such as
    `cursor-wait` on a pending submit still win over this base layer. */
 @layer base {
+  /* Phones (below sm): the whole site is drawn at 92%, hero and every
+     section alike, px-sized text included. Media queries still read the real
+     viewport; per-component zooms (hero visuals, How we work) compound. */
+  @media (width < 40rem) {
+    html {
+      zoom: 0.92;
+    }
+
+    /* Inner pages (their first section is the page-title hero; home's is
+       hero-title): every section sits 16px closer to the one before. A
+       negative margin into the previous section's empty bottom padding,
+       so each section keeps its own padding exceptions. */
+    [data-page-enter]:has(> section:first-child[aria-labelledby="page-title"])
+      > section
+      + section {
+      margin-top: -1rem;
+    }
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [role="tab"],

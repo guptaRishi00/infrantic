@@ -3,7 +3,10 @@ import type { ComponentProps } from "react";
 import { cn } from "@/shared/lib/cn";
 
 const variants = {
-  primary: "bg-black text-white hover:bg-brand-gradient",
+  // Phones have no hover, so below md the primary shows its hover look (the
+  // brand gradient) at rest.
+  primary:
+    "bg-black text-white hover:bg-brand-gradient max-md:bg-brand-gradient",
   secondary:
     "border border-zinc-200 bg-white text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
   muted:

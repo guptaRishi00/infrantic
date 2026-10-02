@@ -42,24 +42,30 @@ export function FlowCanvas({ step }: { step: WorkflowStep }) {
       aria-hidden="true"
       className="relative h-full min-h-[30rem] overflow-hidden rounded-lg border border-zinc-200/70 bg-zinc-50 bg-[radial-gradient(rgb(2_28_55/0.08)_1px,transparent_1px)] [background-size:16px_16px]"
     >
-      {step.edges.map(([fromId, toId], index) => {
-        const from = byId.get(fromId);
-        const to = byId.get(toId);
-        if (!from || !to) return null;
-        return (
-          <Connector
-            key={`${fromId}-${toId}`}
-            from={from}
-            to={to}
-            status={to.status}
-            delay={index * 0.6}
-          />
-        );
-      })}
+      {/* Coordinate box for nodes and wires. Phones: cards narrow from 44%
+          to 36% (42% below 368px, where longer single words need the room)
+          and the box shifts 4% right; with columns at x=22 and x=70 the two
+          side margins then come out equal (26% minus half a card). */}
+      <div className="absolute inset-0 max-sm:right-[-4%] max-sm:left-[4%]">
+        {step.edges.map(([fromId, toId], index) => {
+          const from = byId.get(fromId);
+          const to = byId.get(toId);
+          if (!from || !to) return null;
+          return (
+            <Connector
+              key={`${fromId}-${toId}`}
+              from={from}
+              to={to}
+              status={to.status}
+              delay={index * 0.6}
+            />
+          );
+        })}
 
-      {step.nodes.map((node, index) => (
-        <NodeCard key={node.id} node={node} index={index} />
-      ))}
+        {step.nodes.map((node, index) => (
+          <NodeCard key={node.id} node={node} index={index} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -68,7 +74,7 @@ function NodeCard({ node, index }: { node: FlowNode; index: number }) {
   const style = statusStyles[node.status];
   return (
     <div
-      className="absolute w-[44%] max-w-52 -translate-x-1/2 -translate-y-1/2"
+      className="absolute w-[44%] max-w-52 -translate-x-1/2 -translate-y-1/2 max-[368px]:w-[42%] min-[368px]:max-sm:w-[36%]"
       style={{ left: `${node.x}%`, top: `${node.y}%` }}
     >
       <div
@@ -94,7 +100,7 @@ function NodeCard({ node, index }: { node: FlowNode; index: number }) {
             {style.label}
           </span>
         </div>
-        <p className="mt-1 truncate pl-6 text-[10px] text-zinc-500">
+        <p className="mt-1 truncate pl-6 text-[10px] text-zinc-500 max-sm:whitespace-normal">
           {node.detail}
         </p>
         {node.status === "active" ? (

@@ -251,7 +251,7 @@ function FormBody({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-brand-gradient focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-wait disabled:opacity-70"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-md bg-black px-5 text-[15px] font-medium text-white transition-colors hover:bg-brand-gradient focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:cursor-wait disabled:opacity-70 max-md:bg-brand-gradient"
         >
           {pending ? (
             <>

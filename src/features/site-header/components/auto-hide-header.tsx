@@ -55,7 +55,7 @@ export function AutoHideHeader({ children }: { children: ReactNode }) {
   return (
     <header
       ref={ref}
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-3 transition-[translate] duration-300 ease-out motion-reduce:transition-none data-[hidden=true]:not-focus-within:-translate-y-[120px]"
+      className="fixed inset-x-0 top-0 z-50 px-4 pt-3 max-sm:pt-2 transition-[translate] duration-300 ease-out motion-reduce:transition-none data-[hidden=true]:not-focus-within:-translate-y-[120px]"
     >
       {children}
     </header>

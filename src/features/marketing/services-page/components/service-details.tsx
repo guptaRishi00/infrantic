@@ -2,6 +2,7 @@ import { Check } from "lucide-react";
 import { BlockHeading } from "@/features/marketing/page-blocks";
 import type { Service } from "@/features/marketing/services/services.types";
 import { ButtonLink } from "@/shared/ui/button-link";
+import { SnapRail } from "@/shared/ui/snap-rail";
 
 type ServiceDetailsProps = {
   eyebrow: string;
@@ -34,12 +35,19 @@ export function ServiceDetails({
           title={title}
           description={description}
         />
-        <ol className="mt-12 divide-y divide-zinc-200/80 rounded-2xl border border-zinc-200/80 bg-white">
+        {/* Phones: one bordered card per service line in a swipe rail (like
+            home What we build); the header dropdown anchors still scroll the
+            rail to the right card. */}
+        <SnapRail
+          as="ol"
+          label={title}
+          className="mt-12 rounded-2xl border border-zinc-200/80 bg-white max-sm:gap-4 max-sm:rounded-none max-sm:border-0 max-sm:bg-transparent sm:divide-y sm:divide-zinc-200/80"
+        >
           {services.map((service) => (
             <li
               key={service.id}
               id={service.id}
-              className="group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
+              className="group/card relative scroll-mt-28 grid gap-8 p-7 transition-colors duration-200 first:rounded-t-2xl last:rounded-b-2xl hover:bg-zinc-50/80 max-sm:content-start max-sm:rounded-2xl max-sm:border max-sm:border-zinc-200/80 max-sm:bg-white max-sm:p-6 lg:grid-cols-[1fr_1.4fr] lg:gap-16 lg:p-10"
             >
               <div>
                 <h3 className="text-2xl font-medium tracking-tight text-ink sm:text-3xl">
@@ -80,7 +88,7 @@ export function ServiceDetails({
               </div>
             </li>
           ))}
-        </ol>
+        </SnapRail>
       </div>
     </section>
   );

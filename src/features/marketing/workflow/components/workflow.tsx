@@ -18,7 +18,9 @@ export function Workflow({ content }: { content: WorkflowContent }) {
           title={content.title}
           description={content.description}
         />
-        <div className="mt-12">
+        {/* Phones: tabs + step panel zoomed to 90% as a whole (text, card,
+            diagram and spacing alike); the heading keeps the site scale. */}
+        <div className="mt-12 max-sm:[zoom:0.9]">
           <WorkflowTabs
             labels={content.steps.map((step) => step.tabLabel)}
             panels={content.steps.map((step) => (

@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { SectionHeading } from "@/shared/ui/section-heading";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { GapIcon, ProblemContent } from "../problem.types";
 
 const icons: Record<GapIcon, LucideIcon> = {
@@ -42,7 +43,10 @@ export function Problem({ content }: { content: ProblemContent }) {
           className="mt-3"
         />
 
-        <ul className="mt-12 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+        <SnapRail
+          label={content.title}
+          className="mt-12 grid gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {content.gaps.map((gap) => {
             const Icon = icons[gap.icon];
             const headingId = `gap-${gap.id}`;
@@ -88,7 +92,7 @@ export function Problem({ content }: { content: ProblemContent }) {
               </li>
             );
           })}
-        </ul>
+        </SnapRail>
       </div>
     </section>
   );

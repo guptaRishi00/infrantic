@@ -84,43 +84,45 @@ export function FeaturedProject({
           </div>
 
           {/* Graph-paper canvas; scrolls sideways on narrow screens so the six
-              steps keep their proportions. */}
+              steps keep their proportions. Phones (below sm): no scroll and no
+              connectors; hub, steps and outcome stack left-aligned, the steps
+              as a list of row cards. */}
           <div className="overflow-x-auto bg-white bg-[linear-gradient(rgb(2_28_55/0.05)_1px,transparent_1px),linear-gradient(90deg,rgb(2_28_55/0.05)_1px,transparent_1px)] bg-size-[20px_20px] [scrollbar-width:thin]">
-            <div className="flex h-full min-w-[46rem] flex-col px-6 py-8 sm:px-10">
+            <div className="flex h-full min-w-[46rem] flex-col px-6 py-8 max-sm:min-w-0 sm:px-10">
               <p className="font-mono text-[11px] tracking-wide text-zinc-500 uppercase">
                 {diagram.label}
               </p>
-              <p className="mt-2 flex items-center gap-1.5 text-[13px] text-zinc-500 md:hidden">
+              <p className="mt-2 flex items-center gap-1.5 text-[13px] text-zinc-500 max-sm:hidden md:hidden">
                 Swipe to see all six steps
                 <ArrowRight aria-hidden="true" className="size-3.5" />
               </p>
 
               {/* Vertically centred between the label and the legend. */}
               <div className="my-auto py-8">
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center max-sm:items-start">
                   <span className="rounded-lg bg-ink px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_0_4px_rgb(7_150_254/0.08)]">
                     {diagram.hub}
                   </span>
                   <FlowLine
                     horizontal={false}
                     color={DASH}
-                    className="relative block h-8 w-px"
+                    className="relative block h-8 w-px max-sm:hidden"
                   />
                 </div>
 
-                <ol className="relative grid grid-cols-6 gap-6 pt-6">
+                <ol className="relative grid grid-cols-6 gap-6 pt-6 max-sm:flex max-sm:flex-col max-sm:gap-2.5 max-sm:pt-4">
                   {/* Shared-data bus across the step centres (gap is 1.5rem),
                       in two halves so the data flows outward from the hub. */}
                   <FlowLine
                     horizontal
                     reverse
                     color={DASH}
-                    className="absolute top-0 right-1/2 left-[calc((100%-7.5rem)/12)] h-px"
+                    className="absolute top-0 right-1/2 left-[calc((100%-7.5rem)/12)] h-px max-sm:hidden"
                   />
                   <FlowLine
                     horizontal
                     color={DASH}
-                    className="absolute top-0 right-[calc((100%-7.5rem)/12)] left-1/2 h-px"
+                    className="absolute top-0 right-[calc((100%-7.5rem)/12)] left-1/2 h-px max-sm:hidden"
                   />
                   {diagram.steps.map((step, index) => {
                     const Icon = icons[step.icon];
@@ -130,12 +132,12 @@ export function FeaturedProject({
                         <FlowLine
                           horizontal={false}
                           color={DASH}
-                          className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2"
+                          className="absolute -top-6 left-1/2 h-6 w-px -translate-x-1/2 max-sm:hidden"
                         />
-                        <div className="relative flex h-full min-h-[7.5rem] flex-col items-center justify-center gap-2.5 rounded-lg border border-ink/20 bg-white px-2 pt-7 pb-4 text-center shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+                        <div className="relative flex h-full min-h-[7.5rem] flex-col items-center justify-center gap-2.5 rounded-lg border border-ink/20 bg-white px-2 pt-7 pb-4 text-center shadow-[0_1px_2px_rgb(0_0_0/0.04)] max-sm:min-h-0 max-sm:flex-row max-sm:justify-start max-sm:gap-3 max-sm:px-4 max-sm:py-3 max-sm:text-left">
                           <span
                             aria-hidden="true"
-                            className="absolute top-2 left-2.5 font-mono text-[10px] text-zinc-400"
+                            className="absolute top-2 left-2.5 font-mono text-[10px] text-zinc-400 max-sm:static"
                           >
                             {String(index + 1).padStart(2, "0")}
                           </span>
@@ -151,7 +153,7 @@ export function FeaturedProject({
                         {last ? null : (
                           <ArrowRight
                             aria-hidden="true"
-                            className="absolute top-1/2 -right-5 size-4 -translate-y-1/2 text-ink"
+                            className="absolute top-1/2 -right-5 size-4 -translate-y-1/2 text-ink max-sm:hidden"
                             strokeWidth={2}
                           />
                         )}
@@ -160,11 +162,11 @@ export function FeaturedProject({
                   })}
                 </ol>
 
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center max-sm:items-start max-sm:pt-4">
                   <FlowLine
                     horizontal={false}
                     color={DASH}
-                    className="relative block h-8 w-px"
+                    className="relative block h-8 w-px max-sm:hidden"
                   />
                   <span className="rounded-lg border border-brand-200 bg-brand-50 px-4 py-2.5 text-sm font-semibold text-brand-700">
                     {diagram.outcome}
@@ -174,7 +176,7 @@ export function FeaturedProject({
 
               <div
                 aria-hidden="true"
-                className="flex gap-6 text-[11px] text-zinc-500"
+                className="flex gap-6 text-[11px] text-zinc-500 max-sm:hidden"
               >
                 <span className="flex items-center gap-2">
                   <span className="h-px w-6 bg-ink" />

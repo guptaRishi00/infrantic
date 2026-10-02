@@ -33,10 +33,13 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
           />
         </div>
 
-        {/* A size container, so logo orbits can use cqw for the ring radius. */}
+        {/* A size container, so logo orbits can use cqw for the ring radius.
+            Phones: wider than the column by half of (640px - viewport), so the
+            rings run past the screen edges on small phones and the extra
+            tapers to 0 at sm; the section's overflow-hidden clips them. */}
         <div
           aria-hidden="true"
-          className="@container relative mx-auto mt-10 aspect-square max-w-[50rem]"
+          className="@container relative mx-auto mt-10 aspect-square max-w-[50rem] max-sm:ml-[calc((100vw_-_640px)_/_4)] max-sm:w-[calc(100%_+_(640px_-_100vw)_/_2)] max-sm:max-w-none"
         >
           {RINGS.map((ring) => (
             <span
@@ -107,42 +110,96 @@ export function Integrations({ content }: { content: IntegrationsContent }) {
           <span className="pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-[linear-gradient(to_top,#fff_10%,rgb(255_255_255/0))]" />
         </div>
 
-        {/* Stack grid: one bordered panel split by hairlines, a column per
-            category, each tool with its logo in a small tile (a dot when
-            there is no brand logo). */}
-        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-200/80 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Stack grid (sm up): one bordered panel split by hairlines, a
+            column per category. */}
+        <div className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-zinc-200/80 bg-zinc-200/80 max-sm:hidden sm:grid-cols-2 lg:grid-cols-4">
           {content.stack.map((group) => (
             <div key={group.category} className="bg-white p-6 sm:p-7">
-              <h3 className="font-mono text-xs tracking-wide text-brand-700 uppercase">
-                {group.category}
-              </h3>
-              <ul className="mt-5 space-y-2.5">
-                {group.items.map((item) => (
-                  <li
-                    key={item.name}
-                    className="flex items-center gap-3 text-[15px] text-zinc-700"
-                  >
-                    <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white ring-1 ring-zinc-200">
-                      {item.logo ? (
-                        <IntegrationLogo
-                          id={item.logo}
-                          className="block size-4 [&>svg]:size-full"
-                        />
-                      ) : (
-                        <span
-                          aria-hidden="true"
-                          className="size-1.5 rounded-full bg-brand-gradient"
-                        />
-                      )}
-                    </span>
-                    {item.name}
-                  </li>
-                ))}
-              </ul>
+              <StackGroupBody group={group} />
             </div>
           ))}
         </div>
+
+        {/* Phones: the same categories as cards in a self-moving infinite
+            marquee, edge to edge (-mx-4 cancels the section's px-4). The list
+            is rendered twice and the track slides -50% (transform only); each
+            card carries its own right padding, not flex gap, so both halves
+            are equal. Pauses on hover/touch. Reduced motion: one manually
+            scrollable row. */}
+        <div className="-mx-4 mt-12 overflow-hidden motion-reduce:overflow-x-auto sm:hidden">
+          <div className="flex w-max hover:[animation-play-state:paused] motion-safe:animate-marquee">
+            {/* Reduced motion: the static row starts at the gutter. */}
+            <StackCards stack={content.stack} className="motion-reduce:pl-4" />
+            <StackCards
+              stack={content.stack}
+              className="motion-reduce:hidden"
+              decorative
+            />
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+type StackGroup = IntegrationsContent["stack"][number];
+
+function StackCards({
+  stack,
+  className,
+  decorative = false,
+}: {
+  stack: readonly StackGroup[];
+  className?: string;
+  /** The duplicate copy exists only for the loop; hide it from assistive tech. */
+  decorative?: boolean;
+}) {
+  return (
+    <ul
+      aria-hidden={decorative || undefined}
+      className={cn("flex shrink-0", className)}
+    >
+      {stack.map((group) => (
+        <li key={group.category} className="flex w-[17rem] shrink-0 pr-4">
+          <div className="w-full rounded-2xl border border-zinc-200/80 bg-white p-6">
+            <StackGroupBody group={group} />
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Category label plus its tools, each with a logo tile (a dot when none). */
+function StackGroupBody({ group }: { group: StackGroup }) {
+  return (
+    <>
+      <h3 className="font-mono text-xs tracking-wide text-brand-700 uppercase">
+        {group.category}
+      </h3>
+      <ul className="mt-5 space-y-2.5">
+        {group.items.map((item) => (
+          <li
+            key={item.name}
+            className="flex items-center gap-3 text-[15px] text-zinc-700"
+          >
+            <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-white ring-1 ring-zinc-200">
+              {item.logo ? (
+                <IntegrationLogo
+                  id={item.logo}
+                  className="block size-4 [&>svg]:size-full"
+                />
+              ) : (
+                <span
+                  aria-hidden="true"
+                  className="size-1.5 rounded-full bg-brand-gradient"
+                />
+              )}
+            </span>
+            {item.name}
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

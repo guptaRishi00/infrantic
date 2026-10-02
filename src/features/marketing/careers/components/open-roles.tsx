@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { BlockHeading } from "@/features/marketing/page-blocks";
 import type { Cta } from "@/shared/types";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { Role } from "../careers.data";
 
 type OpenRolesProps = {
@@ -37,11 +38,17 @@ export function OpenRoles({
           description={description}
           tone="dark"
         />
-        <ul className="mt-12 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.03]">
+        {/* Phones: one bordered card per role in a swipe rail (like home What
+            we build). */}
+        <SnapRail
+          label={title}
+          tone="dark"
+          className="mt-12 rounded-2xl border border-white/10 bg-white/[0.03] max-sm:gap-4 max-sm:rounded-none max-sm:border-0 max-sm:bg-transparent sm:divide-y sm:divide-white/10"
+        >
           {roles.map((role) => (
             <li
               key={role.id}
-              className="overflow-hidden first:rounded-t-[15px] last:rounded-b-[15px]"
+              className="overflow-hidden first:rounded-t-[15px] last:rounded-b-[15px] max-sm:rounded-2xl max-sm:border max-sm:border-white/10 max-sm:bg-white/[0.03]"
             >
               <Link
                 href={introduceCta.href}
@@ -71,7 +78,7 @@ export function OpenRoles({
               </Link>
             </li>
           ))}
-        </ul>
+        </SnapRail>
       </div>
     </section>
   );

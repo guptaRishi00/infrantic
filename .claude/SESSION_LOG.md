@@ -1190,3 +1190,176 @@
 - `problem.tsx`: container is now plain `mx-auto max-w-[80rem]`, like Selected work.
 - Verified: lint clean; tsc 0; build OK. CDP: heading/first-card left edge 40→16 (375), 40→16 (768), 104→80 (1440), now equal to Selected work; card right edge 341→359 at 375. Screenshots at 375 and 1440 reviewed.
 - Not committed.
+
+## 2026-10-02 — Mobile pass modelled on SoftexEdge (mobile only)
+- User: take SoftexEdge as the reference and make the whole site mobile responsive.
+- Reference: softexedge.com redirects to softexedge.in, which is the lead-gen landing page (/about 404s there), so the SoftexEdge agency site was measured from the local `softexedge-sept-2026` checkout (dev server on :3300, read-only) at 375px. Its mobile language: 12px gutters, 40–80px section padding, H2 40px; long card lists (process, projects, testimonials, blog) are native scroll-snap rails with dots (blue pill + grey dots); entrance animations off below md (its map: `data-no-mobile-entry`). Pages ~9,000px tall on phones vs Infrantic's 8,000–14,800.
+- Infrantic already matched the type, stats and gutters closely; what it lacked was the rails, so its long card grids stacked into 1,800–3,600px columns.
+- Change (all below `sm`/`md`; desktop untouched by construction):
+  - New `shared/ui/snap-rail.tsx` (`SnapRail`, client): the list keeps its grid classes from `sm`; below `sm` it is a scroll-snap rail (85% cards, `-mx-4 px-4 scroll-px-4`, hidden scrollbar) with dots under it (44px hit areas; `${section title}: show card n of m`; `aria-current` on the active dot; smooth scroll unless reduced motion).
+  - Used in `FeatureGrid` (every inner page's icon-card grids), home Problem ("Where work slows down"), home What we build (phones: one bordered card per item instead of the shared divided frame), `/products` catalogue.
+  - `entry-animations.tsx`: off below md.
+- Not converted: timelines (Steps), case-study write-ups, service detail rows (header anchors), gap rows, roles, stack grids. They are long-form or anchor targets, which SoftexEdge also keeps stacked.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Desktop dump vs a fresh HEAD baseline (visible elements only, 11 pages × 1024/1280/1500, 17,126 elements): 0 differ. The work was stashed for the baseline build; the stash round-trip left CRLF line endings, fixed with `biome format --write`.
+  - Phones, 320/360/375/414 × 11 pages: 0 sideways overflow.
+  - Page heights at 375 drop 1,200–2,800px: home 14,847 → 12,056, /products 8,150 → 5,571, /about 10,839 → 8,515. /contact is unchanged.
+  - Every rail: cards 292px; tapping dot 3 snaps card 3 to the 16px gutter and moves the active dot.
+  - Entry animations: 0 held-hidden elements at 375/767, 83 at 768/1440.
+  - Rail screenshots reviewed (home light + ink, /about, /products).
+- Not committed.
+
+## 2026-10-02 — Black buttons show their blue state on phones (mobile only)
+- User: on mobile, the black-background buttons should be in their active state. Asked which: "always blue on phones" (chosen) vs blue only while pressed.
+- `button-link.tsx` primary variant + the contact form submit: `max-md:bg-brand-gradient` (below 768px the hover look is the resting look). Secondary/muted/onDark untouched.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP tally of black vs gradient buttons: 375/767px home 10 blue, /contact Send message blue; 768/1024/1440px all black (home 10–11, /contact 1–2).
+  - Desktop dump vs the previous build (11 pages × 1024/1280/1500, 17,126 visible elements): 0 differ.
+  - Screenshots of the home hero and the open mobile menu ("Book a call") at 375 reviewed.
+- Note: white text on the gradient is ~3.9:1 at #047EFD and ~2.8:1 at #07A1FD, below AA 4.5:1 for 14–15px labels (black was 21:1). Now permanent on phones rather than a hover flash.
+- Not committed.
+
+## 2026-10-02 — Our technology: bigger orbit circles (mobile only)
+- User: in mobile view, make the circles in Our technology bigger.
+- On phones the outer ring already spanned 94% of the column (322 of 343px at 375), so it could only grow by bleeding past the screen. `integrations.tsx`: below `sm` the orbit box is `w-[calc(100% + (640px - 100vw)/2)]` with `ml-[calc((100vw - 640px)/4)]` and `max-w-none`. A first flat 140% (`-mx-[20%]`) jumped from 850px at 639 to 608px at 640, so the extra now tapers to 0 at sm. Rings, radii (cqw) and logo orbits scale with the box; the section's `overflow-hidden` clips the bleed.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP ring diameters before → after: 375px 130/226/322 → 181/314/447; 320px → 170/296/421; 414px → 188/327/465; 639/640px 571–572 (continuous); 1024 unchanged 304/528/752.
+  - `scrollWidth` = viewport at every width.
+  - Desktop dump vs the previous build (17,126 visible elements, 11 pages × 1024/1280/1500): 0 differ.
+  - Screenshots at 375 and 360 reviewed.
+- Not committed.
+
+## 2026-10-02 — Our technology: stack cards as an infinite marquee (mobile only)
+- User: in mobile view only, make the cards in Our technology a self-moving infinite carousel.
+- `integrations.tsx`:
+  - The hairline stack panel gets `max-sm:hidden`. A `sm:hidden` marquee follows the Services pattern: `-mx-4 overflow-hidden`, track `flex w-max motion-safe:animate-marquee hover:[animation-play-state:paused]`, two `StackCards` copies (second `aria-hidden`, `motion-reduce:hidden`), 17rem cards with per-card `pr-4`.
+  - Reduced motion: `overflow-x-auto` row with `motion-reduce:pl-4` on the first copy.
+  - Category body extracted to `StackGroupBody`, used by both.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP with motion: 375/639 marquee visible, `marquee:running:40000`, translateX −34 → −89 over 2s (~27px/s), halves 1088/1088 (seamless), cards 272×244, duplicate aria-hidden, panel hidden.
+  - 640/1440: panel visible, marquee hidden, no animation.
+  - Reduced motion at 375: no animation, scrollable row 1104px, duplicate hidden.
+  - `scrollWidth` = viewport at 320/375.
+  - Desktop dump vs the previous build (17,126 visible elements): 0 differ.
+  - Screenshots (moving + reduced) reviewed.
+- Not committed.
+
+## 2026-10-02 — How we work: scaled down slightly (mobile only)
+- User: slightly scale down the How we work component; asked where, chose mobile only.
+- `workflow.tsx`: the tabs + step-panel wrapper gets `max-sm:[zoom:0.9]`, so text, card, diagram and spacing shrink together while still filling the column. The section heading keeps the site-wide scale.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP before → after at 375: section 1199 → 1082px; panel 836 → 731px tall; canvas 480 → 432px tall; tab labels 14 → 12.6px; step title 32 → 29px; button 113×44 → 102×40.
+  - Same at 360/639. 640/1440 identical before/after.
+  - All 5 tabs still fit (no scroll) at 360; `scrollWidth` = viewport.
+  - Desktop dump vs the previous build (17,126 visible elements): 0 differ.
+  - Before/after screenshots at 375 reviewed.
+- Note: the zoomed "Book a call" is 40px tall (was 44) and tab labels 12.6px. Fine to read; just under the 44px touch-target guideline.
+- Not committed.
+
+## 2026-10-02 — How we work diagram: smaller cards, even side padding (mobile only)
+- User (with a phone screenshot of the flow canvas): scale the automation down and increase the x-axis padding. Phone-only, matching the screenshot and the previous task.
+- Cause: cards are 44% wide centred at x=22 / x=70, so the left column touched the canvas edge (0%) while the right stopped at 92%.
+- `flow-canvas.tsx`:
+  - Connectors + nodes wrapped in one `absolute inset-0` coordinate box; below `sm` it is `left-[4%] right-[-4%]`.
+  - Cards `min-[368px]:max-sm:w-[36%]`, `max-[368px]:w-[42%]`. Side margins = 26% − half a card, so they are always equal: 8% from 368–639px, 5% below 368px.
+  - The detail line may wrap on phones (as the label already did).
+- Verified: lint clean; tsc 0; build OK.
+  - CDP, all 5 steps: 375px left/right 26/26 (was 0 on the left), cards 137 → 112px; 360 16/16; 414 29/29; 639 57/57; 0 overlaps, 0 cards clipped. 640/1440 unchanged (23/69, 42/95).
+  - Truncated text: none at 360/375. One word ("Requirements", step 2) at 320.
+  - Desktop dump vs the previous build, ignoring the new wrapper element (17,126 visible elements): 0 differ.
+  - Screenshot at 375 reviewed.
+- Not committed.
+
+## 2026-10-02 — Whole site at 92% on phones (mobile only)
+- User: in mobile view only, scale down the home hero slightly, then every component.
+- One rule instead of per-component edits: `globals.css` `@layer base` → `@media (width < 40rem) { html { zoom: 0.92 } }`. The hero and every section, header and footer scale evenly, px-sized text included (a smaller root font would have missed those). Media queries still read the real viewport. The earlier component zooms compound (How we work 0.83 overall).
+- Verified on the production build: lint clean; build OK.
+  - CDP at 375: home h1 108 → 99px tall, hero 941 → 866px, header bar 84 → 77px, Book a call 113×44 → 104×40. Same at 639; 640 unchanged (zoom 1).
+  - Rails still snap (dot 3 → card at the 15px gutter, active dot moves).
+  - Marquee halves 1001/1001, running.
+  - Workflow tabs fit at 360/375.
+  - 0 sideways overflow on 11 pages × 320/360/375/414.
+  - Page `scrollHeight` at 375 drops ~9–12% (home 11,385 → 10,264; /about 8,515 → 7,607).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Before/after screenshot of the home first screen reviewed.
+- Note: phone tap targets shrink with it (md buttons 40px, sm 33px; 44px is the usual minimum).
+- Not committed.
+
+## 2026-10-02 — Featured project diagram: stacked list on phones (mobile only)
+- User (with a phone screenshot): in mobile view only, left-align the featured-project diagram, make the cards a flex-col list, and remove the connecting lines.
+- `featured-project.tsx`, all `max-sm:`:
+  - The canvas drops `min-w-[46rem]` (no sideways scroll).
+  - Hub and outcome wrappers `items-start`; their stems hidden.
+  - The `ol` becomes `flex flex-col gap-2.5`.
+  - The bus halves, per-step drops and ArrowRights are hidden.
+  - Step cards become rows (`flex-row justify-start text-left`, `px-4 py-3`, no min-height) with the 01–06 index inline (`static`).
+  - Swipe hint and line legend hidden (nothing scrolls; the lines they describe are gone).
+- Verified: lint clean; tsc 0; build OK.
+  - CDP at 360/375/639: canvas scrollWidth = clientWidth, `ol` flex/column, 6 rows 42px tall all at the hub's left edge, 0 visible lines/arrows, legend hidden.
+  - 640/1440: original grid row, 16–17 connectors, legend shown.
+  - 0 page overflow at 320/375.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshot at 375 reviewed.
+- Not committed.
+
+## 2026-10-02 — Phone navbar smaller, menu opens like SoftexEdge (mobile only)
+- User: in mobile view only, scale the navbar down, reduce its padding, and make the menu open like SoftexEdge's.
+- Reference read from `softexedge-sept-2026` `ui/resizable-navbar.tsx`: `MobileNavToggle` swaps Tabler `IconMenu2` ↔ `IconX`. `MobileNavMenu` (dropdown mode) is inside the bar, so the bar grows into a card: an always-mounted grid-rows 0fr → 1fr + opacity accordion, 300ms `cubic-bezier(0.16,1,0.3,1)`, `invisible` when closed.
+- Changes:
+  - `site-header.tsx`: phone bar `max-sm:h-14 max-sm:pl-4 max-sm:pr-2` (was 72px, 24/18px); logo `h-4` below sm (sm:h-5 unchanged). Below lg, while the toggle is expanded (`has-[[data-mobile-toggle][aria-expanded=true]]`), the bar goes `rounded-b-none` + `border-b-transparent` (200ms radius transition).
+  - `auto-hide-header.tsx`: `max-sm:pt-2`.
+  - `mobile-nav.tsx`: panel attached at `top-full` with no gap and `border-t-0 rounded-b-2xl`; the SoftexEdge accordion instead of `hidden` (reduced motion: no transition); toggle gets `data-mobile-toggle`; Menu/X icons size-6. Escape/link-close unchanged.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP at 375 (visual px, page zoom .92): bar 52px tall (≈66 before), padding 16/8, logo 15px, icon 22px.
+  - Closed: menu invisible, 0 focusable links. 120ms after the tap the bar radius is mid-transition. Open: menu top = bar bottom, bar bottom radius 0 + transparent border, 14 links focusable. Escape closes back.
+  - 768: same opening, bar unchanged at 72px. 1440: no toggle.
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Closed/open screenshots at 375 reviewed.
+- Not committed.
+
+## 2026-10-02 — Inner pages get the home page's mobile patterns (mobile only)
+- User: take reference from the home page and fix mobile responsiveness of the other pages.
+- Audit at 375: inner pages already inherited the shared work (FeatureGrid rails, hero visuals, stat rows, 92% scale, navbar). Five inner-only components still stacked:
+  - StackShowcase → home "Our technology" marquee.
+  - GapRows (/challenges) → home Problem rail.
+  - ServiceDetails (/services, ~3,500px) → What-we-build rail.
+  - CaseList (/case-studies) → Selected-work-style rail.
+  - OpenRoles (/careers, ink) → rail.
+- Changes (all below sm):
+  - `stack-showcase.tsx`: grid `max-sm:hidden`; `sm:hidden` marquee with two `StackCards` copies (17rem cards, `pr-4`, duplicate `aria-hidden`, reduced motion = scrollable row with `pl-4`). Shared `StackGroupBody`.
+  - `snap-rail.tsx`: `as` prop (`ul`/`ol`). `max-sm:relative`, after an `sr-only` label in a GapRows card, positioned against the page, widened /challenges to 1,620px (found by tracing the 1,500px-wide fixed header back to the expanded layout viewport).
+  - `gap-rows.tsx`, `service-details.tsx`, `case-list.tsx`, `open-roles.tsx`: lists → `SnapRail`. Panel dividers moved to `sm:divide-y` / `sm:space-y-6`. Frames drop border/bg/radius below sm; each item becomes a bordered card. Grid cards get `max-sm:content-start` (equal-height stretching had spread their rows).
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - 0 sideways overflow on 11 pages × 320/360/375/414.
+  - All 14 rails on 7 pages snap card 3 to the 15px gutter and move the dot. On /case-studies, card 3 of 3 rests at the rail end (67px).
+  - `/services#ai-automation`, `#custom-software`, `#data-intelligence` land in view inside the rail.
+  - StackShowcase marquees on /services and /about move, halves 1088/1088, duplicate hidden.
+  - Page heights at 375: /services 10,157 → 7,324, /challenges 9,782 → 8,094, /case-studies 10,251 → 8,527, /about 7,607 → 6,976, /careers 5,882 → 5,273.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of /services, /challenges, /careers reviewed.
+- Not committed.
+
+## 2026-10-02 — Inner pages: slightly tighter section gaps (mobile only)
+- User: in mobile view only, on the other pages, reduce the gap between sections slightly.
+- Sections are direct children of `[data-page-enter]`; inner pages open with the `page-title` hero, home with `hero-title`. Several sections carry deliberate padding exceptions (FAQ top, hero with stats, ServiceDetails), and Faq/CtaBand are shared with home, so per-component padding edits were avoided.
+- `globals.css` (in the phone `@media (width < 40rem)` block): `[data-page-enter]:has(> section:first-child[aria-labelledby="page-title"]) > section + section { margin-top: -1rem }`. Every inner-page gap is 16px tighter (≈15px visually at the .92 zoom), pulled into the previous section's empty bottom padding.
+- Verified on the production build: lint clean; build OK.
+  - CDP content-to-content gaps at 375: e.g. 142 → 127, 118 → 103, 126 → 111 on every inner page; home unchanged (59 142 137…). At 640 every margin is 0.
+  - Page heights −60 to −105px (/challenges 8,094 → 7,991).
+  - 0 page overflow at 320/375.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of three boundaries (timeline → FAQ, stats → ink, panel → ink) reviewed; no overlap or clipping.
+- Not committed.
+
+## 2026-10-02 — Phone stat rows: smaller, wider gap, no blue line (mobile only)
+- User (with a screenshot of the /services hero stats on a phone): wherever this component is used, on mobile only, increase the gap between number and text, scale it down, and remove the blue underline.
+- `hero-stats.tsx` (`HeroStats`: all 9 PageHero stat rows + About "At a glance"). Phone base classes, each already overridden at sm:
+  - Row `gap-5 py-5` → `gap-8 py-4`.
+  - Figure 40px in a 6.75rem column → 32px in 5.75rem.
+  - Label `max-sm:text-[11px]` (was 12).
+  - Brand hairline `max-sm:hidden`.
+- Verified: lint clean; tsc 0; build OK.
+  - CDP on every stat row (10 rows' sets, 360/375): figures 32px, "100%" 81px in an 85px column (fits), figure-to-label gap ≥33px (was 20), rows ~67px, hairline hidden. 640: unchanged (44px, line shown).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshot of /services at 375 reviewed.
+- Not committed.

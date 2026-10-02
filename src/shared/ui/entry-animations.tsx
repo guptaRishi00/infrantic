@@ -47,6 +47,9 @@ function byDomOrder(a: Element, b: Element) {
 export function EntryAnimations() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Off below md, as on SoftexEdge: phones show content straight away (and
+    // cards waiting off-screen in a swipe rail are never left hidden).
+    if (window.matchMedia("(max-width: 767px)").matches) return;
     const root = document.querySelector("[data-page-enter]");
     if (!root) return;
 

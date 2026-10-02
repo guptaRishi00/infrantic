@@ -2,6 +2,7 @@ import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { BlockHeading, blockIcons } from "@/features/marketing/page-blocks";
 import { IntegrationLogo } from "@/shared/ui/integration-logo";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import type { ProductCatalogContent } from "../products.data";
 
 /**
@@ -26,7 +27,10 @@ export function ProductCatalog({
           title={content.title}
           description={content.description}
         />
-        <ul className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <SnapRail
+          label={content.title}
+          className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+        >
           {content.products.map((product) => {
             const Icon = blockIcons[product.icon];
             return (
@@ -103,7 +107,7 @@ export function ProductCatalog({
               </li>
             );
           })}
-        </ul>
+        </SnapRail>
       </div>
     </section>
   );

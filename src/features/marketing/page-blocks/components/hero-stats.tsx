@@ -90,7 +90,8 @@ function StatValue({ value }: { value: string }) {
  * a lighter display weight (400, not 600) with negative tracking, tabular
  * figures, and a short brand hairline tying each figure to its label.
  */
-// Phones: one row per stat (figure left, label right), split by hairlines.
+// Phones: one row per stat (figure left, label right), split by hairlines;
+// smaller figures, a wider figure-to-label gap and no brand hairline there.
 // Hairlines for four stats: stacked on phones, 2x2 from sm, one row from lg.
 const FOUR_UP_BORDERS = [
   "",
@@ -124,7 +125,7 @@ export function HeroStats({
         <div
           key={stat.label}
           className={cn(
-            "flex flex-row-reverse items-center justify-end gap-5 px-1 py-5 text-left sm:flex-col-reverse sm:gap-0 sm:px-4 sm:text-center lg:px-8",
+            "flex flex-row-reverse items-center justify-end gap-8 px-1 py-4 text-left sm:flex-col-reverse sm:gap-0 sm:px-4 sm:text-center lg:px-8",
             fourUp ? "sm:py-6 lg:py-4" : "sm:py-4",
             dark ? "border-white/10" : "border-zinc-200/80",
             fourUp
@@ -134,7 +135,7 @@ export function HeroStats({
         >
           <dt
             className={cn(
-              "max-w-[24ch] text-[12px] leading-5 font-semibold tracking-[0.16em] text-balance uppercase sm:mt-4",
+              "max-w-[24ch] text-[12px] leading-5 max-sm:text-[11px] font-semibold tracking-[0.16em] text-balance uppercase sm:mt-4",
               dark ? "text-zinc-400" : "text-zinc-500",
             )}
           >
@@ -142,14 +143,14 @@ export function HeroStats({
           </dt>
           <dd
             className={cn(
-              "flex w-[6.75rem] shrink-0 flex-col items-start text-[2.5rem] leading-none font-normal tracking-[-0.02em] sm:w-auto sm:items-center sm:text-[2.75rem] lg:text-[4.25rem]",
+              "flex w-[5.75rem] shrink-0 flex-col items-start text-[2rem] leading-none font-normal tracking-[-0.02em] sm:w-auto sm:items-center sm:text-[2.75rem] lg:text-[4.25rem]",
               dark ? "text-white" : "text-ink",
             )}
           >
             <StatValue value={stat.value} />
             <span
               aria-hidden="true"
-              className="mt-3 h-px w-8 bg-brand-gradient opacity-80 sm:mt-5"
+              className="mt-3 h-px w-8 bg-brand-gradient opacity-80 max-sm:hidden sm:mt-5"
             />
           </dd>
         </div>

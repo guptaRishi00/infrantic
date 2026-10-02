@@ -1,5 +1,6 @@
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
+import { SnapRail } from "@/shared/ui/snap-rail";
 import { blockIcons } from "../block-icons";
 import type { FeatureGridContent } from "../page-blocks.types";
 import { BlockHeading } from "./block-heading";
@@ -37,7 +38,9 @@ export function FeatureGrid({ content }: { content: FeatureGridContent }) {
           ) : null}
         </div>
 
-        <ul
+        <SnapRail
+          label={content.title}
+          tone={content.tone}
           className={cn(
             "mt-12 grid gap-4",
             content.columns === 2
@@ -103,7 +106,7 @@ export function FeatureGrid({ content }: { content: FeatureGridContent }) {
               </li>
             );
           })}
-        </ul>
+        </SnapRail>
       </div>
     </section>
   );
