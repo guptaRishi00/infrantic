@@ -50,43 +50,46 @@ export function Hero({ content }: { content: HeroContent }) {
       aria-labelledby="hero-title"
       data-hero=""
       data-entry-skip=""
-      className="relative isolate overflow-hidden px-4 pt-28 pb-16 sm:pt-36 sm:pb-28"
+      className="relative isolate overflow-hidden px-4 pt-24  pb-12 sm:pt-36 sm:pb-28"
     >
       <HeroMotion />
-      <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+      <div className="mx-auto flex max-w-3xl flex-col items-center text-center lg:mt-0 mt-16 lg:py-0 py-4">
         <div data-hero-eyebrow="">
-          <p className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600">
+          <p className="rounded-full border border-zinc-200 bg-white/90 px-2 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs font-medium tracking-wide text-zinc-600">
             {content.eyebrow}
           </p>
         </div>
         <h1
           id="hero-title"
-          className="mt-7 text-[2.2rem] leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[3rem] lg:text-[3.5rem]"
+          className="mt-5 text-[1.8rem] sm:mt-7 leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[3rem] lg:text-[3.5rem]"
         >
           <HeadlineWords text={content.title} />
         </h1>
         <p
           data-hero-sub=""
-          className="mt-6 max-w-[34rem] text-[15px] leading-[1.45] text-pretty text-zinc-600 sm:text-[17px] sm:leading-[1.5]"
+          className="mt-4 max-w-[34rem] text-[14px] sm:text-[15px] leading-[1.45] text-pretty text-zinc-600 sm:mt-6 sm:text-[17px] sm:leading-[1.5]"
         >
           {content.subtitle}
         </p>
         <div
           data-hero-cta=""
-          className="mt-9 flex flex-wrap justify-center gap-3"
+          className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-9 sm:gap-3"
         >
-          <ButtonLink href={content.primaryCta.href}>
+          <ButtonLink
+            href={content.primaryCta.href}
+            className="max-sm:h-8 max-sm:px-3 max-sm:text-[13px]"
+          >
             {content.primaryCta.label}
           </ButtonLink>
           <ButtonLink
             href={content.secondaryCta.href}
             variant="secondary"
-            className="group"
+            className="group max-sm:h-8 max-sm:px-3 max-sm:text-[13px]"
           >
             {content.secondaryCta.label}
             <ArrowRight
               aria-hidden="true"
-              className="size-4 text-zinc-500 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+              className="size-3.5 text-zinc-500 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none sm:size-4"
             />
           </ButtonLink>
         </div>
@@ -94,7 +97,7 @@ export function Hero({ content }: { content: HeroContent }) {
 
       {/* No transform/opacity on this wrapper: the orbit's -z-10 must resolve
           against the section, not a local stacking context above the text. */}
-      <div className="relative mx-auto mt-6 w-full max-w-[25.5rem]">
+      <div className="relative mx-auto mt-4 w-full max-w-[25.5rem] scale-[0.85] origin-top sm:mt-6 sm:scale-100">
         <OrbitBackdrop integrations={content.integrations} />
         {/* Top padding (not margin on the wrapper) moves the cards without moving the orbit anchor. */}
         <HeroCards>
@@ -110,7 +113,7 @@ export function Hero({ content }: { content: HeroContent }) {
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-32 bg-[linear-gradient(to_bottom,#fff_15%,rgb(255_255_255/0))] sm:h-40"
       />
 
-      <div className="relative mt-20 sm:mt-24">
+      <div className="relative mt-8 sm:mt-24">
         {/* White ground under the logo row. The top of the gradient is transparent,
             so the rings fade into it. Same -z-10 as the orbit but later in DOM
             order, so it paints over the rings and under the logos. */}

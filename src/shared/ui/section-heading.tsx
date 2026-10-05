@@ -38,7 +38,7 @@ export function SectionHeading({
         className={cn(
           "leading-[1.1] font-medium tracking-[-0.03em] text-balance",
           size === "lg"
-            ? "text-[2.25rem] sm:text-[2.875rem]"
+            ? "text-[1.9rem] sm:text-[2.875rem]"
             : "text-[2rem] sm:text-[2.5rem]",
           tone === "dark" ? "text-white" : "text-ink",
           titleWidth,

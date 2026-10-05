@@ -6,7 +6,7 @@ import { useEffect, useId, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { NewBadge } from "@/shared/ui/new-badge";
-import { isNavGroup, type NavItem, type NavLink } from "../navigation";
+import { isNavGroup, type NavGroup, type NavItem, type NavLink } from "../navigation";
 
 type MobileNavProps = {
   items: readonly NavItem[];
@@ -62,29 +62,16 @@ export function MobileNav({ items, actions }: MobileNavProps) {
       >
         <div className="min-h-0 overflow-hidden">
           <div className="max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain p-2">
-            <ul className="flex flex-col">
+            <div className="flex flex-col px-2">
               {items.map((item) =>
                 isNavGroup(item) ? (
-                  <li key={item.label} className="py-1">
-                    <span className="block px-3 pt-2 pb-1 text-xs font-medium tracking-wide text-zinc-400 uppercase">
-                      {item.label}
-                    </span>
-                    <ul>
-                      {item.items.map((child) => (
-                        <li key={child.label}>
-                          <MobileLink link={child} onNavigate={close} />
-                        </li>
-                      ))}
-                    </ul>
-                  </li>
+                  <MobileNavGroup key={item.label} item={item} onNavigate={close} />
                 ) : (
-                  <li key={item.label}>
-                    <MobileLink link={item} onNavigate={close} />
-                  </li>
+                  <MobileLink key={item.label} link={item} onNavigate={close} />
                 ),
               )}
-            </ul>
-            <div className="mt-2 grid auto-cols-fr grid-flow-col gap-2 border-t border-zinc-100 pt-3">
+            </div>
+            <div className="mt-4 grid auto-cols-fr grid-flow-col gap-2 pt-3">
               {actions.map((action, index) => (
                 <ButtonLink
                   key={action.href}
@@ -103,6 +90,70 @@ export function MobileNav({ items, actions }: MobileNavProps) {
   );
 }
 
+function MobileNavGroup({
+  item,
+  onNavigate,
+}: {
+  item: NavGroup;
+  onNavigate: () => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div className="w-full border-b border-zinc-100 last:border-b-0">
+      <button
+        type="button"
+        onClick={() => setIsExpanded((prev) => !prev)}
+        className="flex w-full items-center justify-between py-3.5 text-left text-lg font-medium text-zinc-900"
+      >
+        <span>{item.label}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={cn(
+            "shrink-0 text-zinc-400 transition-transform duration-200",
+            isExpanded ? "rotate-180" : ""
+          )}
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+
+      <div
+        className={cn(
+          "grid w-full transition-[grid-template-rows,opacity,visibility] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          isExpanded
+            ? "visible grid-rows-[1fr] opacity-100"
+            : "invisible grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="min-h-0 w-full overflow-hidden">
+          <div className="mb-3 flex w-full flex-col rounded-xl bg-zinc-50 px-3 py-1">
+            {item.items.map((child) => (
+              <Link
+                key={child.label}
+                href={child.href}
+                onClick={onNavigate}
+                className="flex w-full items-center justify-between gap-2 py-2.5 text-left text-base text-zinc-600 transition-colors hover:text-zinc-900"
+              >
+                {child.label}
+                {child.badge ? <NewBadge label={child.badge} /> : null}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MobileLink({
   link,
   onNavigate,
@@ -111,13 +162,15 @@ function MobileLink({
   onNavigate: () => void;
 }) {
   return (
-    <Link
-      href={link.href}
-      onClick={onNavigate}
-      className="flex items-center justify-between rounded-lg px-3 py-2.5 text-[15px] font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
-    >
-      {link.label}
-      {link.badge ? <NewBadge label={link.badge} /> : null}
-    </Link>
+    <div className="w-full border-b border-zinc-100 last:border-b-0">
+      <Link
+        href={link.href}
+        onClick={onNavigate}
+        className="flex w-full items-center justify-between py-3.5 text-left text-lg font-medium text-zinc-900 transition-colors hover:text-zinc-600"
+      >
+        {link.label}
+        {link.badge ? <NewBadge label={link.badge} /> : null}
+      </Link>
+    </div>
   );
 }
