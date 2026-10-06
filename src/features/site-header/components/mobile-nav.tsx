@@ -3,7 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { NewBadge } from "@/shared/ui/new-badge";
@@ -22,6 +22,7 @@ type MobileNavProps = {
 export function MobileNav({ items, actions }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
+  const rootRef = useRef<HTMLDivElement>(null);
   const close = () => setOpen(false);
 
   // Any navigation closes the menu, not only a tap on one of its links
@@ -38,12 +39,22 @@ export function MobileNav({ items, actions }: MobileNavProps) {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") setOpen(false);
     }
+    // A tap anywhere outside the header card (the bar and the menu hanging
+    // under it) closes the menu; the tap still reaches what it landed on.
+    function onPointerDown(event: PointerEvent) {
+      const card = rootRef.current?.parentElement;
+      if (card && !card.contains(event.target as Node)) setOpen(false);
+    }
     document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
   }, [open]);
 
   return (
-    <div className="lg:hidden">
+    <div ref={rootRef} className="lg:hidden">
       <button
         type="button"
         aria-expanded={open}

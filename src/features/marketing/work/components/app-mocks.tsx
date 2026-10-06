@@ -17,7 +17,16 @@ import { cn } from "@/shared/lib/cn";
 // Illustrative product screens (not real client data). Both are decorative:
 // the wrapper is role="img" with a text alternative, the inner UI aria-hidden.
 
-function Frame({ label, children }: { label: string; children: ReactNode }) {
+function Frame({
+  label,
+  minWidth = "min-w-[40rem]",
+  children,
+}: {
+  label: string;
+  /** The mock's scroll width (it scrolls sideways inside a narrow panel). */
+  minWidth?: string;
+  children: ReactNode;
+}) {
   return (
     <div role="img" aria-label={label} className="flex flex-1 flex-col">
       {/* Stretches to the panel's visual area; the window body grows with it. */}
@@ -25,7 +34,7 @@ function Frame({ label, children }: { label: string; children: ReactNode }) {
         aria-hidden="true"
         className="flex flex-1 flex-col overflow-x-auto rounded-xl border border-white/10 bg-[#04182f] [scrollbar-width:thin]"
       >
-        <div className="flex min-w-[40rem] flex-1 flex-col">{children}</div>
+        <div className={cn("flex flex-1 flex-col", minWidth)}>{children}</div>
       </div>
     </div>
   );
@@ -391,7 +400,9 @@ const VIEWS = [
 
 export function TaskBoardMock({ label }: { label: string }) {
   return (
-    <Frame label={label}>
+    // Phones: 48rem wide, so each card's role · date · owner row fits with
+    // room to spare (at 40rem it ran into the card's right edge on iOS).
+    <Frame label={label} minWidth="min-w-[40rem] max-sm:min-w-[48rem]">
       <div className="flex items-center gap-3 border-b border-white/10 px-4 py-3">
         <span className="flex items-center gap-2 pr-1">
           <span className="grid size-6 place-items-center rounded-md bg-brand-gradient text-white">
@@ -473,7 +484,7 @@ export function TaskBoardMock({ label }: { label: string }) {
                     <span className="ml-auto text-[9px] whitespace-nowrap text-zinc-500">
                       {card.due}
                     </span>
-                    <span className="grid size-4 place-items-center rounded-full bg-white/10 text-[7px] font-semibold text-zinc-200">
+                    <span className="grid size-4 shrink-0 place-items-center rounded-full bg-white/10 text-[7px] font-semibold text-zinc-200">
                       {card.owner}
                     </span>
                   </span>

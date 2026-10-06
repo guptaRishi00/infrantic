@@ -1600,3 +1600,85 @@
   - Screenshot at 375 reviewed.
   - Desktop dump vs the previous build (17,129 elements): 0 differ.
 - Not committed.
+
+## 2026-10-07 — One button size on phones; footer labels back to ink (mobile only)
+- User: on mobile, make button sizing consistent across sections; change the footer column titles (Services, Company…) back to their previous colour.
+- Footer: removed `max-sm:text-zinc-500` from the column h2, so it is `text-ink` again; it stays uppercase and tracked.
+- A CDP audit of every filled button on 11 pages at 375 found four sizes (on screen):
+  - md: 37.8px tall, 12.9px text (43 buttons);
+  - PageHero and How we work CTAs, inside a 0.9 zoom with `h-12`: 37.1px, 11.6px text (19);
+  - `sm` ("Learn more", "Enquire now", "View all services", "Start a project"): 31px, 12px (17);
+  - contact submit: md height with 17.2px padding (1).
+- Changes:
+  - `button-link.tsx`: `sm` gets `max-sm:h-11 max-sm:px-4.5 max-sm:text-[15px]`. The header's sm button is hidden below lg.
+  - `contact-form.tsx`: submit `max-sm:px-4.5`.
+  - `page-hero.tsx`: the CTA row is `max-sm:[zoom:1.1111] max-sm:mt-[1.8rem]`, and `max-sm:h-12` is dropped.
+  - `workflow.tsx`: CTA `max-sm:[zoom:1.1111] max-sm:mt-[18px]`, and `max-sm:h-12` is dropped.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Audit after: all 80 buttons are 37.8h / 12.9px text / 15.5px padding / 5.2px radius at 375, 360 and 320.
+  - Inner heroes are still exactly one screen with no clipping at 375/390/360/414.
+  - 0 page overflow at 320/360/375.
+  - Footer h2 computes to rgb(2,28,55).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots reviewed.
+- Not committed.
+
+## 2026-10-07 — Mobile menu closes on an outside tap
+- User: on mobile, clicking outside the navbar should also close it.
+- `mobile-nav.tsx`: while the menu is open, a document `pointerdown` listener (next to the Escape one) closes it when the target is outside the header card (`rootRef.current.parentElement`: the bar plus the panel under it). The tap is not swallowed. The menu exists only below lg, so desktop is untouched; no markup or class changes.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP touch events at 375 and 768. With the menu open:
+    - tapping the Services group or the bar keeps it open;
+    - tapping the page below, or near the screen edge, closes it;
+    - the toggle still opens and closes it.
+- Not committed.
+
+## 2026-10-07 — Healthcare hero: Patients/Staff/Systems no longer crowded (mobile only)
+- User (screenshot of the Healthcare sector hero's three branch nodes): on mobile this part is clustered together.
+- Cause: on phones the 5:4 stage is ~348×278 on screen, so the branch nodes (y 110/200/290 of 400) sat 63px apart, and a 41px node plus its label filled that; each label touched the next node.
+- `healthcare-visual.tsx`: below sm the outer branches end at y 70/330 instead of 110/290.
+  - The branch path and branch packets are built from the spread (`branches()` / `branchPackets()`). The base and phone sets render side by side, switched by `max-sm:hidden` / `sm:hidden` (packets in `contents` wrappers).
+  - Nodes use `top-(--y) max-sm:top-(--phone-y)` custom properties.
+  - Desktop geometry is unchanged.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP, label → next node: 29px at 375×812, 36px at 414×896, 12px at 360×740 (85%-wide stage). Before, the labels touched.
+  - 1280: 20px, unchanged.
+  - The hero is still exactly one screen at all four phone sizes.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots at 375/360/414 reviewed.
+- Not committed.
+
+## 2026-10-07 — Task-board mock: owner avatar no longer hits the card edge (mobile only)
+- User (iPhone screenshot of the home "Role-based task management" board, MP avatar circled): fix this properly.
+- Cause: the board is a 40rem mock scrolling inside the case panel, so on phones each card was 104px on screen. Its footer (role chip · due date · owner avatar) overflowed by 1–4px in Chromium, eating the right padding. iOS draws the text wider, so the avatar reached the border.
+- `app-mocks.tsx`:
+  - `Frame` takes a `minWidth` class (default `min-w-[40rem]`, so the proofreader is unchanged).
+  - `TaskBoardMock` passes `min-w-[40rem] max-sm:min-w-[48rem]`.
+  - The avatar is `shrink-0`.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP: phone cards 104 → 131px on screen; every footer has 0 overflow, 18–22px spare, and the full 8.4px right padding (was 4.9–8.4).
+  - 1280 unchanged (256px cards).
+  - 0 page overflow at 320/375 (the board scrolls inside its frame as before).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshot at 375 reviewed.
+- Not committed.
+
+## 2026-10-07 — About hero orbit: equal left/right gaps (mobile only)
+- User (iPhone screenshot of the About hero orbit): the left and right gaps are not equal.
+- Cause: the orbit is a fixed 28rem canvas that fitted phones only through PageHero's nested `zoom: 0.75`. On iOS Safari the ring drew ~343pt wide on a 390pt screen (≈ 28rem × 0.86, i.e. without the 0.75), so the canvas overflowed its column and sat right of centre. "Automation" nearly touched the right edge, "Software" sat ~60pt from the left. In Chromium it was nearly symmetric, so this was not reproducible here.
+- Fix (no nested zoom for the orbit on phones):
+  - `page-hero.tsx`: no `visualZoom` for orbit visuals.
+  - `hero-visual.tsx` OrbitCanvas: `w-(--orbit-w)` with `[--orbit-w:28rem]`; phones 21rem, 19rem (340–368px), 16rem (<340px).
+  - `ORBIT_UNIT = calc(var(--orbit-w) / 500)` for the comets.
+  - `max-sm:overflow-visible` so the outer chips may overhang the canvas.
+  - `max-sm:-translate-x-[3.5px]` to balance the wider right chip.
+  - Chips now render at their natural phone size (10.3px on screen, was 7.7px).
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP visible gaps (left/right), all within 0.1px: 390 → 52.1/52.0, 375 → 44.6/44.5, 360 → 46.3/46.3, 414 → 64.1/64.0, 320 → 40.2/40.1. Before: 64.4/61.0 at 390 in Chromium; iOS was far worse.
+  - All comet rotation origins sit 0px from the ring centre at 390 and 1280.
+  - The About hero is still exactly one screen at 375/390/360/414.
+  - 0 page overflow at 320/360/375.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshot at 390 reviewed.
+  - Not verified on a real iPhone; the fix removes the dependency instead of reproducing it.
+- Not committed.

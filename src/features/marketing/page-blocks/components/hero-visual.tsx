@@ -172,14 +172,19 @@ function FlowCanvas({ content }: { content: HeroFlowVisual }) {
 
 const ORBIT_BOX = 500;
 const ORBIT_RADII = [110, 168, 226] as const;
-// Fixed 28rem canvas (it fits the hero column from md up), so one design unit
-// is a plain rem length. Container-query units in the comets' transform-origin
-// kept their rotation on the main thread.
-const ORBIT_UNIT = `${28 / ORBIT_BOX}rem`;
+// Fixed-width canvas (--orbit-w: 28rem, which fits the hero column from md
+// up), so one design unit is a plain length. Container-query units in the
+// comets' transform-origin kept their rotation on the main thread.
+const ORBIT_UNIT = `calc(var(--orbit-w) / ${ORBIT_BOX})`;
 
 function OrbitCanvas({ content }: { content: HeroOrbitVisual }) {
   return (
-    <div className="relative mx-auto aspect-square w-[28rem] overflow-hidden">
+    // Phones: no CSS zoom (iOS Safari rendered the zoomed 28rem canvas too
+    // big and off-centre); the canvas is sized per width instead so the
+    // outermost chips, which may overhang it, still clear the column. Nudged
+    // 3.5px left there: "Automation" (right) is wider than "Software" (left),
+    // so this evens the visible gaps on both sides.
+    <div className="relative mx-auto aspect-square w-(--orbit-w) overflow-hidden [--orbit-w:28rem] max-[340px]:[--orbit-w:16rem] max-sm:-translate-x-[3.5px] max-sm:overflow-visible min-[340px]:max-[368px]:[--orbit-w:19rem] min-[368px]:max-sm:[--orbit-w:21rem]">
       <div className="absolute top-1/2 left-1/2 size-full -translate-x-1/2 -translate-y-1/2">
         {ORBIT_RADII.map((radius) => (
           <span

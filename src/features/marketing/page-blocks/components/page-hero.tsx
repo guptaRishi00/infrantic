@@ -28,12 +28,10 @@ export function PageHero({
     aside ?? (content.visual ? <HeroVisual content={content.visual} /> : null);
   // Phone zoom for the visual: the flow diagrams and sector illustrations are
   // full-width boxes, so 0.85 only scales their nodes and labels up to a
-  // readable size; the orbit is a fixed 28rem canvas, so 0.75 (0.64 under
-  // 368px) is the most a phone column fits.
+  // readable size. The orbit takes no zoom: it sizes its own canvas per
+  // phone width (see OrbitCanvas).
   const visualZoom =
-    !aside && content.visual?.kind === "orbit"
-      ? "max-[368px]:[zoom:0.64] min-[368px]:max-sm:[zoom:0.75]"
-      : "max-sm:[zoom:0.85]";
+    !aside && content.visual?.kind === "orbit" ? "" : "max-sm:[zoom:0.85]";
   return (
     <section
       aria-labelledby="page-title"
