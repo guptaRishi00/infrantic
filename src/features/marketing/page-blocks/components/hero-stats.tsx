@@ -90,9 +90,10 @@ function StatValue({ value }: { value: string }) {
  * a lighter display weight (400, not 600) with negative tracking, tabular
  * figures, and a short brand hairline tying each figure to its label.
  */
-// Phones: one row per stat (figure left, label right), split by hairlines;
-// smaller figures, a wider figure-to-label gap and no brand hairline there.
-// Hairlines for four stats: stacked on phones, 2x2 from sm, one row from lg.
+// Phones: stats become cards in a two-column grid (figure on top, label
+// below, centred both ways, no brand hairline); with three stats the third spans the full
+// width, four make a 2x2 grid.
+// Hairlines for four stats (from sm): 2x2 from sm, one row from lg.
 const FOUR_UP_BORDERS = [
   "",
   "border-t sm:border-t-0 sm:border-l",
@@ -116,7 +117,7 @@ export function HeroStats({
   return (
     <dl
       className={cn(
-        "grid motion-safe:animate-rise",
+        "grid motion-safe:animate-rise max-sm:grid-cols-2 max-sm:gap-3",
         fourUp ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-3",
         className,
       )}
@@ -125,9 +126,12 @@ export function HeroStats({
         <div
           key={stat.label}
           className={cn(
-            "flex flex-row-reverse items-center justify-end gap-8 px-1 py-4 text-left sm:flex-col-reverse sm:gap-0 sm:px-4 sm:text-center lg:px-8",
+            "flex flex-col-reverse items-center justify-end gap-3 p-4 text-center max-sm:justify-center max-sm:rounded-2xl max-sm:border sm:gap-0 sm:px-4 lg:px-8",
             fourUp ? "sm:py-6 lg:py-4" : "sm:py-4",
-            dark ? "border-white/10" : "border-zinc-200/80",
+            dark
+              ? "border-white/10 max-sm:bg-white/[0.03]"
+              : "border-zinc-200/80 max-sm:bg-white",
+            !fourUp && index === 2 && "max-sm:col-span-2",
             fourUp
               ? FOUR_UP_BORDERS[index]
               : index > 0 && "border-t sm:border-t-0 sm:border-l",
@@ -143,7 +147,7 @@ export function HeroStats({
           </dt>
           <dd
             className={cn(
-              "flex w-[5.75rem] shrink-0 flex-col items-start text-[2rem] leading-none font-normal tracking-[-0.02em] sm:w-auto sm:items-center sm:text-[2.75rem] lg:text-[4.25rem]",
+              "flex shrink-0 flex-col items-center text-[2rem] leading-none font-normal tracking-[-0.02em] sm:w-auto sm:items-center sm:text-[2.75rem] lg:text-[4.25rem]",
               dark ? "text-white" : "text-ink",
             )}
           >

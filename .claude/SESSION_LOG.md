@@ -1363,3 +1363,178 @@
   - Desktop dump vs the previous build (17,129 elements): 0 differ.
   - Screenshot of /services at 375 reviewed.
 - Not committed.
+
+## 2026-10-06 — Phones: smaller site, one-screen heroes, wider gaps, all buttons active (mobile only)
+- User: in mobile view only, scale down every component, make every hero section h-screen, increase the gap between sections slightly, and keep the buttons in their active state.
+- Found first: the user committed the earlier mobile work (`b9074e1`) and their own phone edits (`bc7c417`: smaller home-hero type and `h-8` CTAs, cards `scale-[0.85]`, an accordion mobile menu, smaller section titles), plus an uncommitted `relative z-10` on the hero text. All kept.
+- Changes:
+  - `globals.css`: phone zoom 0.92 → 0.86 via `--phone-zoom`. Sections: one site-wide phone rule `[data-page-enter] > section + section { margin-top: 1rem }` (replaced the inner-page −1rem rule).
+  - Heroes: measured that `100dvh` renders at zoom × screen (747px on an 812px screen at .92), so the exact-screen height is `calc(100dvh/var(--phone-zoom))`. Home hero section gets that min-height + `flex-col justify-center` on phones. PageHero's copy+visual grid gets it too, plus phone `pt-24 pb-8` (was 28/12; the phone header is now 56px) and `max-sm:gap-6`, so healthcare/about/marketing also fit on a 360×740 phone. Stat rows still start below the fold as before.
+  - Buttons: `button-link.tsx` secondary/muted get `max-md:border-brand-200 max-md:bg-brand-50`, onDark `max-md:bg-brand-gradient max-md:text-white` (primary already gradient); contact form reset button the same.
+  - Lint fix in the user's `mobile-nav.tsx`: the accordion chevron `<svg>` gets `aria-hidden="true"` (Biome `noSvgWithoutTitle`), and the file was Biome-formatted.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Hero vs screen at 375×812, 390×844, 414×896, 360×740: home and all 9 PageHero pages exactly equal to the screen. /contact (form hero) 1,655–1,760px.
+  - Buttons at 375/767: 31 gradient + 6 brand-50, none black/white at rest; 768/1440 black/white.
+  - Section gaps at 375: home 142 → 146, inner pages 127 → 146 (visual px, net of the stronger zoom).
+  - Rails snap card 3 to the 14px gutter; tools marquee halves 936/936; workflow tabs fit.
+  - 0 overflow on 11 pages × 320/360/375/414.
+  - Desktop dump vs the 2026-10-02 build: 3 differences, all the home hero text block becoming `position: relative` (the user's uncommitted `relative z-10`); boxes identical.
+  - First-screen screenshots (home, /services, /about at 375×812; healthcare at 360×740) reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Inner-page heroes: smaller, still one screen, deeper header gap (mobile only)
+- User: in mobile view only, except the home page, scale down every page's hero, keep it fitting the h-screen viewport, and increase the gap between header and hero.
+- Measured first: the PageHero box already equalled the screen, with its content centred, so the header gap was just leftover space: 45–81px at 375×812, 28–58px at 360×740.
+- Changes:
+  - `page-hero.tsx`: copy block `max-sm:[zoom:0.9]`; visual zoom 0.75/0.64 → 0.68/0.58 (≈90%); phone grid top padding `pt-24` → `pt-28` (base, overridden at sm).
+  - `contact-page.tsx` (form hero, can't be one screen): phone `pt-32` → `pt-36`; intro `max-sm:[zoom:0.9]`; form deliberately unscaled (readable inputs, no iOS focus zoom).
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP on 9 PageHero pages: box = screen at 375×812, 360×740, 414×896. Content 10–13% smaller. Header → first element gap 45–81 → 94–132 (375×812), 28–58 → 65–113 (360×740), 99–141 → 136–174 (414×896).
+  - /contact gap 55 → 69. Home hero unchanged (812 = 812).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - First screens of /services, healthcare (360×740), /about, /contact reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Home hero fills the first screen; marquee below the fold (mobile only)
+- User: in mobile view only, on the home page, the IndustriesMarquee should appear after the viewport and the hero should take the whole viewport.
+- Before: the whole hero section (headline, cards and the marquee) was one screen tall and centred, so the marquee showed on the first screen.
+- `hero.tsx`: the section loses its phone flex/min-h. The headline block + cards are wrapped in a div that is `max-sm:flex max-sm:flex-col max-sm:justify-center max-sm:min-h-[calc(100dvh/var(--phone-zoom)-6rem)]` (screen height minus the section's `pt-24`) and `sm:contents` (desktop layout unchanged). No transform/z-index on it, so the orbit's `-z-10` still resolves against the section. The user's uncommitted `relative z-10` on the headline block is kept.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP: the wrapper ends exactly at the fold at 375×812, 360×740, 414×896 and 639×800; the marquee starts 28px below it in every case. 640/1440: wrapper `display: contents`, layout as before.
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - First-screen and scrolled screenshots at 375 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Home hero on phones: larger elements, evenly spaced (mobile only)
+- User: in mobile only, scale up the home hero's elements and increase the gaps so it fits properly and evenly in the viewport (awesome-design-md / taste-skill if needed).
+- Measured before (375×812): content 369px of the 757px header→fold area; 230px empty above, 158px below; headline 25px visual, subtitle 12px, buttons 28px tall, cards at 85%.
+- `hero.tsx`, phone values only (each sm/lg value unchanged):
+  - Pill `px-3 py-1 text-xs`; headline 1.8 → 2.25rem (3 balanced lines); subtitle 14 → 16px.
+  - The user's phone `h-8 px-3 text-[13px]` CTA overrides removed (standard md buttons, 44px); arrow `size-4`.
+  - Copy gaps `mt-[clamp(1rem,3dvh,1.75rem)]` / `clamp(0.875rem,2.5dvh,1.5rem)` / `clamp(1.5rem,4.5dvh,2.5rem)`.
+  - The user's phone `mt-16 py-4` on the copy block zeroed below sm (sm–md kept). The cards' `scale-[0.85]` removed rather than set to 100%: a `scale` value would make that wrapper a stacking context (the orbit warning).
+  - Screen box `justify-evenly` + `py-6` (matches HeroCards' own `pt-6`); section phone `pt-24` → `pt-16` (the 64px phone header) with the box's min-height adjusted to `-4rem`.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP spaces header→pill / CTA→cards / cards→fold: 102/102/102 (375×812), 80/80/80 (360×740), 119/119/119 (390×844), 145/145/145 (414×896). Headline 31px visual, subtitle 14, buttons 97×38, cards 145px tall.
+  - The box still ends at the fold and the marquee starts below it at every size; 640/1440 unchanged.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots at three phone sizes reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Home hero title in two lines (mobile only)
+- User: in mobile view only, make the hero title two lines.
+- Measured: at 2.25rem the title ("Business is complex." / "Your systems shouldn't be.", server-split into block lines) wrapped to 3 lines from 320 to 390px. The longer line is 11.79em wide; the column is `100vw/--phone-zoom − 2rem`.
+- `hero.tsx` h1: `max-sm:text-[length:min(2.25rem,calc((100vw/var(--phone-zoom) − 2rem)/12.2))]` (≈3% slack), capped at the previous 2.25rem.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP: 2 rendered lines at 320/360/375/390/414/639 (font 27.9 / 31.7 / 33.1 / 34.5 / 36 / 36px).
+  - Hero spaces still equal (115/115/115 at 375×812, 93 at 360×740, 130 at 390×844, 145 at 414×896).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots at 320, 375, 414 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Home hero: subtitle→buttons gap = buttons→cards gap (mobile only)
+- User (phone screenshot with the two gaps marked): in mobile view only, keep the subtitle→buttons and buttons→cards gaps equal.
+- Before (375×812): subtitle→buttons 31px (a fixed clamp gap), buttons→cards 115px (the evenly shared space).
+- `hero.tsx`, all below sm:
+  - The copy block goes `display: contents` (its `relative z-10` is not needed on phones: no stacking context on the cards wrapper since the phone scale was removed).
+  - The screen box `items-center` instead of `justify-evenly`.
+  - Pill wrapper `mt-auto`; CTA row `mt-auto pt-6` (matches HeroCards' own `pt-6`); cards wrapper `my-auto`. The four auto margins share the free space equally.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP (gaps measured from the buttons themselves): header→pill / subtitle→buttons / buttons→cards / cards→fold = 94/94/94/94 (375×812), 77/77/77/77 (360×740), 106/106/106/106 (390×844), 117/117/117/117 (414×896).
+  - Fold intact (marquee below it).
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots at 360/375/414 reviewed (pill not stretched, rings behind the text).
+- Committed and pushed.
+
+## 2026-10-06 — Section gaps by background (mobile only, every page)
+- User's principle: dark → white (or white → dark): the white section's top padding and the dark section's bottom padding are equal. White → white: the gap is only the lower section's top padding.
+- Measured first (375, all 11 pages): every section `pt64 pb64` + the 16px margin rule, with exceptions (FAQ pt48, home Problem pt0, hero pb16–64). Dark sections are exactly the ones with `.bg-ink`.
+- `globals.css`:
+  - Removed the `section + section { margin-top: 1rem }` rule.
+  - Added an unlayered `@media (width < 40rem)` block (so it overrides the sections' `py-*` utilities): all `[data-page-enter] > section` `padding-bottom: 5rem`, non-first `padding-top: 5rem` (hero header clearance untouched), and `padding-bottom: 0` on a section whose next sibling has the same background (`:not(.bg-ink):has(+ section:not(.bg-ink))`, `.bg-ink:has(+ section.bg-ink)`).
+  - P = 5rem (≈69px visual at the .86 zoom).
+- Verified on the production build: lint clean; build OK.
+  - CDP on all 11 pages at 375: computed paddings follow the rule everywhere (e.g. /services hero pb80 → dark focus-areas pt80/pb80 → light service-lines pt80 pb0 → engagement pt80 pb0 …). Content gaps light → light ≈69–91 (card internals), across light/dark edges 138–163.
+  - At 640 all sections keep their own padding (112px).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of six boundaries reviewed (FAQ → CTA, dark → light, light → light, hero stats → dark, card → FAQ, panel → dark).
+- Committed and pushed.
+
+## 2026-10-06 — Home hero: tighter gaps around the buttons (mobile only)
+- User (phone screenshot with the subtitle → buttons and buttons → cards gaps marked): reduce the gap there.
+- Before (375×812): both gaps 94px (auto margins sharing the free space with header → pill and cards → fold).
+- `hero.tsx` (below sm): CTA row `mt-auto pt-6` → `mt-[clamp(2.5rem,6.5dvh,3.5rem)]`; cards wrapper `my-auto` → `mt-[calc(clamp(2.5rem,6.5dvh,3.5rem)-1.5rem)] mb-auto` (subtracts HeroCards' own pt-6). The pill keeps `mt-auto`, so the leftover space splits equally above the pill and below the cards (group centred).
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP subtitle → buttons / buttons → cards: 45/45 (375×812), 41/41 (360×740), 47/47 (390×844), 48/48 (414×896). Header → pill = cards → fold (142/142 at 375×812). Fold intact, marquee below it.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots at 360/375/414 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Section rhythm made optically exact (mobile only)
+- User (phone screenshot of home Selected work (dark) → How we work (white)): the gap rule still looks unequal in places. Asked which reference points; the user had no preference, so the rule is applied to what paints (card borders, chip borders, letters).
+- Measured: box-wise every edge was 69/69, but text adds space. A line box starts ~5px above its capitals (light sections open with the mono eyebrow or, for How we work, a heading), and ends a few px below its baseline. Optical difference before: +2 to +5px below most edges, ±6–12 where a section ends in text or the CTA band (pill-first) follows.
+- Changes (phones only):
+  - `globals.css`: non-first section `padding-top: calc(5rem - 5px)`; CTA band (`aria-labelledby="cta-title"`) keeps `5rem`.
+  - `steps.tsx`: `max-sm:[&>li:last-child>div>p:last-child]:-mb-1.5` (only when the last step ends in text, not chips).
+  - `stack-showcase.tsx`: footnote `max-sm:-mb-1.5`.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Optical CDP (last painted box or glyph bottom → edge vs edge → cap top) over all 32 light/dark edges on 11 pages: 29 exact, 1 at −1, 2 at −2 (How we work 69/67; careers hiring → CTA 71/69).
+  - White → white gaps 69–70 everywhere, FAQ → CTA 69 (closed `<details>` content excluded: it reports rects but doesn't paint).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshot of the reported spot at 375 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Home Work + Services: more bottom padding (mobile only)
+- User: in mobile view only, on the home page, increase the bottom padding of Work and Services slightly.
+- `globals.css` (phone, unlayered, after the rhythm rules): `[data-page-enter] > section#work, section#services { padding-bottom: 6rem }` (was 5rem). Ids exist only on home (checked in the prerendered HTML).
+- Verified on the production build: lint clean; build OK.
+  - CDP at 375: work/services pb 80 → 96px (≈69 → 83px visual from the last card to the edge); the white side below stays 67/69. At 640 both keep their own 112px.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+- Note: by design these two edges are now ~14px roomier above than below (an exception to the equal-edge rule).
+- Committed and pushed.
+
+## 2026-10-06 — Stat rows as a 2 + 1 card grid (mobile only)
+- User (screenshot of a phone hero stat row): make the stats two cards in the first row and one full-width card in the second.
+- `hero-stats.tsx` (`HeroStats`: the 9 PageHero stat rows + About "At a glance"), phone only:
+  - `dl` `max-sm:grid-cols-2 max-sm:gap-3`.
+  - Each stat a card: `max-sm:rounded-2xl max-sm:border`, `max-sm:bg-white` (light) / `max-sm:bg-white/[0.03]` (ink), `p-4 gap-3`, `flex-col-reverse` + `max-sm:items-start` (figure above label); the fixed figure column removed.
+  - Three stats: the third `max-sm:col-span-2`. Four (About) form a 2x2. Brand hairline stays hidden on phones.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP on all stat rows at 320/375: two 141/169px cards then one 293/348px card (About ink: 2x2); radius 16, 1px border, no figure/label overflow. 640: original hairline row (no radius/border cards).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of /services and About at 375 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Stat cards centred (mobile only)
+- User (screenshot of the phone stat cards): make the stats centre-aligned.
+- `hero-stats.tsx`: cell base `text-left` → `text-center` (the `sm:text-center` it duplicated was dropped); `max-sm:items-start` removed (cells are `items-center`) and `max-sm:justify-center` added (vertical centring, so cards whose labels wrap differently balance); figure `items-start` → `items-center` (sm already centred). 640+ unchanged.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP over 84 stat cards (all stat rows at 320/375/414): worst offset from the card centre 3.2px (figure, each label line, and top vs bottom space). 640: original row.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of /services and About at 375 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — /case-studies: equal-height case cards in the phone rail (mobile only)
+- User: on /case-studies, make the cards in the Case studies carousel the same height (mobile only).
+- Cause: the SnapRail stretches its `li` slots to the tallest card (930px at 375), but each bordered `article` kept its own height (930 / 857 / 888).
+- `case-list.tsx` (phone only): `article` gets `max-sm:h-full max-sm:grid-rows-[auto_1fr]`, so it fills its slot and the extra height goes to the white body (the grey header keeps its size). The body `dl` gets `max-sm:content-start`, so its blocks stay 28px apart and the spare space sits at the bottom.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP: cards 1019/1019/1019 (320), 930/930/930 (375), 868/868/868 (414); headers unchanged (317/266/317 at 375); block gaps 28/28 in every card. 640: unchanged (772/724/748, stacked).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of cards 1 and 3 at 375 reviewed.
+- Committed and pushed.
+
+## 2026-10-06 — Menu closes on navigation; draggable "What we do" row; dot spacing (mobile only)
+- User: in mobile view only, (1) the dropdown should close after navigating to a new page, (2) make the home "What we do" carousel cards draggable by hand too, (3) slightly more space between cards and their pagination dots.
+- (1) `mobile-nav.tsx`: links already called `close()`, but the user's accordion groups kept their expanded state (the menu reopened with Services unfolded), and back/forward didn't close it. Now: `usePathname` + render-time state adjustment closes the menu on any path change; `MobileNavGroup` gets `menuOpen` and collapses when the menu closes.
+- (2) New `services/components/services-marquee.tsx` (client) wraps the Services marquee frame.
+  - The track's CSS animation now starts at sm (`motion-safe:sm:animate-marquee`).
+  - On phones the frame is `overflow-x-auto` (hidden scrollbar), so touch drag/momentum is native. A rAF loop advances `scrollLeft` at half-track/60s (the CSS pace), wraps by half (the list is doubled), holds on touchstart/pointerdown and resumes 1.5s after release, wraps both ways during a drag, and sleeps off-screen (IntersectionObserver).
+  - Reduced motion: no auto-scroll, one scrollable row (unchanged). Desktop: the original CSS marquee with hover pause.
+- (3) `snap-rail.tsx`: dots `mt-5` → `mt-7`.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Menu (CDP, 375): expand Services → tap Custom Software → `/services#custom-software`, menu closed; reopened with no group expanded. history.back() with the menu open → closed. Tap About → closed.
+  - Services row: 375 overflow auto, no CSS animation, auto-scroll 39.5 → 93.0px in 2s (≈27px/s = 1600/60). A 200px touch drag moved it 215px, held while touched, resumed after release. Released at 1590 (half 1600) → wrapped to 29; dragged to 0 → 1600. 1024: CSS marquee running as before.
+  - Card → dot gap 17 → 24px visual on every rail (home, /products, /about).
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+- Committed and pushed.

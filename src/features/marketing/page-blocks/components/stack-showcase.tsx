@@ -67,7 +67,9 @@ export function StackShowcase({ content }: { content: StackShowcaseContent }) {
         {content.footnote ? (
           <p
             className={cn(
-              "mt-6 text-[15px]",
+              // Phones: -mb-1.5 takes out the space under the last line's baseline
+              // (section rhythm measures to the visible text).
+              "mt-6 text-[15px] max-sm:-mb-1.5",
               dark ? "text-zinc-400" : "text-zinc-500",
             )}
           >

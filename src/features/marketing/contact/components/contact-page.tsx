@@ -20,10 +20,12 @@ export function ContactPage() {
     <>
       <section
         aria-labelledby="page-title"
-        className="bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4 pt-32 pb-16 sm:pt-44 sm:pb-24"
+        className="bg-[radial-gradient(70%_60%_at_50%_0%,#eef8ff_0%,rgb(255_255_255/0)_100%)] px-4 pt-36 pb-16 sm:pt-44 sm:pb-24"
       >
         <div className="mx-auto grid max-w-[80rem] gap-12 lg:grid-cols-[1fr_1.1fr] lg:grid-rows-[auto_1fr] lg:gap-x-16">
-          <div>
+          {/* Phones: the intro is drawn at 90%; the form keeps its size so its
+              inputs stay readable (and iOS doesn't zoom on focus). */}
+          <div className="max-sm:[zoom:0.9]">
             <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600">
               {intro.eyebrow}
             </p>

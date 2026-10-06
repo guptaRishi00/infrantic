@@ -304,23 +304,54 @@
 /* Tailwind v4 resets buttons to the default cursor; every clickable control
    shows the pointer instead (links already do). Utilities such as
    `cursor-wait` on a pending submit still win over this base layer. */
+/* Phones: section rhythm, every page (page sections are direct children of
+   [data-page-enter]; dark ones carry .bg-ink). Each section gets the same
+   padding; where the next section has the same background (light → light or
+   dark → dark) the upper one drops its bottom padding, so the gap is just the
+   lower section's top padding. Across a light/dark edge both paddings stay,
+   so the space on each side of the edge is equal. Unlayered on purpose: it
+   must override each section's own py-* utilities, but only below sm. The
+   hero's top padding (header clearance) is left alone. */
+@media (width < 40rem) {
+  [data-page-enter] > section {
+    padding-bottom: 5rem;
+  }
+
+  /* Minus 5px: a section opens with text (the mono eyebrow, or a heading),
+     whose line box starts ~5px above its capitals, so the space to the
+     first letters matches the space below the previous section's content. */
+  [data-page-enter] > section:not(:first-child) {
+    padding-top: calc(5rem - 5px);
+  }
+
+  /* The CTA band opens with a bordered pill, not text: no cap correction. */
+  [data-page-enter] > section[aria-labelledby="cta-title"] {
+    padding-top: 5rem;
+  }
+
+  [data-page-enter] > section:not(.bg-ink):has(+ section:not(.bg-ink)),
+  [data-page-enter] > section.bg-ink:has(+ section.bg-ink) {
+    padding-bottom: 0;
+  }
+
+  /* Home "Selected work" and Services (both dark): a little more room below
+     their content, by request. */
+  [data-page-enter] > section#work,
+  [data-page-enter] > section#services {
+    padding-bottom: 6rem;
+  }
+}
+
 @layer base {
-  /* Phones (below sm): the whole site is drawn at 92%, hero and every
-     section alike, px-sized text included. Media queries still read the real
-     viewport; per-component zooms (hero visuals, How we work) compound. */
+  /* Phones (below sm): the whole site is drawn at 86% (--phone-zoom), hero
+     and every section alike, px-sized text included. Media queries still
+     read the real viewport; per-component zooms (hero visuals, How we work)
+     compound. Viewport units are zoomed too, so a box exactly one screen
+     tall is calc(100dvh / var(--phone-zoom)). */
   @media (width < 40rem) {
     html {
-      zoom: 0.92;
-    }
-
-    /* Inner pages (their first section is the page-title hero; home's is
-       hero-title): every section sits 16px closer to the one before. A
-       negative margin into the previous section's empty bottom padding,
-       so each section keeps its own padding exceptions. */
-    [data-page-enter]:has(> section:first-child[aria-labelledby="page-title"])
-      > section
-      + section {
-      margin-top: -1rem;
+      --phone-zoom: 0.86;
+      zoom: var(--phone-zoom);
     }
   }
 

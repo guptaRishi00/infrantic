@@ -50,73 +50,82 @@ export function Hero({ content }: { content: HeroContent }) {
       aria-labelledby="hero-title"
       data-hero=""
       data-entry-skip=""
-      className="relative isolate overflow-hidden px-4 pt-24  pb-12 sm:pt-36 sm:pb-28"
+      className="relative isolate overflow-hidden px-4 pt-16 pb-12 sm:pt-36 sm:pb-28"
     >
       <HeroMotion />
-      <div className="mx-auto flex max-w-3xl flex-col items-center text-center lg:mt-0 mt-16 lg:py-0 py-4">
-        <div data-hero-eyebrow="">
-          <p className="rounded-full border border-zinc-200 bg-white/90 px-2 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs font-medium tracking-wide text-zinc-600">
-            {content.eyebrow}
+      {/* Phones: headline + cards fill the first screen exactly (100dvh is
+          zoomed with the page; 4rem is the section's top padding, the phone
+          header's height), so the industries marquee starts below the fold.
+          The copy block dissolves into this box (display: contents). The
+          subtitle → CTAs and CTAs → cards gaps are one fixed, height-scaled
+          gap (the cards' margin subtracts their own pt-6), and the free
+          space is shared by auto margins above the pill and below the cards,
+          so the group stays centred; py-6 keeps those two ends symmetric.
+          From sm up this box is display: contents, so the layout is
+          unchanged; it adds no transform or z-index, so the orbit's stacking
+          is unaffected. */}
+      <div className="max-sm:flex max-sm:min-h-[calc(100dvh/var(--phone-zoom)-4rem)] max-sm:flex-col max-sm:items-center max-sm:py-6 sm:contents">
+        <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center lg:mt-0 mt-16 lg:py-0 py-4 max-sm:contents">
+          <div data-hero-eyebrow="" className="max-sm:mt-auto">
+            <p className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600">
+              {content.eyebrow}
+            </p>
+          </div>
+          {/* Phones: two lines. The font follows the column width (the longest
+            line, "Your systems shouldn't be.", is 11.79em; /12.2 leaves ~3%
+            slack), capped at 2.25rem. */}
+          <h1
+            id="hero-title"
+            className="mt-[clamp(1rem,3dvh,1.75rem)] text-[2.25rem] max-sm:text-[length:min(2.25rem,calc((100vw_/_var(--phone-zoom)_-_2rem)_/_12.2))] sm:mt-7 leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[3rem] lg:text-[3.5rem]"
+          >
+            <HeadlineWords text={content.title} />
+          </h1>
+          <p
+            data-hero-sub=""
+            className="mt-[clamp(0.875rem,2.5dvh,1.5rem)] max-w-[34rem] text-base sm:text-[15px] leading-[1.45] text-pretty text-zinc-600 sm:mt-6 sm:text-[17px] sm:leading-[1.5]"
+          >
+            {content.subtitle}
           </p>
-        </div>
-        <h1
-          id="hero-title"
-          className="mt-5 text-[1.8rem] sm:mt-7 leading-[1.02] font-medium tracking-[-0.035em] text-balance text-ink sm:text-[3rem] lg:text-[3.5rem]"
-        >
-          <HeadlineWords text={content.title} />
-        </h1>
-        <p
-          data-hero-sub=""
-          className="mt-4 max-w-[34rem] text-[14px] sm:text-[15px] leading-[1.45] text-pretty text-zinc-600 sm:mt-6 sm:text-[17px] sm:leading-[1.5]"
-        >
-          {content.subtitle}
-        </p>
-        <div
-          data-hero-cta=""
-          className="mt-6 flex flex-wrap justify-center gap-2 sm:mt-9 sm:gap-3"
-        >
-          <ButtonLink
-            href={content.primaryCta.href}
-            className="max-sm:h-8 max-sm:px-3 max-sm:text-[13px]"
+          <div
+            data-hero-cta=""
+            className="mt-[clamp(1.5rem,4.5dvh,2.5rem)] flex flex-wrap justify-center gap-3 max-sm:mt-[clamp(2.5rem,6.5dvh,3.5rem)] sm:mt-9"
           >
-            {content.primaryCta.label}
-          </ButtonLink>
-          <ButtonLink
-            href={content.secondaryCta.href}
-            variant="secondary"
-            className="group max-sm:h-8 max-sm:px-3 max-sm:text-[13px]"
-          >
-            {content.secondaryCta.label}
-            <ArrowRight
-              aria-hidden="true"
-              className="size-3.5 text-zinc-500 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none sm:size-4"
-            />
-          </ButtonLink>
+            <ButtonLink href={content.primaryCta.href}>
+              {content.primaryCta.label}
+            </ButtonLink>
+            <ButtonLink
+              href={content.secondaryCta.href}
+              variant="secondary"
+              className="group"
+            >
+              {content.secondaryCta.label}
+              <ArrowRight
+                aria-hidden="true"
+                className="size-4 text-zinc-500 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+              />
+            </ButtonLink>
+          </div>
         </div>
-      </div>
 
-      {/* No transform/opacity on this wrapper: the orbit's -z-10 must resolve
+        {/* No transform/opacity on this wrapper: the orbit's -z-10 must resolve
           against the section, not a local stacking context above the text. */}
-      <div className="relative mx-auto mt-4 w-full max-w-[25.5rem] scale-[0.85] origin-top sm:mt-6 sm:scale-100">
-        <OrbitBackdrop integrations={content.integrations} />
-        {/* Top padding (not margin on the wrapper) moves the cards without moving the orbit anchor. */}
-        <HeroCards>
-          <ActivityStack activity={content.activity} />
-        </HeroCards>
+        <div className="relative mx-auto mt-4 w-full max-w-[25.5rem] origin-top max-sm:mt-[calc(clamp(2.5rem,6.5dvh,3.5rem)-1.5rem)] max-sm:mb-auto sm:mt-6 sm:scale-100">
+          <OrbitBackdrop integrations={content.integrations} />
+          {/* Top padding (not margin on the wrapper) moves the cards without moving the orbit anchor. */}
+          <HeroCards>
+            <ActivityStack activity={content.activity} />
+          </HeroCards>
+        </div>
       </div>
 
-      {/* Soft top fade so the rings dissolve under the header. Later in DOM
-          order than the orbit, so it paints over the rings; it ends above the
-          highest badge. */}
+      {/* Soft top fade so the rings dissolve under the header. */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-32 bg-[linear-gradient(to_bottom,#fff_15%,rgb(255_255_255/0))] sm:h-40"
       />
 
       <div className="relative mt-8 sm:mt-24">
-        {/* White ground under the logo row. The top of the gradient is transparent,
-            so the rings fade into it. Same -z-10 as the orbit but later in DOM
-            order, so it paints over the rings and under the logos. */}
+        {/* White ground under the logo row. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -inset-x-4 -top-32 -bottom-16 -z-10 bg-[linear-gradient(to_bottom,rgb(255_255_255/0),#fff_55%)] sm:-bottom-28"

@@ -37,8 +37,11 @@ export function PageHero({
       )}
     >
       <div className="mx-auto max-w-[80rem]">
-        <div className="grid min-h-[100dvh] content-center items-center gap-12 pt-28 pb-12 sm:pt-32 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-          <div>
+        {/* Phones: exactly one screen tall (100dvh is zoomed with the page).
+            Copy and visual are drawn at 90% there, which leaves room for a
+            deeper gap under the header (pt-28) while both still fit. */}
+        <div className="grid min-h-[100dvh] content-center items-center gap-12 pt-28 pb-8 max-sm:min-h-[calc(100dvh/var(--phone-zoom))] max-sm:gap-6 sm:pt-32 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+          <div className="max-sm:[zoom:0.9]">
             <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600">
               {content.eyebrow}
             </p>
@@ -72,7 +75,7 @@ export function PageHero({
           {visual ? (
             // Phones show the visual under the copy, zoomed as a whole (text,
             // rem-sized comets and all) so the fixed canvases fit the column.
-            <div className="max-lg:mx-auto max-lg:w-full max-lg:max-w-lg max-[368px]:[zoom:0.64] min-[368px]:max-sm:[zoom:0.75]">
+            <div className="max-lg:mx-auto max-lg:w-full max-lg:max-w-lg max-[368px]:[zoom:0.58] min-[368px]:max-sm:[zoom:0.68]">
               {visual}
             </div>
           ) : null}

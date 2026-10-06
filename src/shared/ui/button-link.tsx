@@ -3,18 +3,18 @@ import type { ComponentProps } from "react";
 import { cn } from "@/shared/lib/cn";
 
 const variants = {
-  // Phones have no hover, so below md the primary shows its hover look (the
-  // brand gradient) at rest.
+  // Phones have no hover, so below md every variant shows its hover look at
+  // rest (primary/onDark: brand gradient; secondary/muted: brand tint).
   primary:
     "bg-black text-white hover:bg-brand-gradient max-md:bg-brand-gradient",
   secondary:
-    "border border-zinc-200 bg-white text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
+    "border border-zinc-200 bg-white text-zinc-800 hover:border-brand-200 hover:bg-brand-50 max-md:border-brand-200 max-md:bg-brand-50",
   muted:
-    "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:border-brand-200 hover:bg-brand-50",
+    "border border-zinc-200 bg-zinc-50 text-zinc-800 hover:border-brand-200 hover:bg-brand-50 max-md:border-brand-200 max-md:bg-brand-50",
   // White button for ink sections; fills with the brand gradient on hover. The
   // border stays transparent so the gradient reaches the edge.
   onDark:
-    "border border-transparent bg-white text-ink hover:bg-brand-gradient hover:text-white",
+    "border border-transparent bg-white text-ink hover:bg-brand-gradient hover:text-white max-md:bg-brand-gradient max-md:text-white",
 } as const;
 
 // The same hover looks, driven by hovering anywhere on a `group/card` parent

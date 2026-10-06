@@ -70,7 +70,7 @@ export function SnapRail({
         {children}
       </List>
       {count > 1 ? (
-        <div className="mt-5 flex items-center gap-1 sm:hidden">
+        <div className="mt-7 flex items-center gap-1 sm:hidden">
           {Array.from({ length: count }, (_, index) => (
             // 44px-tall hit area around a 6px dot; the padding is cancelled
             // by negative margins so the row stays compact.

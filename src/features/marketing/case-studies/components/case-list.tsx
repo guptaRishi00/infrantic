@@ -29,11 +29,14 @@ export function CaseList({ content }: { content: CaseListContent }) {
           label={content.title}
           className="mt-12 max-sm:gap-4 sm:space-y-6"
         >
+          {/* Phones: each card fills its rail slot (the rail stretches the
+              slots to the tallest card), the extra height going to the
+              white body below the grey header, packed to the top. */}
           {content.cases.map((study) => (
             <li key={study.id}>
               <article
                 aria-labelledby={`${study.id}-title`}
-                className="grid overflow-hidden rounded-2xl border border-zinc-200/80 lg:grid-cols-[22rem_1fr]"
+                className="grid overflow-hidden rounded-2xl border border-zinc-200/80 max-sm:h-full max-sm:grid-rows-[auto_1fr] lg:grid-cols-[22rem_1fr]"
               >
                 <div className="flex flex-col border-b border-zinc-200/80 bg-zinc-50/70 p-7 lg:border-r lg:border-b-0">
                   <div className="flex items-center gap-3">
@@ -66,7 +69,7 @@ export function CaseList({ content }: { content: CaseListContent }) {
                     </ul>
                   </div>
                 </div>
-                <dl className="grid gap-8 p-7 lg:grid-cols-3 lg:p-8">
+                <dl className="grid gap-8 p-7 max-sm:content-start lg:grid-cols-3 lg:p-8">
                   <div>
                     <dt className="font-mono text-xs tracking-wide text-zinc-500 uppercase">
                       {content.challengeLabel}

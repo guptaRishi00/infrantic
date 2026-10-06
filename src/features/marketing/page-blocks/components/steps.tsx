@@ -28,7 +28,10 @@ export function Steps({ content }: { content: StepsContent }) {
           tone={content.tone}
           className="lg:sticky lg:top-28"
         />
-        <ol className="relative lg:max-w-[40rem]">
+        {/* Phones: when the last step ends in its text (no output chips), pull
+            it up by the space under the text's baseline so the gap to the
+            next section matches the section rhythm. */}
+        <ol className="relative lg:max-w-[40rem] max-sm:[&>li:last-child>div>p:last-child]:-mb-1.5">
           <span
             aria-hidden="true"
             className={cn(

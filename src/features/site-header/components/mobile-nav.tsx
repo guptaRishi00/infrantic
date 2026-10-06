@@ -2,11 +2,17 @@
 
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 import { ButtonLink } from "@/shared/ui/button-link";
 import { NewBadge } from "@/shared/ui/new-badge";
-import { isNavGroup, type NavGroup, type NavItem, type NavLink } from "../navigation";
+import {
+  isNavGroup,
+  type NavGroup,
+  type NavItem,
+  type NavLink,
+} from "../navigation";
 
 type MobileNavProps = {
   items: readonly NavItem[];
@@ -17,6 +23,15 @@ export function MobileNav({ items, actions }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
   const close = () => setOpen(false);
+
+  // Any navigation closes the menu, not only a tap on one of its links
+  // (back/forward, or a link elsewhere on the page while it is open).
+  const pathname = usePathname();
+  const [lastPathname, setLastPathname] = useState(pathname);
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (!open) return;
@@ -65,7 +80,12 @@ export function MobileNav({ items, actions }: MobileNavProps) {
             <div className="flex flex-col px-2">
               {items.map((item) =>
                 isNavGroup(item) ? (
-                  <MobileNavGroup key={item.label} item={item} onNavigate={close} />
+                  <MobileNavGroup
+                    key={item.label}
+                    item={item}
+                    menuOpen={open}
+                    onNavigate={close}
+                  />
                 ) : (
                   <MobileLink key={item.label} link={item} onNavigate={close} />
                 ),
@@ -92,12 +112,20 @@ export function MobileNav({ items, actions }: MobileNavProps) {
 
 function MobileNavGroup({
   item,
+  menuOpen,
   onNavigate,
 }: {
   item: NavGroup;
+  menuOpen: boolean;
   onNavigate: () => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  // Closing the menu folds its groups too, so it reopens collapsed.
+  const [wasOpen, setWasOpen] = useState(menuOpen);
+  if (menuOpen !== wasOpen) {
+    setWasOpen(menuOpen);
+    if (!menuOpen) setIsExpanded(false);
+  }
 
   return (
     <div className="w-full border-b border-zinc-100 last:border-b-0">
@@ -108,6 +136,7 @@ function MobileNavGroup({
       >
         <span>{item.label}</span>
         <svg
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="18"
           height="18"
@@ -119,7 +148,7 @@ function MobileNavGroup({
           strokeLinejoin="round"
           className={cn(
             "shrink-0 text-zinc-400 transition-transform duration-200",
-            isExpanded ? "rotate-180" : ""
+            isExpanded ? "rotate-180" : "",
           )}
         >
           <path d="m6 9 6 6 6-6" />
@@ -131,7 +160,7 @@ function MobileNavGroup({
           "grid w-full transition-[grid-template-rows,opacity,visibility] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
           isExpanded
             ? "visible grid-rows-[1fr] opacity-100"
-            : "invisible grid-rows-[0fr] opacity-0"
+            : "invisible grid-rows-[0fr] opacity-0",
         )}
       >
         <div className="min-h-0 w-full overflow-hidden">

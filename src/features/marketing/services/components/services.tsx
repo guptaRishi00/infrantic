@@ -10,6 +10,7 @@ import {
 import { cn } from "@/shared/lib/cn";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import type { Service, ServiceIcon, ServicesContent } from "../services.types";
+import { ServicesMarquee } from "./services-marquee";
 
 // Lucide strokes are single-colour; they take the brand gradient by pointing
 // `stroke` at one shared <linearGradient> (BrandIconGradient, rendered once
@@ -73,10 +74,12 @@ export function Services({ content }: { content: ServicesContent }) {
           list is rendered twice and the track slides -50% (transform only, so
           it runs on the compositor). Each card carries its own right padding
           (not flex gap) so both halves are exactly equal. Pauses on hover.
-          Reduced motion: one manually scrollable row. */}
-      <div className="-mx-4 mt-16 overflow-hidden motion-reduce:overflow-x-auto">
+          Reduced motion: one manually scrollable row. Phones: a native
+          scroller kept moving by ServicesMarquee, so it can also be dragged
+          by hand. */}
+      <ServicesMarquee className="-mx-4 mt-16 overflow-hidden motion-reduce:overflow-x-auto max-sm:overflow-x-auto max-sm:[scrollbar-width:none] max-sm:[&::-webkit-scrollbar]:hidden">
         <div
-          className="flex w-max hover:[animation-play-state:paused] motion-safe:animate-marquee"
+          className="flex w-max hover:[animation-play-state:paused] motion-safe:sm:animate-marquee"
           style={{ animationDuration: "60s" }}
         >
           <ServiceList services={content.services} />
@@ -86,7 +89,7 @@ export function Services({ content }: { content: ServicesContent }) {
             decorative
           />
         </div>
-      </div>
+      </ServicesMarquee>
     </section>
   );
 }

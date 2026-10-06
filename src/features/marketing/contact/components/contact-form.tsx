@@ -81,7 +81,7 @@ function FormBody({
         <button
           type="button"
           onClick={onReset}
-          className="mt-6 inline-flex h-11 items-center rounded-md border border-zinc-200 bg-white px-4.5 text-[15px] font-medium text-zinc-800 transition-colors hover:border-brand-200 hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+          className="mt-6 inline-flex h-11 items-center rounded-md border border-zinc-200 bg-white px-4.5 text-[15px] font-medium text-zinc-800 transition-colors hover:border-brand-200 hover:bg-brand-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink max-md:border-brand-200 max-md:bg-brand-50"
         >
           {content.resetLabel}
         </button>
