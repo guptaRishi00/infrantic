@@ -1538,3 +1538,65 @@
   - Card → dot gap 17 → 24px visual on every rail (home, /products, /about).
   - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
 - Committed and pushed.
+
+## 2026-10-07 — Footer one column, readability floor, opaque hero pill (mobile only)
+- User (Hindi/English): on mobile, put the footer in one column; sizing isn't optimised for mobile in many places; (screenshot) the "AI. Automation. Software." pill shouldn't be transparent, and the faint line showing over it should stay hidden behind it.
+- Pill: `bg-white/90` let the orbit ring line show through. Home hero pill `max-sm:bg-white max-sm:text-[13px]`.
+- Footer (`site-footer.tsx`): link nav `max-sm:grid-cols-1`; links `max-sm:py-2.5` (37px visual tap height); socials `max-sm:size-11` (38px).
+- Sizing: a CDP audit of visual text size (font-size × every zoom) and tap targets on 11 pages at 375 found readable text at 8.6–10.3px (stat labels 9.5, panel labels such as Built with / Challenge / Included 10.3, pills 10.1) and small targets (footer links 26px, socials 31, menu toggle 34, zoomed hero CTAs 34). Changes:
+  - `globals.css`: unlayered phone readability floor (`text-xs`/10/11/12px and `max-sm:text-[11px]` → 13px), excluding `[aria-hidden=true]` subtrees and `[data-hero]`.
+  - PageHero and /contact pills `max-sm:text-[14px]`.
+  - Mobile-nav toggle `max-sm:size-11`; logo link `max-sm:py-3.5 -my-3.5`.
+  - `max-sm:h-12` on the PageHero CTAs and the How we work CTA (both inside a 0.9 zoom).
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - Audit after: no readable text below 11.2px except the home hero mock cards (deliberate), the How we work tabs/step label (10.1–10.8, inside the user-requested 0.9 zoom), and the inner pills (10.8).
+  - Remaining <36px targets: card "Learn more"/"Enquire now" (stretched card links, the card is the target), How we work tabs, and "View all services"/"Start a project" sm buttons (31px).
+  - Inner heroes still exactly one screen at 375/390/414/360.
+  - Footer: one column, link height 37, socials 38. Pill computed `rgb(255,255,255)`.
+  - 0 page overflow at 320/375. Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of the hero pill and footer reviewed.
+- Not committed.
+
+## 2026-10-07 — Inner-page hero spacing and sizing (mobile only)
+- User (Hindi/English, screenshot): on phones the inner-page heroes' spacing and sizing look off; there was a big band between the header and the pill, and a small floating flow diagram with empty bands above and below it.
+- `page-hero.tsx`: the phone grid is a flex column one screen tall. Changes:
+  - Top padding is `calc(4rem+7dvh)` instead of `pt-28`, so the pill sits 45–54px under the header (was 45–81).
+  - The copy stays at the top, at zoom 0.9.
+  - The visual box is `flex-1 min-h-56 flex-col justify-center` at zoom 0.85 (was 0.68/0.58); the orbit is 0.75 (0.64 under 368px).
+- `hero-visual.tsx`: the role=img div and the aria-hidden div are `flex-1 flex-col`. The flow canvas is `aspect-auto flex-1 max-h-[44rem]`, so its %-placed nodes spread into the free height. It bleeds `-mt-14 -mb-7` into the gaps, because the nodes span only ~22–82% of its height. It is `pointer-events-none` on phones.
+- `visual-frame.tsx`: sector illustrations are 85% wide, centred, on phone screens under 760px tall.
+- Dead ends: `cqh`/`cqw` units resolved to 0 under the html zoom. `h-full` inside the flexed box collapsed the visuals to 0 (the flex container only has a min-height). Both are now noted in the map.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP at 375/390/360/414 on 9 pages: the hero box equals the screen everywhere, and no visual label is clipped.
+  - Flow pages, cta→visual / visual→fold: 59–84 / 49–74 at 375×812 (were 115–137 / 92–114), 44–67 / 37–59 at 360×740, and 82–113 / 69–101 at 414×896.
+  - Sector and about pages are unchanged.
+  - The hero CTAs receive taps at top, middle and bottom on 4 pages at 360 and 414.
+  - No new page overflow at 360/375/414. The contact-form honeypot sits off-screen, the same as in the baseline.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+  - Screenshots of 7 heroes at 375 reviewed.
+- Not committed.
+
+## 2026-10-07 — Mobile menu: tighter Careers → Book a call gap (mobile only)
+- User: on mobile, reduce the gap in the navbar menu between the last option (Careers) and the Book a call CTA.
+- `mobile-nav.tsx`: the CTA row's `mt-4 pt-3` gets `max-sm:mt-1 max-sm:pt-1`; tablet (sm–lg) keeps the old spacing.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP with the menu open, Careers text → button: 39 → 22px visual at 375 and 360; 45px unchanged at 768.
+  - Screenshot at 375 reviewed.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+- Not committed.
+
+## 2026-10-07 — Footer link columns like SoftexEdge (mobile only)
+- User: on mobile, arrange and size the footer links like SoftexEdge's one-column footer; only the links, the rest of the footer stays.
+- Reference: `softexedge-sept-2026/src/components/layout/Footer.tsx`. On phones its groups are one column `gap-y-12`. Each group is `flex-col gap-2.5`: a `text-sm uppercase tracking-[0.3em]` label (`mb-2`), then `text-[0.95rem] font-medium` links. SoftexEdge has no page zoom, so its sizes were divided by Infrantic's 0.86.
+- `site-footer.tsx`, phone-only changes:
+  - nav `max-sm:gap-14`;
+  - h2 16px, uppercase, `tracking-[0.3em]`, zinc-500 (the muted-label / prominent-link hierarchy of the reference, in light colours);
+  - ul `max-sm:mt-4 max-sm:space-y-0`;
+  - links `max-sm:py-1.5 text-[1.1rem] font-medium text-zinc-700`.
+  - `tracking-tight` was tried and dropped: it closed up the word spaces.
+- Verified on the production build: lint clean; tsc 0; build OK.
+  - CDP at 375/360: groups 48px apart, label 13.8px, links 15.1px weight 500, pitch 33.0, label → first link 19px. SoftexEdge is 48 / 14 / 15.2 / 32.8 / 18.
+  - At 768 the values are unchanged (15px, two columns).
+  - Screenshot at 375 reviewed.
+  - Desktop dump vs the previous build (17,129 elements): 0 differ.
+- Not committed.

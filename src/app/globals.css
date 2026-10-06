@@ -304,6 +304,23 @@
 /* Tailwind v4 resets buttons to the default cursor; every clickable control
    shows the pointer instead (links already do). Utilities such as
    `cursor-wait` on a pending submit still win over this base layer. */
+/* Phones: readability floor. The page is drawn at 86% there, so text set at
+   10-12px (labels, chips, meta) came out at 8.6-10.3px; it is raised to 13px
+   (about 11px on screen). Decorative mock-ups (aria-hidden) and the home
+   hero's illustrative activity cards are left alone. Unlayered so it beats
+   the size utilities, but only below sm. */
+@media (width < 40rem) {
+  :is(
+      .text-xs,
+      .text-\[10px\],
+      .text-\[11px\],
+      .text-\[12px\],
+      .max-sm\:text-\[11px\]
+    ):not([aria-hidden="true"], [aria-hidden="true"] *, [data-hero] *) {
+    font-size: 13px;
+  }
+}
+
 /* Phones: section rhythm, every page (page sections are direct children of
    [data-page-enter]; dark ones carry .bg-ink). Each section gets the same
    padding; where the next section has the same background (light → light or

@@ -38,7 +38,7 @@ export function SiteFooter() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="grid size-9 place-items-center rounded-full border border-zinc-200 text-zinc-600 transition-colors hover:border-zinc-300 hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
+                    className="grid size-9 place-items-center rounded-full border max-sm:size-11 border-zinc-200 text-zinc-600 transition-colors hover:border-zinc-300 hover:text-ink focus-visible:outline-2 focus-visible:outline-ink"
                   >
                     <SocialIcon id={social.id} />
                     <span className="sr-only">{social.label}</span>
@@ -48,21 +48,26 @@ export function SiteFooter() {
             </ul>
           </div>
 
+          {/* Phones: one column laid out like SoftexEdge's footer (its
+              on-screen sizes divided by the 0.86 phone zoom): groups 48px
+              apart, a small uppercase tracked label, then 15px medium links
+              on a 33px pitch (padding, not gaps, so the whole pitch is the
+              tap target). */}
           <nav
             aria-label="Footer"
-            className="grid grid-cols-2 gap-8 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-8 max-sm:grid-cols-1 max-sm:gap-14 lg:grid-cols-4"
           >
             {footerColumns.map((column) => (
               <div key={column.title}>
-                <h2 className="text-[15px] font-medium text-ink">
+                <h2 className="text-[15px] font-medium text-ink max-sm:text-[16px] max-sm:tracking-[0.3em] max-sm:uppercase">
                   {column.title}
                 </h2>
-                <ul className="mt-4 space-y-2.5 max-lg:mt-3 max-lg:space-y-1">
+                <ul className="mt-4 space-y-2.5 max-lg:mt-3 max-lg:space-y-1 max-sm:mt-4 max-sm:space-y-0">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={link.href}
-                        className="text-[15px] text-zinc-500 transition-colors hover:text-ink max-lg:inline-block max-lg:py-1"
+                        className="text-[15px] text-zinc-500 transition-colors hover:text-ink max-lg:inline-block max-lg:py-1 max-sm:py-1.5 max-sm:text-[1.1rem] max-sm:font-medium max-sm:text-zinc-700"
                       >
                         {link.label}
                       </Link>

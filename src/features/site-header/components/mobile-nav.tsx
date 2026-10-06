@@ -51,7 +51,7 @@ export function MobileNav({ items, actions }: MobileNavProps) {
         aria-label={open ? "Close menu" : "Open menu"}
         data-mobile-toggle
         onClick={() => setOpen((value) => !value)}
-        className="grid size-10 place-items-center rounded-lg text-zinc-800 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-ink"
+        className="grid size-10 place-items-center rounded-lg text-zinc-800 max-sm:size-11 transition-colors hover:bg-zinc-100 focus-visible:outline-2 focus-visible:outline-ink"
       >
         {open ? (
           <X aria-hidden="true" className="size-6" />
@@ -91,7 +91,7 @@ export function MobileNav({ items, actions }: MobileNavProps) {
                 ),
               )}
             </div>
-            <div className="mt-4 grid auto-cols-fr grid-flow-col gap-2 pt-3">
+            <div className="mt-4 grid auto-cols-fr grid-flow-col gap-2 pt-3 max-sm:mt-1 max-sm:pt-1">
               {actions.map((action, index) => (
                 <ButtonLink
                   key={action.href}

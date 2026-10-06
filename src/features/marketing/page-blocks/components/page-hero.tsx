@@ -26,6 +26,14 @@ export function PageHero({
 }) {
   const visual =
     aside ?? (content.visual ? <HeroVisual content={content.visual} /> : null);
+  // Phone zoom for the visual: the flow diagrams and sector illustrations are
+  // full-width boxes, so 0.85 only scales their nodes and labels up to a
+  // readable size; the orbit is a fixed 28rem canvas, so 0.75 (0.64 under
+  // 368px) is the most a phone column fits.
+  const visualZoom =
+    !aside && content.visual?.kind === "orbit"
+      ? "max-[368px]:[zoom:0.64] min-[368px]:max-sm:[zoom:0.75]"
+      : "max-sm:[zoom:0.85]";
   return (
     <section
       aria-labelledby="page-title"
@@ -38,11 +46,13 @@ export function PageHero({
     >
       <div className="mx-auto max-w-[80rem]">
         {/* Phones: exactly one screen tall (100dvh is zoomed with the page).
-            Copy and visual are drawn at 90% there, which leaves room for a
-            deeper gap under the header (pt-28) while both still fit. */}
-        <div className="grid min-h-[100dvh] content-center items-center gap-12 pt-28 pb-8 max-sm:min-h-[calc(100dvh/var(--phone-zoom))] max-sm:gap-6 sm:pt-32 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+            The copy (drawn at 90%) sits at the top, ~6% of the screen height
+            under the 4rem phone header, and the visual takes the remaining height, centred in it,
+            so there are no empty bands above the copy or around a small
+            floating visual. */}
+        <div className="grid min-h-[100dvh] content-center items-center gap-12 pt-32 pb-8 max-sm:flex max-sm:pt-[calc(4rem+7dvh)] max-sm:min-h-[calc(100dvh/var(--phone-zoom))] max-sm:flex-col max-sm:items-stretch max-sm:gap-6 sm:pb-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <div className="max-sm:[zoom:0.9]">
-            <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600">
+            <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600 max-sm:text-[14px]">
               {content.eyebrow}
             </p>
             <h1
@@ -55,7 +65,9 @@ export function PageHero({
               {content.description}
             </p>
             {content.primaryCta || content.secondaryCta ? (
-              <div className="mt-8 flex flex-wrap gap-3">
+              // Phones: the row cancels the copy's 0.9 zoom so the buttons
+              // match every other button (its margin is 2rem x 0.9).
+              <div className="mt-8 flex flex-wrap gap-3 max-sm:mt-[1.8rem] max-sm:[zoom:1.1111]">
                 {content.primaryCta ? (
                   <ButtonLink href={content.primaryCta.href}>
                     {content.primaryCta.label}
@@ -74,8 +86,15 @@ export function PageHero({
           </div>
           {visual ? (
             // Phones show the visual under the copy, zoomed as a whole (text,
-            // rem-sized comets and all) so the fixed canvases fit the column.
-            <div className="max-lg:mx-auto max-lg:w-full max-lg:max-w-lg max-[368px]:[zoom:0.58] min-[368px]:max-sm:[zoom:0.68]">
+            // rem-sized comets and all). This box takes the height left under
+            // the copy (flex-1, min 14rem); flex columns carry that height down
+            // to a flow canvas, and other visuals are centred in it.
+            <div
+              className={cn(
+                "max-lg:mx-auto max-lg:w-full max-lg:max-w-lg max-sm:flex max-sm:min-h-56 max-sm:flex-1 max-sm:flex-col max-sm:justify-center",
+                visualZoom,
+              )}
+            >
               {visual}
             </div>
           ) : null}

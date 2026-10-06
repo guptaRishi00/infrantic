@@ -67,7 +67,7 @@ export function Hero({ content }: { content: HeroContent }) {
       <div className="max-sm:flex max-sm:min-h-[calc(100dvh/var(--phone-zoom)-4rem)] max-sm:flex-col max-sm:items-center max-sm:py-6 sm:contents">
         <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center text-center lg:mt-0 mt-16 lg:py-0 py-4 max-sm:contents">
           <div data-hero-eyebrow="" className="max-sm:mt-auto">
-            <p className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600">
+            <p className="rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-xs font-medium tracking-wide text-zinc-600 max-sm:bg-white max-sm:text-[13px]">
               {content.eyebrow}
             </p>
           </div>

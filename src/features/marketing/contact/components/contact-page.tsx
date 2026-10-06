@@ -26,7 +26,7 @@ export function ContactPage() {
           {/* Phones: the intro is drawn at 90%; the form keeps its size so its
               inputs stay readable (and iOS doesn't zoom on focus). */}
           <div className="max-sm:[zoom:0.9]">
-            <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600">
+            <p className="w-fit rounded-full border border-zinc-200 bg-white/90 px-3 py-1 text-[13px] font-medium tracking-wide text-zinc-600 max-sm:text-[14px]">
               {intro.eyebrow}
             </p>
             <h1

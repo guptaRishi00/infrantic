@@ -19,7 +19,12 @@ export function VisualFrame({
 }) {
   return (
     <div role="img" aria-label={label}>
-      <div aria-hidden="true" className="relative aspect-[5/4] select-none">
+      {/* Short phones: 85% width, so the 5:4 drawing fits the one-screen
+          hero under the copy. */}
+      <div
+        aria-hidden="true"
+        className="relative aspect-[5/4] select-none [@media(max-height:760px)]:max-sm:mx-auto [@media(max-height:760px)]:max-sm:w-[85%]"
+      >
         {children}
       </div>
     </div>

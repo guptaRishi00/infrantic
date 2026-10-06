@@ -153,8 +153,13 @@ function FlowNodeView({ node }: { node: HeroFlowNode }) {
 function FlowCanvas({ content }: { content: HeroFlowVisual }) {
   return (
     // No frame: the diagram sits on the hero background. overflow-hidden stays
-    // (invisible) so the packets' travel can't widen the page.
-    <div className="relative aspect-[5/4] overflow-hidden">
+    // (invisible) so the packets' travel can't widen the page. Phones: the
+    // canvas takes the hero's free height (flex-1 down from PageHero's visual
+    // box, capped at 44rem), so the nodes (placed in %) spread into it, and
+    // bleeds into the gaps above and below (more above: the labels hang under
+    // the nodes), where their empty margins sit; it ignores taps there so it
+    // never covers the CTAs.
+    <div className="relative aspect-[5/4] overflow-hidden max-sm:pointer-events-none max-sm:-mt-14 max-sm:-mb-7 max-sm:aspect-auto max-sm:max-h-[44rem] max-sm:flex-1">
       {content.wires.map((wire) => (
         <Wire key={`${wire.from.join()}-${wire.to.join()}`} {...wire} />
       ))}
@@ -232,8 +237,15 @@ function OrbitCanvas({ content }: { content: HeroOrbitVisual }) {
 
 export function HeroVisual({ content }: { content: HeroVisualContent }) {
   return (
-    <div role="img" aria-label={content.label}>
-      <div aria-hidden="true">
+    <div
+      role="img"
+      aria-label={content.label}
+      className="max-sm:flex max-sm:flex-1 max-sm:flex-col"
+    >
+      <div
+        aria-hidden="true"
+        className="max-sm:flex max-sm:flex-1 max-sm:flex-col max-sm:justify-center"
+      >
         {content.kind === "flow" ? (
           <FlowCanvas content={content} />
         ) : (

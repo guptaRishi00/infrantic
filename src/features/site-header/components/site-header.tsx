@@ -21,7 +21,7 @@ export function SiteHeader() {
         />
         <Link
           href="/"
-          className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink max-lg:-my-3 max-lg:py-3"
+          className="flex items-center rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink max-lg:-my-3 max-lg:py-3 max-sm:-my-3.5 max-sm:py-3.5"
         >
           <BrandLogo priority className="h-4 w-auto sm:h-5" />
         </Link>

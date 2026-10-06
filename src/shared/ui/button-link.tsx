@@ -33,8 +33,9 @@ const cardHover = {
  */
 const stretchedClass = "after:absolute after:inset-0 after:content-['']";
 
+// Phones (below sm) use one button size everywhere: sm grows to md there.
 const sizes = {
-  sm: "h-9 px-3.5 text-sm",
+  sm: "h-9 px-3.5 text-sm max-sm:h-11 max-sm:px-4.5 max-sm:text-[15px]",
   md: "h-11 px-4.5 text-[15px]",
 } as const;
 

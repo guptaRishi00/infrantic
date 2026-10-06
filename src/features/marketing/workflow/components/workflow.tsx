@@ -48,7 +48,12 @@ function StepPanel({ step }: { step: WorkflowStep }) {
             <p className="max-w-xs text-[15px] leading-6 text-zinc-600">
               {step.description}
             </p>
-            <ButtonLink href={step.cta.href} className="mt-5">
+            {/* Phones: cancels the panel's 0.9 zoom so it matches every
+                other button (margin 20px x 0.9). */}
+            <ButtonLink
+              href={step.cta.href}
+              className="mt-5 max-sm:mt-[18px] max-sm:[zoom:1.1111]"
+            >
               {step.cta.label}
             </ButtonLink>
           </div>
